@@ -25,9 +25,22 @@ What’s included in this workshop:
 Workshop Link: [https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/en-US/](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/en-US)
 
 
-
-
-
+## IAM Policy for Bedrock
+Following IAM policy should be created to grant access on Bedrock APIs:
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Statement1",
+            "Effect": "Allow",
+            "Action": "bedrock:*",
+            "Resource": "*"
+        }
+    ]
+}
+```
+After the policy created, you need to attach the policy to your **Sagemaker Execution Role**. 
 
 ## Using these notebooks
 

@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT-0
 """Helper utilities for working with Amazon Bedrock from Python notebooks"""
 # Python Built-Ins:
+from enum import Enum
 import json
 import os
 from time import sleep
@@ -9,9 +10,8 @@ from typing import Dict, Optional
 
 # External Dependencies:
 import boto3
-from pydantic import root_validator
-from enum import Enum
 from botocore.config import Config
+from pydantic import root_validator
 
 
 def get_bedrock_client(

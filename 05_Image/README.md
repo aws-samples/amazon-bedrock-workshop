@@ -1,4 +1,5 @@
-# Image Generation
+# Lab 5 - Image Generation
+
 ### Overview
 
 Image generation can be a tidious task for artists, designers and content creators who illustrate their thoughts with the help of images. With the help of Foundation Models (FM) this tidious task can be streamlined to just a single line of text that expresses the thought of the artist, FMs can be used for creating realistic and artistic images of various subjects, environments, and scenes from language prompts.

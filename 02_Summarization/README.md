@@ -1,6 +1,4 @@
-
-# Text summarization
-
+# Lab 2 - Text Summarization
 
 ## Overview
 

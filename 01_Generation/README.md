@@ -1,3 +1,5 @@
+# Lab 1 - Text Generation
+
 ## Overview
 
 In this lab, you will learn how to generate text using LLMs on Amazon Bedrock. We will demonstrate the use of LLMs using the Bedrock API as well as how to utilize the LangChain framework that integrates with Bedrock. 

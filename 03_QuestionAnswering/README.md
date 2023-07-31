@@ -1,4 +1,5 @@
-# Question Answering
+# Lab 3 - Question Answering
+
 ## Introduction
 
 Question Answering (QA) is an important task that involves extracting answers to factual queries posed in natural language. Typically, a QA system processes a query against a knowledge base containing structured or unstructured data and generates a response with accurate information. Ensuring high accuracy is key to developing a useful, reliable and trustworthy question answering system, especially for enterprise use cases. 

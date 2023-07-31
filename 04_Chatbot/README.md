@@ -1,4 +1,4 @@
-# Conversational Interface - Chatbots
+# Lab 4 - Conversational Interfaces (Chatbots)
 
 ## Overview
 

@@ -35,12 +35,13 @@ def get_bedrock_client(
         target_region = region
 
     print(f"Create new client\n  Using region: {target_region}")
-    boto3_kwargs = {"region_name": target_region}
+    session_kwargs = {"region_name": target_region}
+    client_kwargs = {**session_kwargs}
 
     profile_name = os.environ.get("AWS_PROFILE")
     if profile_name:
         print(f"  Using profile: {profile_name}")
-        boto3_kwargs["profile_name"] = profile_name
+        session_kwargs["profile_name"] = profile_name
 
     retry_config = Config(
         region_name=target_region,
@@ -49,7 +50,7 @@ def get_bedrock_client(
             "mode": "standard",
         },
     )
-    session = boto3.Session(**boto3_kwargs)
+    session = boto3.Session(**session_kwargs)
 
     if assumed_role:
         print(f"  Using role: {assumed_role}", end='')
@@ -59,17 +60,17 @@ def get_bedrock_client(
             RoleSessionName="langchain-llm-1"
         )
         print(" ... successful!")
-        boto3_kwargs["aws_access_key_id"] = response["Credentials"]["AccessKeyId"]
-        boto3_kwargs["aws_secret_access_key"] = response["Credentials"]["SecretAccessKey"]
-        boto3_kwargs["aws_session_token"] = response["Credentials"]["SessionToken"]
+        client_kwargs["aws_access_key_id"] = response["Credentials"]["AccessKeyId"]
+        client_kwargs["aws_secret_access_key"] = response["Credentials"]["SecretAccessKey"]
+        client_kwargs["aws_session_token"] = response["Credentials"]["SessionToken"]
 
     if endpoint_url:
-        boto3_kwargs["endpoint_url"] = endpoint_url
+        client_kwargs["endpoint_url"] = endpoint_url
 
     bedrock_client = session.client(
         service_name="bedrock",
         config=retry_config,
-        **boto3_kwargs
+        **client_kwargs
     )
 
     print("boto3 Bedrock client successfully created!")

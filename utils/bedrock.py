@@ -35,22 +35,19 @@ def get_bedrock_client(
         target_region = region
 
     print(f"Create new client\n  Using region: {target_region}")
-    boto3_kwargs = {"region_name": target_region}
+
+    # Create the session
+    boto3_session_kwargs = {"region_name": target_region}
 
     profile_name = os.environ.get("AWS_PROFILE")
     if profile_name:
         print(f"  Using profile: {profile_name}")
-        boto3_kwargs["profile_name"] = profile_name
+        boto3_session_kwargs["profile_name"] = profile_name
 
-    retry_config = Config(
-        region_name=target_region,
-        retries={
-            "max_attempts": 10,
-            "mode": "standard",
-        },
-    )
-    session = boto3.Session(**boto3_kwargs)
+    session = boto3.Session(**boto3_session_kwargs)
 
+    # Create the client
+    boto3_client_kwargs = {"region_name": target_region}
     if assumed_role:
         print(f"  Using role: {assumed_role}", end='')
         sts = session.client("sts")
@@ -59,17 +56,24 @@ def get_bedrock_client(
             RoleSessionName="langchain-llm-1"
         )
         print(" ... successful!")
-        boto3_kwargs["aws_access_key_id"] = response["Credentials"]["AccessKeyId"]
-        boto3_kwargs["aws_secret_access_key"] = response["Credentials"]["SecretAccessKey"]
-        boto3_kwargs["aws_session_token"] = response["Credentials"]["SessionToken"]
+        boto3_client_kwargs["aws_access_key_id"] = response["Credentials"]["AccessKeyId"]
+        boto3_client_kwargs["aws_secret_access_key"] = response["Credentials"]["SecretAccessKey"]
+        boto3_client_kwargs["aws_session_token"] = response["Credentials"]["SessionToken"]
 
     if endpoint_url:
-        boto3_kwargs["endpoint_url"] = endpoint_url
+        boto3_client_kwargs["endpoint_url"] = endpoint_url
 
+    retry_config = Config(
+        region_name=target_region,
+        retries={
+            "max_attempts": 10,
+            "mode": "standard",
+        },
+    )
     bedrock_client = session.client(
         service_name="bedrock",
         config=retry_config,
-        **boto3_kwargs
+        **boto3_client_kwargs
     )
 
     print("boto3 Bedrock client successfully created!")

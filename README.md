@@ -51,7 +51,7 @@ To grant Bedrock access to your identity, you can:
         {
             "Sid": "BedrockFullAccess",
             "Effect": "Allow",
-            "Action": "bedrock:*",
+            "Action": ["bedrock:*"],
             "Resource": "*"
         }
     ]

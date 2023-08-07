@@ -2,7 +2,9 @@
 
 echo "Creating directory"
 mkdir -p ./dependencies && \
-cd ./dependencies && \
+cd ./dependencies
+# Removing prior dependencies
+rm -rf * 
 echo "Downloading dependencies"
 curl -sS https://preview.documentation.bedrock.aws.dev/Documentation/SDK/bedrock-python-sdk.zip > sdk.zip && \
 echo "Unpacking dependencies"

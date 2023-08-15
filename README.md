@@ -17,7 +17,7 @@ Labs include:
 
 <div align="center">
 
-![imgs/10-overview](imgs/10-overview.png "Overview of the different labs in the workshop")
+![imgs/11-overview](imgs/11-overview.png "Overview of the different labs in the workshop")
 
 </div>
 

@@ -13,6 +13,7 @@ Labs include:
 - **Questions Answering** \[Estimated time to complete - 45 mins\]  
 - **Chatbot** \[Estimated time to complete - 45 mins\]
 - **Image Generation** \[Estimated time to complete - 30 mins\]
+- **Code Generation** \[Estimated time to complete - 30 mins\]
 
 <div align="center">
 
@@ -117,3 +118,13 @@ This repository contains notebook examples for the Bedrock Architecture Patterns
 ### Text to Image
 
 - [Image Generation with Stable Diffusion](./05_Image/Bedrock%20Stable%20Diffusion%20XL.ipynb): This notebook demonstrates image generation with using the Stable Diffusion model
+
+### Code Generation, SQL Generation, Code Translation and Explanation
+
+1. [Code Generation](./06_CodeGeneration/00_code_generatation_w_bedrock.ipynb)- Demonstrates how to generate Python code using Natural language. It shows examples of prompting to generate simple functions, classes, and full programs in Python for Data Analyst to perform sales analysis on a given Sales CSV dataset.
+
+2. [Database or SQL Query Generation](./06_CodeGeneration/01_sql_query_generate_w_bedrock.ipynb) - Focuses on generating SQL queries with Amazon Bedrock APIs. It includes examples of generating both simple and complex SQL statements for a given data set and database schema. 
+
+3. [Code Explanation](./06_CodeGeneration/02_code_interpret_w_langchain.ipynb) - Uses Bedrock's foundation models to generate explanations for complex C++ code snippets. It shows how to carefully craft prompts to get the model to generate comments and documentation that explain the functionality and logic of complicated C++ code examples. Prompts can be easily updated for another programming languages.
+
+4. [Code Translation ](./06_CodeGeneration/03_code_translate_w_langchain.ipynb) - Guides you through translating C++ code to Java using Amazon Bedrock and LangChain APIs. It shows techniques for prompting the model to port C++ code over to Java, handling differences in syntax, language constructs, and conventions between the languages.

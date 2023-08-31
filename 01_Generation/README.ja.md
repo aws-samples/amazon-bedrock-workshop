@@ -1,28 +1,28 @@
-# Lab 1 - Text Generation
+# Lab 1 - テキスト生成
 
-## Overview
+## 概要
 
-In this lab, you will learn how to generate text using LLMs on Amazon Bedrock. We will demonstrate the use of LLMs using the Bedrock API as well as how to utilize the LangChain framework that integrates with Bedrock. 
+このラボでは、Amazon Bedrock で LLM を使用してテキストを生成する方法を学習します。Bedrock API を使用して LLM を使用する方法と、Bedrock と統合される LangChain フレームワークを利用する方法についても説明します。 
 
-We will first generate text using a zero-shot prompt. The zero-shot prompt provides instruction to generate text content without providing a detailed context. We will explore zero-shot email generation using two approaches: Bedrock API (BoTo3) and Bedrock integration with LangChain. Then we will show how to improve the quality of the generated text by providing additional context in the prompt.  
+まず、Zero-Shot プロンプトを使用してテキストを生成します。Zero-Shot プロンプトでは、詳細なコンテキストを指定せずにテキストコンテンツを生成する指示が与えられます。Bedrock API (BoTo3) と Bedrock と LangChain の統合という 2 つのアプローチを使用して、Zero-Shot メールを生成する方法を検討します。次に、プロンプトにコンテキストを追加して生成テキストの品質を向上させる方法を示します。 
 
-## Audience
+## 想定読者
 
-Architects and developer who want to learn how to use Amazon Bedrock LLMs to generate text. 
-Some of the business use cases for text generation include:
+Amazon Bedrock LLM を使用してテキストを生成する方法を学びたいアーキテクトおよび開発者です。 
+テキスト生成のビジネスユースケースには次のようなものがあります。
 
-- Generating product descriptions based on product features and benefits for marketing teams
-- Generation of media articles and marketing campaigns
-- Email and reports generation
+- 製品の特徴とマーケティングチームの利点に基づいた製品説明の作成
+- メディア記事やマーケティングキャンペーンの作成
+- メールとレポートの生成
 
 ## Workshop Notebooks
 
-We will generate an email response to a customer where the customer had provided negative feedback on service received from a customer support engineer. The text generation workshop includes the following three notebooks. 
-1. [Generate Email with Amazon Titan](./00_generate_w_bedrock.ipynb) - Invokes Amazon Titan large text model using Bedrock API to generate an email response to a customer. It uses a zero-shot prompt without context as instruction to the model. 
-2. [Zero-shot Text Generation with Anthropic Claude](01_zero_shot_generation.ipynb) - Invokes Anthropic's Claude Text model using the LangChain framework integration with Bedrock to generate an email to a customer. It uses a zero-shot prompt without context as instruction to the model. 
-3. [Contextual Text Generation using LangChain](./02_contextual_generation.ipynb) - We provide additional context in the prompt which includes the original email from the customer that we would like the model to generate a response for. The example includes a custom prompt template in LangChain, so that variable values can be substitued in the prompt at runtime.  
+カスタマーサポートエンジニアから受けたサービスについてお客様から否定的なフィードバックがあった場合は、メールで返信します。テキスト生成ワークショップには、次の 3 つのノートブックが含まれます。 
+1. [Amazon Titan で E メールを生成](./00_generate_w_bedrock.ipynb) - Bedrock API を使用して Amazon Titan Text large モデルを呼び出し、顧客へのメールレスポンスを生成します。コンテキストのないゼロショットプロンプトをモデルへの指示として使用します。 
+2. [Anthropic Claude で Zero-shot テキスト生成](01_zero_shot_generation.ipynb) - LangChain フレームワークと Bedrock の統合を使用して Anthropic の Claude モデルを呼び出し、顧客へのメールを生成します。コンテキストのない Zero-Shot プロンプトをモデルへの指示として使用します。
+3. [LangChain を使用したコンテキスト生成](./02_contextual_generation.ipynb) - モデルにレスポンスを生成させたい顧客からの元のメールを含む追加のコンテキストをプロンプトに入力します。この例には LangChain のカスタムプロンプトテンプレートが含まれているため、実行時にプロンプトの変数値を代入できます。  
 
-## Architecture
+## アーキテクチャ
 
 ![Bedrock](./images/bedrock.jpg)
 ![Bedrock](./images/bedrock_langchain.jpg)

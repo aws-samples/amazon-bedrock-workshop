@@ -70,6 +70,7 @@ For more information on the fine-grained action and resource permissions in Bedr
 Once your notebook environment is set up, clone this workshop repository into it.
 
 ```sh
+sudo yum install -y unzip
 git clone https://github.com/aws-samples/amazon-bedrock-workshop.git
 cd amazon-bedrock-workshop
 ```

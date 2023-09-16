@@ -1,10 +1,10 @@
-# アマゾン・ベッドロック・ワークショップ
+# Amazon Bedrock ワークショップ
 
-開発者とソリューションビルダーを対象としたこのハンズオンワークショップでは、[アマゾン・ベッドロック](https://aws.amazon.com/bedrock/) を通じて基盤モデル (FM) を活用する方法を紹介します。
+開発者とソリューションビルダーを対象としたこのハンズオンワークショップでは、[Amazon Bedrock](https://aws.amazon.com/bedrock/) を通じて基盤モデル (FM) を活用する方法を紹介します。
 
 Amazon Bedrockは完全マネージド型のサービスで、サードパーティプロバイダーとAmazonのFMへのアクセスを提供します。APIを介して利用できます。Bedrockでは、さまざまなモデルから選択して、ユースケースに最適なモデルを見つけることができます。
 
-この一連のラボでは、ジェネレーティブ AI についてお客様に見られる最も一般的な使用パターンをいくつか調べます。テキストや画像を生成し、生産性を向上させて組織に価値をもたらす手法を紹介します。これは、メールの作成、テキストの要約、質問への回答、チャットボットの構築、画像の作成に役立つ基盤モデルを活用することで実現されます。Bedrock API や SDK のほか、[ラングチェイン](https://python.langchain.com/docs/get_started/introduction) や [ファイス](https://faiss.ai/index.html) などのオープンソースソフトウェアを使用して、これらのパターンを実装する実践的な経験を積むことができます。
+この一連のラボでは、生成AI についてお客様に見られる最も一般的な使用パターンをいくつか調べます。テキストや画像を生成し、生産性を向上させて組織に価値をもたらす手法を紹介します。これは、メールの作成、テキストの要約、質問への回答、チャットボットの構築、画像の作成に役立つ基盤モデルを活用することで実現されます。Bedrock API や SDK のほか、[LangChain](https://python.langchain.com/docs/get_started/introduction) や [FAISS](https://faiss.ai/index.html) などのオープンソースソフトウェアを使用して、これらのパターンを実装する実践的な経験を積むことができます。
 
 ラボには以下が含まれます。
 
@@ -24,7 +24,7 @@ Amazon Bedrockは完全マネージド型のサービスで、サードパーテ
 
 このワークショップは **Python notebooks** のシリーズとして提供され、任意の環境から実行できます。
 
-*   豊富な AI/ML 機能を備えたフルマネージド環境では、[セージメーカースタジオ](https://aws.amazon.com/sagemaker/studio/) の使用をお勧めします。すぐに使い始めるには、[ドメインクイックセットアップの説明](https://docs.aws.amazon.com/sagemaker/latest/dg/onboard-quick-start.html) を参照してください。
+*   豊富な AI/ML 機能を備えたフルマネージド環境では、[SageMaker Studio](https://aws.amazon.com/sagemaker/studio/) の使用をお勧めします。すぐに使い始めるには、[ドメインクイックセットアップの説明](https://docs.aws.amazon.com/sagemaker/latest/dg/onboard-quick-start.html) を参照してください。
 *   フルマネージドでありながらより基本的なエクスペリエンスを実現するには、代わりに [SageMaker ノートブックインスタンスの作成](https://docs.aws.amazon.com/sagemaker/latest/dg/howitworks-create-ws.html) を使用できます。
 *   既存の (ローカルまたはその他の) ノートブック環境を使用したい場合は、[AWS を呼び出すための認証情報](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) があることを確認してください。
 
@@ -35,7 +35,7 @@ Amazon Bedrockは完全マネージド型のサービスで、サードパーテ
 BedrockにIDへのアクセスを許可するには、次の方法があります。
 
 *   [AWS IAM コンソール](https://us-east-1.console.aws.amazon.com/iam/home?#) を開いてください
-*   [役割](https://us-east-1.console.aws.amazon.com/iamv2/home?#/roles) (SageMaker を使用している場合や IAM ロールを引き受けている場合)、または [ユーザ](https://us-east-1.console.aws.amazon.com/iamv2/home?#/users) を検索してください
+*   [ロール](https://us-east-1.console.aws.amazon.com/iamv2/home?#/roles) (SageMaker を使用している場合や IAM ロールを引き受けている場合)、または [ユーザ](https://us-east-1.console.aws.amazon.com/iamv2/home?#/users) を検索してください
 *   _Add Permissions > Create Inline Policy_ を選択して新しいインライン権限を添付し、_JSON_ エディターを開いて以下のポリシー例を貼り付けます。
 
 <!---->
@@ -54,7 +54,7 @@ BedrockにIDへのアクセスを許可するには、次の方法がありま�
 
 > ⚠️ **Note:** Amazon SageMaker では、ノートブックの実行ロールは通常、AWS コンソールへのログインに使用したユーザーまたはロールの _separate_ になります。Amazon Bedrock 用の AWS コンソールを試してみたい場合は、コンソールのユーザー/ロールにもアクセス権限を付与する必要があります。
 
-Bedrockのきめ細かいアクションとリソース権限の詳細については、Bedrock開発者ガイドをご覧ください。
+Bedrock のきめ細かいアクションとリソース権限の詳細については、Bedrock 開発者ガイドをご覧ください。
 
 ### ノートブックを複製して使用する
 
@@ -83,7 +83,7 @@ bash ./download-dependencies.sh
 
 ### イントロ
 
-*   [シンプルな岩盤の使い方](./00_Intro/bedrock_boto3_setup.ipynb): このノートブックには、boto3 クライアントのセットアップと bedrock の基本的な使い方が記載されています。
+*   [シンプルな Bedrock の使い方](./00_Intro/bedrock_boto3_setup.ipynb): このノートブックには、boto3 クライアントのセットアップと bedrock の基本的な使い方が記載されています。
 
 ### 世代
 
@@ -99,7 +99,7 @@ bash ./download-dependencies.sh
 ### 質問応答
 
 *   [コンテキスト付きの簡単な質問](./03_QuestionAnswering/00_qa_w_bedrock_titan.ipynb): このノートブックは、モデルを直接呼び出して、与えられたコンテキストで質問に答える簡単な例を示しています。
-*   [検索拡張世代による質問への回答](./03_QuestionAnswering/01_qa_w_rag_claude.ipynb): Retrival Augmented Generation (RAG) と呼ばれるアーキテクチャを実装することで、上記のプロセスを改善できます。RAG は言語モデルの外部 (ノンパラメトリック) からデータを取得し、取得した関連データをコンテキストに追加することでプロンプトを拡張します。
+*   [Retrieval Augmented Generation による質問への回答](./03_QuestionAnswering/01_qa_w_rag_claude.ipynb): Retrival Augmented Generation (RAG) と呼ばれるアーキテクチャを実装することで、上記のプロセスを改善できます。RAG は言語モデルの外部 (ノンパラメトリック) からデータを取得し、取得した関連データをコンテキストに追加することでプロンプトを拡張します。
 
 ### チャットボット
 
@@ -108,4 +108,4 @@ bash ./download-dependencies.sh
 
 ### テキストから画像へ
 
-*   [安定した拡散による画像生成](./05_Image/Bedrock%20Stable%20Diffusion%20XL.ipynb): このノートブックは、安定拡散モデルを使用した画像生成のデモンストレーションです
+*   [Stable Diffusion による画像生成](./05_Image/Bedrock%20Stable%20Diffusion%20XL.ipynb): このノートブックは、Stable Diffusion モデルを使用した画像生成のデモンストレーションです

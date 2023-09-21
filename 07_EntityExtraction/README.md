@@ -1,4 +1,4 @@
-# Lab 6 - Entity Extraction
+# Lab 7 - Entity Extraction
 ## Overview
 Entity extraction is an NLP technique that allows us to automatically extract specific data from naturally written text, such as news, emails, books, etc.
 That data can then later be saved to a database, used for lookup or any other type of processing.

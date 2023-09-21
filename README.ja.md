@@ -2,9 +2,9 @@
 
 開発者とソリューションビルダーを対象としたこのハンズオンワークショップでは、[Amazon Bedrock](https://aws.amazon.com/bedrock/) を通じて基盤モデル (FM) を活用する方法を紹介します。
 
-Amazon Bedrockは完全マネージド型のサービスで、サードパーティプロバイダーとAmazonのFMへのアクセスを提供します。APIを介して利用できます。Bedrockでは、さまざまなモデルから選択して、ユースケースに最適なモデルを見つけることができます。
+Amazon Bedrock は完全マネージド型のサービスで、サードパーティプロバイダーと Amazon の FM へのアクセスを提供します。API を介して利用できます。Bedrock では、さまざまなモデルから選択して、ユースケースに最適なモデルを見つけることができます。
 
-この一連のラボでは、生成AI についてお客様に見られる最も一般的な使用パターンをいくつか調べます。テキストや画像を生成し、生産性を向上させて組織に価値をもたらす手法を紹介します。これは、メールの作成、テキストの要約、質問への回答、チャットボットの構築、画像の作成に役立つ基盤モデルを活用することで実現されます。Bedrock API や SDK のほか、[LangChain](https://python.langchain.com/docs/get_started/introduction) や [FAISS](https://faiss.ai/index.html) などのオープンソースソフトウェアを使用して、これらのパターンを実装する実践的な経験を積むことができます。
+この一連のラボでは、生成 AI についてお客様に見られる最も一般的な使用パターンをいくつか見ていきます。テキストや画像を生成し、生産性を向上させて組織に価値をもたらす手法を紹介します。これは、メールの作成、テキストの要約、質問への回答、チャットボットの構築、画像の生成に役立つ基盤モデルを活用することで実現されます。Bedrock API や SDK のほか、[LangChain](https://python.langchain.com/docs/get_started/introduction) や [FAISS](https://faiss.ai/index.html) などのオープンソースソフトウェア (OSS) を使用して、これらのパターンを実装する実践的な経験を積むことができます。
 
 ラボには以下が含まれます。
 
@@ -16,7 +16,7 @@ Amazon Bedrockは完全マネージド型のサービスで、サードパーテ
 
 <div align="center"></div>
 
-これらの [ワークショップのウェブサイトにあるステップバイステップのガイド付きインストラクション](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/en-US) も参照できます。
+これらの [ワークショップのウェブサイトにあるステップバイステップのガイド付きインストラクション](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP) も参照できます。
 
 ## はじめに
 
@@ -32,7 +32,7 @@ Amazon Bedrockは完全マネージド型のサービスで、サードパーテ
 
 ノートブック環境から引き継ぐ AWS ID (SageMaker の [_Studio/notebook Execution Role_](https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html)、または自己管理型ノートブックの場合はロールや IAM ユーザーの場合もあります) には、Amazon Bedrock サービスを呼び出すのに十分な [AWS IAM のアクセス許可](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html) が必要です。
 
-BedrockにIDへのアクセスを許可するには、次の方法があります。
+Bedrock に ID へのアクセスを許可するには、次の方法があります。
 
 *   [AWS IAM コンソール](https://us-east-1.console.aws.amazon.com/iam/home?#) を開いてください
 *   [ロール](https://us-east-1.console.aws.amazon.com/iamv2/home?#/roles) (SageMaker を使用している場合や IAM ロールを引き受けている場合)、または [ユーザ](https://us-east-1.console.aws.amazon.com/iamv2/home?#/users) を検索してください
@@ -67,45 +67,55 @@ git clone https://github.com/aws-samples/amazon-bedrock-workshop.git
 cd amazon-bedrock-workshop
 ```
 
-このサービスはプレビュー段階であるため、Amazon Bedrock SDK は [Python 用 AWS SDK-boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html) の標準リリースにはまだ含まれていません。以下のスクリプトを実行して、Bedrock をテストするためのカスタム SDK ホイールをダウンロードして抽出します。
+このサービスはプレビュー段階であるため、Amazon Bedrock SDK は [Python 用 AWS SDK-boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html) の標準リリースにはまだ含まれていません。以下のスクリプトを実行して、Bedrock をテストするためのカスタム SDK wheel をダウンロードして抽出します。
 
 ```sh
 bash ./download-dependencies.sh
 ```
 
-このスクリプトでは `dependencies` フォルダが作成され、関連する SDK がダウンロードされますが、まだ `pip install` は作成されません。
+このスクリプトでは `dependencies` フォルダが作成され、関連する SDK がダウンロードされますが、まだ `pip install` は実行されません。
 
-これで、ラボノートを探索する準備ができました！Bedrock SDK のインストール方法、クライアントの作成方法、Python から API の呼び出しを開始する方法の詳細については、[00_Intro/Bedrock_boto3_Setup.ipynb](00_Intro/bedrock_boto3_setup.ipynb) をご覧ください。
+これで、ラボノートを探索する準備ができました！Bedrock SDK のインストール方法、クライアントの作成方法、Python から API の呼び出しを開始する方法の詳細については、[00_Intro/Bedrock_boto3_Setup.ipynb](00_Intro/bedrock_boto3_setup.jp.ipynb) をご覧ください。
 
 ## コンテンツ
 
-このリポジトリには、Bedrock Architecture Patterns ワークショップのノートブックサンプルが含まれています。ノートブックは以下のようにモジュール別に整理されています。
+このリポジトリには、[Bedrock Architecture Designe Patterns ワークショップ](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP) のノートブックサンプルが含まれています。ノートブックは以下のようにモジュール別に整理されています。
 
-### イントロ
+### Intro
 
-*   [シンプルな Bedrock の使い方](./00_Intro/bedrock_boto3_setup.ipynb): このノートブックには、boto3 クライアントのセットアップと bedrock の基本的な使い方が記載されています。
+*   [シンプルな Bedrock の使い方](./00_Intro/bedrock_boto3_setup.ja.ipynb): このノートブックには、boto3 クライアントのセットアップと bedrock の基本的な使い方が記載されています。
 
-### 世代
+### Generation (テキスト生成)
 
-*   [boto3 を使ったシンプルなユースケース](./01_Generation/00_generate_w_bedrock.ipynb): このノートブックでは、Amazon Bedrock を使用してテキストを生成します。Amazon Titan モデルを boto3 で直接消費する方法を示します。
-*   [LangChainを使ったシンプルなユースケース](./01_Generation/01_zero_shot_generation.ipynb): 次に、同じタスクを実行しますが、一般的なフレームワーク LangChain を使用します
-*   [コンテキストを追加した生成](./01_Generation/02_contextual_generation.ipynb): 次に、レスポンスを改善するために、コンテキストを追加してプロンプトを強化することで、これをさらに進めます。
+*   [boto3 を使ったシンプルなユースケース](./01_Generation/00_generate_w_bedrock.ja.ipynb): このノートブックでは、Amazon Bedrock を使用してテキストを生成します。Amazon Titan モデルを boto3 で直接利用する方法を示します。
+*   [LangChainを使ったシンプルなユースケース](./01_Generation/01_zero_shot_generation.ja.ipynb): 次に、同じタスクを実行しますが、一般的なフレームワーク LangChain を使用します。
+*   [コンテキストを追加した生成](./01_Generation/02_contextual_generation.ja.ipynb): 次に、レスポンスを改善するために、コンテキストを追加してプロンプトを強化することができます。
 
-### 要約
+[Bedrock Architecture Designe Patterns ワークショップ](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP) の [Text Generation](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP/30-generation) をご参考ください。
 
-*   [小さなテキストの要約](./02_Summarization/01.small-text-summarization-claude.ipynb): このノートブックでは、Bedrockを使って小さなテキストを要約するという簡単な作業を行います。
-*   [長文の要約](./02_Summarization/02.long-text-summarization-titan.ipynb): 要約する内容が大きくなり、モデルの最大トークンを超えるため、上記の方法は機能しない可能性があります。このノートブックでは、ファイルを小さなチャンクに分割し、各チャンクを要約し、その要約をまとめる方法を紹介します。
+### Summarization (文章要約)
 
-### 質問応答
+*   [小さなテキストの要約](./02_Summarization/01.small-text-summarization-claude.ja.ipynb): このノートブックでは、Bedrock を使って小さなテキストを要約するという簡単な作業を行います。
+*   [長文の要約](./02_Summarization/02.long-text-summarization-titan.ja.ipynb): 要約する内容が大きくなり、モデルの最大トークンを超えるため、上記の方法は機能しない可能性があります。このノートブックでは、ファイルを小さなチャンクに分割し、各チャンクを要約し、その要約をまとめる方法を紹介します。
 
-*   [コンテキスト付きの簡単な質問](./03_QuestionAnswering/00_qa_w_bedrock_titan.ipynb): このノートブックは、モデルを直接呼び出して、与えられたコンテキストで質問に答える簡単な例を示しています。
-*   [Retrieval Augmented Generation による質問への回答](./03_QuestionAnswering/01_qa_w_rag_claude.ipynb): Retrival Augmented Generation (RAG) と呼ばれるアーキテクチャを実装することで、上記のプロセスを改善できます。RAG は言語モデルの外部 (ノンパラメトリック) からデータを取得し、取得した関連データをコンテキストに追加することでプロンプトを拡張します。
+[Bedrock Architecture Designe Patterns ワークショップ](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP) の [Text Summarization](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP/40-summarization/42-detailed-summarization) をご参考ください。
 
-### チャットボット
+### Question Answering (質問応答)
 
-*   [クロードを使ったチャットボット](./04_Chatbot/00_Chatbot_Claude.ipynb): このノートブックには Claude を使っているチャットボットが描かれています
-*   [Titan を使用するチャットボット](./04_Chatbot/00_Chatbot_Titan.ipynb): このノートブックには Titan を使っているチャットボットが描かれています
+*   [コンテキスト付きの簡単な質問](./03_QuestionAnswering/00_qa_w_bedrock_titan.ja.ipynb): このノートブックは、モデルを直接呼び出して、与えられたコンテキストで質問に答える簡単な例を示しています。
+*   [Retrieval Augmented Generation による質問への回答](./03_QuestionAnswering/01_qa_w_rag_claude.ja.ipynb): Retrival Augmented Generation (RAG) と呼ばれるアーキテクチャを実装することで、上記のプロセスを改善できます。RAG は言語モデルの外部 (ノンパラメトリック) からデータを取得し、取得した関連データをコンテキストに追加することでプロンプトを拡張します。
 
-### テキストから画像へ
+[Bedrock Architecture Designe Patterns ワークショップ](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP) の [Question Answering](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP/50-qa) をご参考ください。
 
-*   [Stable Diffusion による画像生成](./05_Image/Bedrock%20Stable%20Diffusion%20XL.ipynb): このノートブックは、Stable Diffusion モデルを使用した画像生成のデモンストレーションです
+### ChatBot (チャットボット)
+
+*   [Claude を使用するチャットボット](./04_Chatbot/00_Chatbot_Claude.ja.ipynb): このノートブックには Claude を使用するチャットボットの例が含まれています。
+*   [Titan を使用するチャットボット](./04_Chatbot/00_Chatbot_Titan.ja.ipynb): このノートブックには Titan を使用するチャットボットの例が含まれています。
+
+[Bedrock Architecture Designe Patterns ワークショップ](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP) の [Conversational Interface - Chatbots](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP/60-chatbot) をご参考ください。
+
+### Image (画像生成)
+
+*   [Stable Diffusion による画像生成](./05_Image/Bedrock%20Stable%20Diffusion%20XL.ja.ipynb): このノートブックは、Stable Diffusion モデルを使用した画像生成のデモンストレーションです。
+
+[Bedrock Architecture Designe Patterns ワークショップ](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP) の [Image Generation](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP/70-image) をご参考ください。

@@ -27,5 +27,8 @@ By using a LLM for entity extraction in most cases you are only required to spec
 
 In this module, you will be able to work with Amazon Bedrock API to extract entities based on simple descriptions.
 
+## Architecture Overview
+![architecture-overview](./images/logic-overview.png)
+
 ## Target Audience
 This module can be executed by any developer familiar with Python, also by data scientists and other technical people.

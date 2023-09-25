@@ -131,4 +131,4 @@ This repository contains notebook examples for the Bedrock Architecture Patterns
 
 ### Entity Extraction
 
-- [Entity Extraction with Claude v2](./07_EntityExtraction/entitiy_extraction.ipynb): This notebook shows how LLM can be used to extract specific information from natural text.
+- [Entity Extraction with Claude v2](./08_EntityExtraction/entitiy_extraction.ipynb): This notebook shows how LLM can be used to extract specific information from natural text.

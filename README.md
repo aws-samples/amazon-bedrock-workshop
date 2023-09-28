@@ -129,3 +129,7 @@ This repository contains notebook examples for the Bedrock Architecture Patterns
 3. [Code Explanation](./06_CodeGeneration/02_code_interpret_w_langchain.ipynb) : Uses Bedrock's foundation models to generate explanations for complex C++ code snippets. It shows how to carefully craft prompts to get the model to generate comments and documentation that explain the functionality and logic of complicated C++ code examples. Prompts can be easily updated for another programming languages.
 
 4. [Code Translation ](./06_CodeGeneration/03_code_translate_w_langchain.ipynb) : Guides you through translating C++ code to Java using Amazon Bedrock and LangChain APIs. It shows techniques for prompting the model to port C++ code over to Java, handling differences in syntax, language constructs, and conventions between the languages.
+
+### Entity Extraction
+
+- [Entity Extraction with Claude v2](./08_EntityExtraction/entitiy_extraction.ipynb): This notebook shows how LLM can be used to extract specific information from natural text.

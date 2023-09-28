@@ -13,8 +13,13 @@ Amazon Bedrock は完全マネージド型のサービスで、サードパー�
 *   **Questions Answering** [完了までの推定時間-45 分]
 *   **Chatbot** [完了までの推定時間-45 分]
 *   **Image Generation** [完了までの推定時間-30 分]
+*   **Code Generation** [完了までの推定時間-30 分]
 
-<div align="center"></div>
+<div align="center">
+
+![imgs/11-overview](imgs/11-overview.png "Overview of the different labs in the workshop")
+
+</div>
 
 これらの [ワークショップのウェブサイトにあるステップバイステップのガイド付きインストラクション](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP) も参照できます。
 
@@ -119,3 +124,15 @@ bash ./download-dependencies.sh
 *   [Stable Diffusion による画像生成](./05_Image/Bedrock%20Stable%20Diffusion%20XL.ja.ipynb): このノートブックは、Stable Diffusion モデルを使用した画像生成のデモンストレーションです。
 
 [Bedrock Architecture Designe Patterns ワークショップ](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP) の [Image Generation](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP/70-image) をご参考ください。
+
+### Code Generation (コード生成、SQL生成、コード翻訳、説明)
+
+1. [コード生成](./06_CodeGeneration/00_code_generatation_w_bedrock.ja.ipynb): 自然言語を使用して Python コードを生成する方法を示します。データアナリストが与えられた売上 CSV データセットに対して売上分析を実行するために、Python で簡単な関数、クラス、完全なプログラムを生成するプロンプトの例を示します。
+
+2. [Database や SQL Queryの生成](./06_CodeGeneration/01_sql_query_generate_w_bedrock.ja.ipynb) : Amazon Bedrock API を使った SQL クエリの生成に焦点を当てています。与えられたデータセットとデータベーススキーマに対して、単純な SQL 文と複雑な SQL 文の両方を生成する例が含まれています。
+
+3. [Code の説明](./06_CodeGeneration/02_code_interpret_w_langchain.ja.ipynb) : Bedrock の基盤モデルを使って、複雑な C++ コード・スニペットの説明を生成します。複雑な C++ コード例の機能やロジックを説明するコメントやドキュメントを生成するために、入念なプロンプトを作成する方法を示しています。プロンプトは、他のプログラミング言語用に簡単に更新することができます。
+
+4. [Code 翻訳](./06_CodeGeneration/03_code_translate_w_langchain.ja.ipynb) : Amazon Bedrock と LangChain API を使用して、C++ コードを Java に変換する方法を説明します。言語間の構文、言語構成、規約の違いを扱いながら、C++ コードを Java に移植するテクニックを示します。
+
+[Bedrock Architecture Designe Patterns ワークショップ](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP) の [Code Generation](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP/80-codegeneration) をご参考ください。

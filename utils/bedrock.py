@@ -14,6 +14,7 @@ def get_bedrock_client(
     assumed_role: Optional[str] = None,
     endpoint_url: Optional[str] = None,
     region: Optional[str] = None,
+    mode: Optional[str] = 'data-plane',
 ):
     """Create a boto3 client for Amazon Bedrock, with optional configuration overrides
 
@@ -66,9 +67,14 @@ def get_bedrock_client(
 
     if endpoint_url:
         client_kwargs["endpoint_url"] = endpoint_url
+    
+    if mode=='data-plane':
+        service_name='bedrock-runtime'
+    else:
+        service_name='bedrock'
 
     bedrock_client = session.client(
-        service_name="bedrock",
+        service_name=service_name,
         config=retry_config,
         **client_kwargs
     )

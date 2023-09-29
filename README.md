@@ -76,13 +76,6 @@ git clone https://github.com/aws-samples/amazon-bedrock-workshop.git
 cd amazon-bedrock-workshop
 ```
 
-Because the service is in preview, the Amazon Bedrock SDK is not yet included in standard releases of the [AWS SDK for Python - boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html). Run the following script to download and extract custom SDK wheels for testing Bedrock:
-
-```sh
-bash ./download-dependencies.sh
-```
-
-This script will create a `dependencies` folder and download the relevant SDKs, but will not `pip install` them just yet.
 
 You're now ready to explore the lab notebooks! Start with [00_Intro/bedrock_boto3_setup.ipynb](00_Intro/bedrock_boto3_setup.ipynb) for details on how to install the Bedrock SDKs, create a client, and start calling the APIs from Python.
 

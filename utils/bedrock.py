@@ -12,9 +12,8 @@ from botocore.config import Config
 
 def get_bedrock_client(
     assumed_role: Optional[str] = None,
-    endpoint_url: Optional[str] = None,
     region: Optional[str] = None,
-    mode: Optional[str] = 'data-plane',
+    runtime: Optional[bool] = True,
 ):
     """Create a boto3 client for Amazon Bedrock, with optional configuration overrides
 
@@ -23,12 +22,11 @@ def get_bedrock_client(
     assumed_role :
         Optional ARN of an AWS IAM role to assume for calling the Bedrock service. If not
         specified, the current active credentials will be used.
-    endpoint_url :
-        Optional override for the Bedrock service API Endpoint. If setting this, it should usually
-        include the protocol i.e. "https://..."
     region :
         Optional name of the AWS Region in which the service should be called (e.g. "us-east-1").
         If not specified, AWS_REGION or AWS_DEFAULT_REGION environment variable will be used.
+    runtime :
+        Optional choice of getting different client to perform operations with the Amazon Bedrock service.
     """
     if region is None:
         target_region = os.environ.get("AWS_REGION", os.environ.get("AWS_DEFAULT_REGION"))
@@ -65,10 +63,7 @@ def get_bedrock_client(
         client_kwargs["aws_secret_access_key"] = response["Credentials"]["SecretAccessKey"]
         client_kwargs["aws_session_token"] = response["Credentials"]["SessionToken"]
 
-    if endpoint_url:
-        client_kwargs["endpoint_url"] = endpoint_url
-    
-    if mode=='data-plane':
+    if runtime:
         service_name='bedrock-runtime'
     else:
         service_name='bedrock'

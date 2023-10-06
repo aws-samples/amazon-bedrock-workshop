@@ -49,6 +49,9 @@ Additionally, we have prepared the embeddings to be loaded in the vector databas
 
 Take note you can use Titan Embeddings to obtain the embeddings of the user question, then use those embedding to retrieve the most relevant documents from the vector database, build a prompt concatenating the top 3 documents and invoke the LLM model via Bedrock.
 
+## Setup
+Before running any of the labs in this section ensure you've run the [Bedrock boto3 setup notebook](../00_Intro/bedrock_boto3_setup.ipynb#Prerequisites).
+
 ## Notebooks
 
 1. [Q&A with model knowledge and small context](./00_qa_w_bedrock_titan.ipynb)

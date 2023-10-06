@@ -30,5 +30,8 @@ In this module, you will be able to work with Amazon Bedrock API to extract enti
 ## Architecture Overview
 ![architecture-overview](./images/logic-overview.png)
 
+## Setup
+Before running any of the labs in this section ensure you've run the [Bedrock boto3 setup notebook](../00_Intro/bedrock_boto3_setup.ipynb#Prerequisites).
+
 ## Target Audience
 This module can be executed by any developer familiar with Python, also by data scientists and other technical people.

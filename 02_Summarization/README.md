@@ -38,6 +38,9 @@ The idea in this demonstration is to show the art of the possible and how to rep
 
 This module can be executed by any developer familiar with Python, also by data scientists and other technical people.
 
+## Setup
+Before running any of the labs in this section ensure you've run the [Bedrock boto3 setup notebook](../00_Intro/bedrock_boto3_setup.ipynb#Prerequisites).
+
 ## Patterns
 
 On this workshop, you will be able to learn following patterns on summarization:

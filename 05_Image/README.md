@@ -40,6 +40,9 @@ In this workshop, you will be able to learn about Image Generation using Amazon 
 2. [Image to Image (In-painting)](./Bedrock%20Stable%20Diffusion%20XL.ipynb)
     ![Text to Image](./images/72-img-2-img.png)
 
+## Setup
+Before running any of the labs in this section ensure you've run the [Bedrock boto3 setup notebook](../00_Intro/bedrock_boto3_setup.ipynb#Prerequisites).
+
 ## Helper
 To facilitate image generation, there is a utility class `Bedrock` implementation in `/utils/bedrock.py`. This helps you to generate images easily.
 

@@ -56,4 +56,6 @@ Before running any of the labs in this section ensure you've run the [Bedrock bo
 
 1. [Q&A with model knowledge and small context](./00_qa_w_bedrock_titan.ipynb)
 
-2. [Q&A with RAG](./01_qa_w_rag_claude.ipynb)
+1. [Q&A with RAG](./01_qa_w_rag_claude.ipynb)
+
+1. [Q&A with RAG and Pinecone](./02_qa_w_rag_claude_pinecone.ipynb)

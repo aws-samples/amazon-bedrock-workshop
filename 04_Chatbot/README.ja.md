@@ -45,8 +45,8 @@ LangChain は2つの形式のメモリコンポーネントを提供します。
 
 ## ノートブック
 
-このモジュールは、同じパターンのノートブックを2冊提供します。Amazon Titan Text Large だけでなく、Anthropic Claude, AI21 Labs Jurassic との会話も体験でき、それぞれのモデルの会話力を体感できます。
+このモジュールは、同じパターンのノートブックを 3 冊提供します。Amazon Titan Text Large だけでなく、Anthropic Claude, AI21 Labs Jurassic との会話も体験でき、それぞれのモデルの会話力を体感できます。
 
 1.  [Claude を使用したチャットボット](./00_Chatbot_Claude.ja.ipynb)
 1.  [Titan を使用したチャットボット](./00_Chatbot_Titan.jp.ipynb)
-1.  [Jurassic を使用したチャットボット](./00_Chatbot_AI21.jp.ipynb)
+1.  [AI21 を使用したチャットボット](./00_Chatbot_AI21.jp.ipynb)

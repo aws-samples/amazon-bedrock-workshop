@@ -68,17 +68,10 @@ Bedrock のきめ細かいアクションとリソース権限の詳細につい
 ノートブック環境を設定したら、このワークショップリポジトリをその中に複製します。
 
 ```sh
+sudo yum install -y unzip
 git clone https://github.com/aws-samples/amazon-bedrock-workshop.git
 cd amazon-bedrock-workshop
 ```
-
-このサービスはプレビュー段階であるため、Amazon Bedrock SDK は [Python 用 AWS SDK-boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html) の標準リリースにはまだ含まれていません。以下のスクリプトを実行して、Bedrock をテストするためのカスタム SDK wheel をダウンロードして抽出します。
-
-```sh
-bash ./download-dependencies.sh
-```
-
-このスクリプトでは `dependencies` フォルダが作成され、関連する SDK がダウンロードされますが、まだ `pip install` は実行されません。
 
 これで、ラボノートを探索する準備ができました！Bedrock SDK のインストール方法、クライアントの作成方法、Python から API の呼び出しを開始する方法の詳細については、[00_Intro/Bedrock_boto3_Setup.ipynb](00_Intro/bedrock_boto3_setup.jp.ipynb) をご覧ください。
 
@@ -136,3 +129,7 @@ bash ./download-dependencies.sh
 4. [Code 翻訳](./06_CodeGeneration/03_code_translate_w_langchain.ja.ipynb) : Amazon Bedrock と LangChain API を使用して、C++ コードを Java に変換する方法を説明します。言語間の構文、言語構成、規約の違いを扱いながら、C++ コードを Java に移植するテクニックを示します。
 
 [Bedrock Architecture Designe Patterns ワークショップ](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP) の [Code Generation](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/ja-JP/80-codegeneration) をご参考ください。
+
+### エンティティ抽出
+
+- [Entity Extraction with Claude v2](./08_EntityExtraction/entitiy_extraction.ipynb) : このノートブックは、LLM を使用して自然テキストから特定の情報を抽出する方法を示しています。

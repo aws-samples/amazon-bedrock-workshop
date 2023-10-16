@@ -4,6 +4,16 @@ from nemoguardrails import LLMRails, RailsConfig
 from langchain.vectorstores import FAISS
 from typing import List
 
+def _get_index_name_from_id(name: str):
+    if "build" in name:
+        return "KnowledgeBase"
+    if "bot" in name:
+        return "Assistant conversations"
+    if "user" in name:
+        return "Human conversations"
+    if "flows" in name:
+        return "NeMo Conversations Flows"
+    return name
 
 def _get_model_config(config: RailsConfig, type: str):
     """Quick helper to return the config for a specific model type."""
@@ -134,11 +144,14 @@ class BedrockEmbeddingsIndex(EmbeddingsIndex):
             self._embedding_size = len(self._embeddings[0])
 
     async def build(self):
-        """Builds the vecdb index."""
+        """Builds the vector database index."""
+        index_name = _get_index_name_from_id(self._id.lower())
         try:
             if self._load_index_from_disk() is not None:
+                print(f"\n{index_name} vector store index loaded from disk.")
                 self.loaded_from_disk = True
                 return
+            print(f"\nbuilding {index_name} vector store index.")
             # iterate through the List[IndexItem] and create a list[str] of text
             texts = [item.text for item in self._items]
             # create a list of dict from List[IndexItem].meta
@@ -146,12 +159,15 @@ class BedrockEmbeddingsIndex(EmbeddingsIndex):
 
             self._index = FAISS.from_texts(texts, self._model.get_internal(), metadatas=metadata)
             # save the index to disk
+            print(f"{index_name} vector store index built.")
             self._save_index_to_disk()
 
         except Exception as e:
             err_message = f"{e} >> Faiss _index build failed"
             # remove
             print(err_message)
+
+
 
     def get_index(self):
         return self._index

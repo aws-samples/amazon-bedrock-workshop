@@ -30,6 +30,8 @@ Some of the business use cases for code generation include:
 
 4. [Code Translation ](./03_code_translate_w_langchain.ipynb) - Guides you through translating C++ code to Java using Amazon Bedrock and LangChain APIs. It shows techniques for prompting the model to port C++ code over to Java, handling differences in syntax, language constructs, and conventions between the languages.
 
+## Setup
+Before running any of the labs in this section ensure you've run the [Bedrock boto3 setup notebook](../00_Intro/bedrock_boto3_setup.ipynb#Prerequisites).
 
 ## Architecture
 

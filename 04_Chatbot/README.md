@@ -42,8 +42,12 @@ In this architecture:
 3. The embedded text is then input to the FM for contextual search and including the chat history
 4. The FM model then gives you the results based on the context.
 
+## Setup
+Before running any of the labs in this section ensure you've run the [Bedrock boto3 setup notebook](../00_Intro/bedrock_boto3_setup.ipynb#Prerequisites).
+
 ## Notebooks
-This module provides you with 2 notebooks for the same pattern. You can experience conversation with Anthropic Claude as well as Amazon Titan Text Large to experience each the conversational power of each model.
+This module provides you with 3 notebooks for the same pattern. You can experience conversation with Anthropic Claude as well as Amazon Titan Text Large to experience each the conversational power of each model.
 
 1. [Chatbot using Claude](./00_Chatbot_Claude.ipynb)
 2. [Chatbot using Titan](./00_Chatbot_Titan.ipynb)
+3. [Chatbot using AI21](./00_Chatbot_AI21.jpynb)

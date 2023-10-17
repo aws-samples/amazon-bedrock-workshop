@@ -22,6 +22,10 @@ We will generate an email response to a customer where the customer had provided
 2. [Zero-shot Text Generation with Anthropic Claude](01_zero_shot_generation.ipynb) - Invokes Anthropic's Claude Text model using the LangChain framework integration with Bedrock to generate an email to a customer. It uses a zero-shot prompt without context as instruction to the model. 
 3. [Contextual Text Generation using LangChain](./02_contextual_generation.ipynb) - We provide additional context in the prompt which includes the original email from the customer that we would like the model to generate a response for. The example includes a custom prompt template in LangChain, so that variable values can be substitued in the prompt at runtime.  
 
+## Setup
+Before running any of the labs in this section ensure you've run the [Bedrock boto3 setup notebook](../00_Intro/bedrock_boto3_setup.ipynb#Prerequisites).
+
+
 ## Architecture
 
 ![Bedrock](./images/bedrock.jpg)

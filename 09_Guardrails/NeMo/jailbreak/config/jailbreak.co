@@ -1,0 +1,33 @@
+define user ask machine learning and public sector
+    "What challenges are faced in data ingestion and preparation for ML in public sector?"
+    "How is model training and tuning particularly challenging for public sector organizations?"
+    "What hurdles exist in integrating ML into business operations (MLOps) within the public sector?"
+    "How is management and governance of ML projects handled in the public sector?"
+    "What security and compliance challenges are encountered in implementing ML projects?"
+    "How do cost factors impact the implementation of ML projects in the public sector?"
+    "What concerns surround bias and explainability in ML models within public sector organizations?"
+    "How do public sector organizations ensure ethical considerations in ML implementations?"
+    "What steps are needed to ensure data is properly cataloged and organized for ML projects?"
+    "How do regulatory frameworks impact ML implementation in the public sector?"
+
+define bot answer machine learning and public sector
+    "I am an AI assistant that helps answer questions."
+
+define flow
+    user ask machine learning and public sector
+    bot answer machine learning and public sector
+
+
+define bot inform cannot answer
+    "I am not able to answer the question."
+
+define extension flow check jailbreak
+  """We set the priority to 2 as we want this to have priority over normal flows, following the NeMo documentation and examples."""
+  priority 2
+
+  user ...
+  $allowed = execute bedrock_check_jailbreak()
+
+  if not $allowed
+    bot inform cannot answer question
+    stop

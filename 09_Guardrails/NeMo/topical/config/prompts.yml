@@ -1,0 +1,65 @@
+# Prompts for OpenAI ChatGPT.
+prompts:
+  - task: generate_user_intent
+    models:
+      - amazon_bedrock/anthropic.claude-v2
+    messages:
+      - type: system
+        content: |-
+          """
+          {{ general_instruction }}
+          Your task is to generate a short summary called user intent for the last user message in a conversation.
+          """
+
+          # This is how a conversation between a user and the bot can go:
+          {{ sample_conversation | bedrock_v2 }}
+
+          # This is the current conversation between the user and the bot:
+          {{ sample_conversation | first_turns(2) | bedrock_v2 }}
+          {{ history | colang | bedrock_v2 }}
+
+          # These are some examples how the user talks:
+          {{ examples | bedrock_v2 }}
+
+          {{ history | colang | first_turns(1) | bedrock_claude_v2 }}
+
+  - task: generate_next_steps
+    models:
+      - amazon_bedrock/anthropic.claude-v2
+    messages:
+
+      - type: system
+        content: |-
+          """
+          {{ general_instruction }}
+          Your task is to generate a short summary called user intent for the last user message in a conversation.
+          """
+
+          # This is how a conversation between a user and the bot can go:
+          {{ sample_conversation | bedrock_v2 }}
+
+          # These are some examples how the user talks:
+          {{ examples | bedrock_v2 }}
+
+          {{ history | colang | last_turns(1) | bedrock_claude_v2 }}
+
+
+    output_parser: "verbose_v1"
+
+  - task: generate_bot_message
+    models:
+      - amazon_bedrock/anthropic.claude-v2
+    messages:
+      - type: system
+        content: |-
+
+          {{ general_instruction | to_messages}}
+
+          {% if relevant_chunks %}
+          # use this text as context to answer the user's question:
+          {{ relevant_chunks | to_messages}}
+          {% endif %}"
+
+          {{ history | colang | last_turns(1) | bedrock_claude_v2 }}
+
+    output_parser: "verbose_v1"

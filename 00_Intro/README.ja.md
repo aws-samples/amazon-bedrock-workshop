@@ -4,4 +4,4 @@
 
 まず、[ルート README の 'Getting Started' セクション](../README.ja.md#Getting-started) で設定が完了していることを確認します。
 
-これで、必要な SDK のインストール方法、Bedrock への接続方法、モデルの起動方法が記載された、[bedrock_boto3_setup.ipynb](bedrock_boto3_setup.ja.ipynb) ノートブック を読み進める準備ができました。
+これで、必要な SDK のインストール方法、Bedrock への接続方法、モデルの起動方法が記載された、[bedrock_boto3_setup.ja.ipynb](bedrock_boto3_setup.ja.ipynb) ノートブック を読み進める準備ができました。

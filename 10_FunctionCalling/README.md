@@ -1,6 +1,6 @@
 # Lab 10 - Introduction to Function calling with Claude2 via Amazon Bedrock
 
-This lab will walk you through the basics of function calling via Claude models to the Amazon Bedrock service using Python. 
+This lab will walk you through the basics of function calling using Claude models via Amazon Bedrock service using Python Bedrock SDK. 
 
 First, ensure you've completed the setup in the ['Getting Started' section of the root README](../README.md#Getting-started)
 

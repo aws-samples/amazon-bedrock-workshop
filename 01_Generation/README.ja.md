@@ -18,9 +18,9 @@ Amazon Bedrock LLM を使用してテキストを生成する方法を学びた�
 ## Workshop Notebooks
 
 カスタマーサポートエンジニアから受けたサービスについてお客様から否定的なフィードバックがあった場合は、メールで返信します。テキスト生成ワークショップには、次の 3 つのノートブックが含まれます。 
-1. [Amazon Titan で E メールを生成](./00_generate_w_bedrock.ipynb) - Bedrock API を使用して Amazon Titan Text large モデルを呼び出し、顧客へのメールレスポンスを生成します。コンテキストのない Zero-Shot プロンプトをモデルへの指示として使用します。 
-2. [Anthropic Claude で Zero-shot テキスト生成](01_zero_shot_generation.ipynb) - LangChain フレームワークと Bedrock の統合を使用して Anthropic の Claude モデルを呼び出し、顧客へのメールを生成します。コンテキストのない Zero-Shot プロンプトをモデルへの指示として使用します。
-3. [LangChain を使用したコンテキスト生成](./02_contextual_generation.ipynb) - モデルにレスポンスを生成させたい顧客からの元のメールを含む追加のコンテキストをプロンプトに入力します。この例には LangChain のカスタムプロンプトテンプレートが含まれているため、実行時にプロンプトの変数値を代入できます。  
+1. [Amazon Titan で E メールを生成](./00_generate_w_bedrock.ja.ipynb) - Bedrock API を使用して Amazon Titan Text large モデルを呼び出し、顧客へのメールレスポンスを生成します。コンテキストのない Zero-Shot プロンプトをモデルへの指示として使用します。 
+2. [Anthropic Claude で Zero-shot テキスト生成](./01_zero_shot_generation.ja.ipynb) - LangChain フレームワークと Bedrock の統合を使用して Anthropic の Claude モデルを呼び出し、顧客へのメールを生成します。コンテキストのない Zero-Shot プロンプトをモデルへの指示として使用します。
+3. [LangChain を使用したコンテキスト生成](./02_contextual_generation.ja.ipynb) - モデルにレスポンスを生成させたい顧客からの元のメールを含む追加のコンテキストをプロンプトに入力します。この例には LangChain のカスタムプロンプトテンプレートが含まれているため、実行時にプロンプトの変数値を代入できます。  
 
 ## アーキテクチャ
 

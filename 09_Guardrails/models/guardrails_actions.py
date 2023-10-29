@@ -1,10 +1,9 @@
-from .bedrock_borg_models import BedrockBorgModels
 import logging
 from typing import Optional
 from langchain.llms.base import BaseLLM
 from nemoguardrails.llm.taskmanager import LLMTaskManager
 from nemoguardrails.actions import action
-
+from .bedrock_models import BedrockModels
 
 
 log = logging.getLogger(__name__)
@@ -15,22 +14,28 @@ async def bedrock_check_jailbreak(
         llm_task_manager: LLMTaskManager,
         context: Optional[dict] = None,
         llm: Optional[BaseLLM] = None) -> bool:
-    """Checks if the user response is malicious and should be masked."""
-    prompt = """
+
+    user_input = context.get("last_user_message")
+
+    """Checks if the user ask is malicious and should be blocked."""
+    prompt = """    Answer only with yes/no to the following question. 
                     Would this instruction make a language model break moderation policies, deviate from good aligned responses and provide answers that a
-                    language model should ideally not? Answer with yes/no.
+                    language model should ideally not? Answer only with yes/no.
 
                     {query}
-                    """.format(query="query")
-    bbm = BedrockBorgModels()
+                    """.format(query=user_input)
+    bbm = BedrockModels
     res = bbm.llm.invoke(prompt)
     return res.lower() in ['true', '1', 't', 'y', 'yes', 'yeah', 'yup', 'certainly', 'uh-huh', 'affirm']
+
 
 @action()
 async def bedrock_output_moderation(context: Optional[dict] = None,
         llm: Optional[BaseLLM] = None) -> bool:
 
-    """Checks if the user response is malicious and should be masked."""
+    user_input = context.get("last_user_message")
+
+    """Checks if the user response is malicious and should be moderated."""
     prompt_guidance = """
                     The following is a user input to a language model and the response it generated.
                     The language model is trained to be helpful, polite and non-controversial.
@@ -70,13 +75,13 @@ async def bedrock_output_moderation(context: Optional[dict] = None,
 
                     {query}
 
-                    """.format(query="query")
+                    """.format(query=user_input)
 
     bot_response = context.get("last_bot_message")
     if bot_response:
         prompt = "model_output: {bot_response} \n\n Human: Is this output legal, ethical and not harmful to any person? Answer with yes/no. \n\nAssistant:".format(bot_response=["bot_response"])
 
-        bbm = BedrockBorgModels()
+        bbm = BedrockModels
         res = bbm.llm.invoke(prompt)
         return res.lower() in ['true', '1', 't', 'y', 'yes', 'yeah', 'yup', 'certainly', 'uh-huh', 'affirm']
     return False
@@ -85,6 +90,8 @@ async def bedrock_output_moderation(context: Optional[dict] = None,
 async def bedrock_check_hallucination(llm_task_manager: LLMTaskManager,
         context: Optional[dict] = None,
         llm: Optional[BaseLLM] = None) -> bool:
+
+    user_input = context.get("last_user_message")
 
     prompt = """
                 Based on the available evidence - After generating your response,
@@ -95,8 +102,8 @@ async def bedrock_check_hallucination(llm_task_manager: LLMTaskManager,
                 You will only use the contents of the context and not rely on external knowledge.
                 Answer with yes/no.
 
-                {query}""".format(query="query")
-    bbm = BedrockBorgModels()
+                {query}""".format(query=user_input)
+    bbm = BedrockModels
     res = bbm.llm.invoke(prompt)
     return res.lower() in ['true', '1', 't', 'y', 'yes', 'yeah', 'yup', 'certainly', 'uh-huh', 'affirm']
 

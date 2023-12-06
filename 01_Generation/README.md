@@ -8,7 +8,7 @@ We will first generate text using a zero-shot prompt. The zero-shot prompt provi
 
 ## Audience
 
-Architects and developer who want to learn how to use Amazon Bedrock LLMs to generate text. 
+Architects and developers who want to learn how to use Amazon Bedrock LLMs to generate text. 
 Some of the business use cases for text generation include:
 
 - Generating product descriptions based on product features and benefits for marketing teams
@@ -21,6 +21,7 @@ We will generate an email response to a customer where the customer had provided
 1. [Generate Email with Amazon Titan](./00_generate_w_bedrock.ipynb) - Invokes Amazon Titan large text model using Bedrock API to generate an email response to a customer. It uses a zero-shot prompt without context as instruction to the model. 
 2. [Zero-shot Text Generation with Anthropic Claude](01_zero_shot_generation.ipynb) - Invokes Anthropic's Claude Text model using the LangChain framework integration with Bedrock to generate an email to a customer. It uses a zero-shot prompt without context as instruction to the model. 
 3. [Contextual Text Generation using LangChain](./02_contextual_generation.ipynb) - We provide additional context in the prompt which includes the original email from the customer that we would like the model to generate a response for. The example includes a custom prompt template in LangChain, so that variable values can be substitued in the prompt at runtime.  
+4. [Batch Text Generation](./03_batch_generate.ipynb) - Submits a Bedrock batch job to generate multiple emails in parallel based on input prompts and parameters. The notebook handles uploading input data to S3, submitting and monitoring the batch job, and retrieving output results.
 
 ## Setup
 Before running any of the labs in this section ensure you've run the [Bedrock boto3 setup notebook](../00_Intro/bedrock_boto3_setup.ipynb#Prerequisites).

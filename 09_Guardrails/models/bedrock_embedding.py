@@ -115,8 +115,8 @@ class BedrockEmbeddingsIndex(EmbeddingsIndex):
 
         if "build" in self._id:
             # part of the temp solution
-            from . import BedrockBorgModels
-            models = BedrockBorgModels()
+            from . import BedrockModels
+            models = BedrockModels
             models.knowledge_base = self
 
         """Add a list of items to the index."""
@@ -200,11 +200,11 @@ class BedrockEmbeddingsIndex(EmbeddingsIndex):
 class BedrockEmbeddingModel(EmbeddingModel):
     """Embedding model using Amazon Bedrock."""
 
-    def __init__(self, embedding_model: str):
-        self.model_id = embedding_model
-        from . import BedrockBorgModels
-        borg_models = BedrockBorgModels()
-        self.model = borg_models.get_embeddings(model_id="amazon.titan-embed-text-v1")
+    def __init__(self, embeddings_model_id: str):
+        self.model_id = embeddings_model_id
+        from . import BedrockModels
+        bedrock_models = BedrockModels
+        self.model = bedrock_models.get_embeddings(embeddings_model_id=embeddings_model_id)
         self.embeddings = None
         self.embedding_size = len(self.encode(["test"])[0])
         # print(f"embedding_size - {self.embedding_size}")

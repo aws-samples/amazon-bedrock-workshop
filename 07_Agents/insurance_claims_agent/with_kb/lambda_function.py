@@ -107,12 +107,8 @@ def send_reminder(payload):
     print(payload)
     return {
         "response": {
-            # "sendReminderClaimId": data['claimId'],
-            # "sendReminderOutstandingPaperwork": data['pendingDocuments'],
-            # "sendReminderOutstandingPaperworkRequirements": data['pendingDocumentsRequirements'],
-            # "email_content": email,
-            "sendReminderTrackingId": "50e8400-e29b-41d4-a716-446655440000",
-            "sendReminderStatus": "InProgress"
+            "TrackingId": "50e8400-e29b-41d4-a716-446655440000",
+            "Status": "InProgress"
         }
     }
 

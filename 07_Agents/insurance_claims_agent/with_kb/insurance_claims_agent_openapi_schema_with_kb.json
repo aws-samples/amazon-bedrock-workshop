@@ -69,7 +69,7 @@
                     "pendingDocuments": {
                       "type": "array",
                       "items": {
-                        "type": "string",
+                        "type": "string"
                       },
                       "example": ["doc1", "doc2", "doc3"],
                       "description": "The list of pending documents for the claim."
@@ -153,12 +153,22 @@
                   "pendingDocuments": {
                     "type": "array",
                     "items": {
-                      "type": "string",
+                      "type": "object",
+                      "properties": {
+                        "pendingDocument": {
+                          "type": "string",
+                          "description": "name of the pending document in the claim"
+                        },
+                        "DocumentRequirements": {
+                          "type": "string",
+                          "description": "the requirements of the pending document in the claim"
+                        }
+                      }
                     },
-                    "example": ["doc1", "doc2", "doc3"],
-                    "description": "The list of pending documents for the claim."
+                    "description": "List of object containing the pending documents id as key and their requirements as value"
                   }
                 },
+
                 "required": [
                   "claimId",
                   "pendingDocuments"

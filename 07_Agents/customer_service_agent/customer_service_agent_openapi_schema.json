@@ -6,7 +6,7 @@
         "description": "Customer service APIs for a retail store selling shoes"
     },
     "paths": {
-        "/customer/{CustomerName}": {
+        "/attributes/{CustomerName}": {
             "get": {
                 "summary": "Get customer information",
                 "description": "Based on provided customer name, return customer information like customer ID, preferred activity and others",
@@ -75,11 +75,11 @@
                 }
             }
         },
-        "/place_order": {
+        "/transaction": {
             "get": {
                 "summary": "Sub task to place an order on behalf of the customer",
                 "description": "Place an order for a shoe by creating an Order record and updating inventory in the database",
-                "operationId": "placeshoeOrder",
+                "operationId": "placeShoeOrder",
                 "parameters": [{
                     "name": "ShoeID",
                     "in": "query",
@@ -118,7 +118,7 @@
                 }
             }
         },
-        "/check_inventory": {
+        "/assets": {
             "get": {
                 "summary": "Returns all details related to shoes, including inventory details",
                 "description": "Checks inventory for shoes and returns all available information about available shoes, including shoe ID, shoe colors, inventory, best fit activity, style description and price ",

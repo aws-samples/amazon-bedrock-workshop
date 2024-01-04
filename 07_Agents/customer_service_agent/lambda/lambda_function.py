@@ -3,12 +3,13 @@ import boto3
 import sqlite3
 from datetime import datetime
 import logging
+import os
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 s3 = boto3.client('s3')
-bucket = '<S3_BUCKET_NAME>'  # Name of bucket with data file and OpenAPI file
+bucket = os.environ['S3_BUCKET']  # Name of bucket with data file and OpenAPI file
 db_name = 'customer_service_agent_sqlite_db'  # Location of data file in S3
 local_db = '/tmp/csbot.db'  # Location in Lambda /tmp folder where data file will be copied
 
@@ -18,6 +19,30 @@ s3.download_file(bucket, db_name, local_db)
 
 cursor = None
 conn = None
+
+
+def get_named_parameter(event, name):
+    """
+    Function that gets the parameter 'name' from the lambda event object
+    Args:
+        event: lambda event
+        name: name of the parameter to return
+    Returns:
+        parameter value
+    """
+    return next(item for item in event['parameters'] if item['name'] == name)['value']
+
+
+def get_named_property(event, name):
+    """
+    get the named property 'name' from the lambda event object
+    Args:        
+        event: lambda event
+        name: name of the named property to return
+    Returns:
+        named property value
+    """
+    return next(item for item in event['requestBody']['content']['application/json']['properties'] if item['name'] == name)['value']
 
 
 def load_data():
@@ -122,21 +147,15 @@ def lambda_handler(event, context):
     logger.info('API Path')
     logger.info(api_path)
     body = ""
-    if api_path == '/customer/{CustomerName}':
+    if api_path == '/attributes/{CustomerName}':
+        c_name = get_named_parameter(event, "CustomerName")
+        body = return_customer_info(c_name, cursor)
+    elif api_path == '/transaction':
+        shoe_id = get_named_parameter(event, "ShoeID")
+        cid = get_named_parameter(event, "CustomerID")
         parameters = event['parameters']
-        for parameter in parameters:
-            if parameter["name"] == "CustomerName":
-                c_name = parameter["value"]
-                body = return_customer_info(c_name, cursor)
-    elif api_path == '/place_order':
-        parameters = event['parameters']
-        for parameter in parameters:
-            if parameter["name"] == "ShoeID":
-                shoe_id = parameter["value"]
-            if parameter["name"] == "CustomerID":
-                cid = parameter["value"]
-                body = place_shoe_order(shoe_id, cid, cursor, conn)
-    elif api_path == '/check_inventory':
+        body = place_shoe_order(shoe_id, cid, cursor, conn)
+    elif api_path == '/assets':
         body = return_shoe_inventory(cursor)
     else:
         body = {"{} is not a valid api, try another one.".format(api_path)}

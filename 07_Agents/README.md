@@ -44,7 +44,11 @@ Before running any of the labs in this section ensure you've run the [Bedrock bo
 
 
 ## Architecture
-
+**Building Agents for Bedrock using AWS Console**
 ![Bedrock](./images/91-agent-architecture.png)
+
+**Building Agents for Bedrock using Boto3 SDK**
 ![Bedrock](./images/92-agent-architecture.png)
+
+**Integrating Knowledge Bases to your Agents**
 ![Bedrock](./images/93-agent-architecture.png)

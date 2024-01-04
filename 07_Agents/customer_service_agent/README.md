@@ -9,4 +9,4 @@ It demonstrates how to:
 4. Test and deploy your agent
 
 This folder contains the API schema, AWS Lamdbda function and SQLite database required for the use case.
-You can find detailed instructions on how to create the Agent using the AWS console at the [Bedrock Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/en-US/90-agents)
+You can find detailed instructions on how to create the Agent using the AWS console on the [Bedrock Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/en-US/90-agents)

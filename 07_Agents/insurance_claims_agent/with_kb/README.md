@@ -1,48 +1,38 @@
-# Lab 7.2 - Building Agents for Bedrock using Boto3 SDK
+# Lab 7.3 - Integrating Knowledge Bases to your Agents
 
 ## Overview
-In this lab we will demonstrate how to build, test and deploy Agents via [AWS Boto3 SDK](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
+In this lab we will demonstrate how to integrate a [Knowledge Base for Amazon Bedrock](https://aws.amazon.com/bedrock/knowledge-bases/) to your Agents via [AWS Boto3 SDK](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
 
-Boto3 provides two clients for Agents for Bedrock:
-- [AgentsforBedrock](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/bedrock-agent.html) represented by ``bedrock-agent`` that provides functionalities related to the Agent's configuration and
-- [AgentsforBedrockRuntime](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/bedrock-agent-runtime.html) represented by ``bedrock-agent-runtime`` that provides functionalities related to the Agent's and Knowledge Base's invocation.
+Knowledge base for Amazon Bedrock provides you the capability of amass 
+data sources into a repository of information. With knowledge bases, you 
+can easily build an application that takes advantage of retrieval 
+augmented generation (RAG), a technique in which the retrieval of 
+information from data sources augments the generation of model responses. 
+Once set up, you can take advantage of a knowledge base in the following 
+ways.
 
-The table below details the SDK functionalities
+Configure your RAG application to use the RetrieveAndGenerate API to query 
+your knowledge base and generate responses from the information it 
+retrieves.
 
-| **Functionality**                                           | **Boto3 SKD Client**  | **Scope**                 |
-|-------------------------------------------------------------|-----------------------|---------------------------|
-| Create, Update, Delete and Prepare **Agent**                | bedrock-agent         | Agent Configuration       |
-| Associate, Update and Disassociate **Agent Knowledge Base** | bedrock-agent         | Agent Configuration       |
-| Create, Update and Delete **Agent Action Group**            | bedrock-agent         | Agent Configuration       |
-| Create, Update and Delete **Agent Alias**                   | bedrock-agent         | Agent Configuration       |
-| Invoke **Agent**                                            | bedrock-agent-runtime | Agent invocation          |
-| Query **Knowledge Base**                                    | bedrock-agent-runtime | Knowledge Base invocation |
+Associate your knowledge base with an agent (for more information, see 
+Agents for Amazon Bedrock) to add RAG capability to the agent by helping 
+it reason through the steps it can take to help end users.
 
-We will perform the following actions using the Boto3 SDK:
-1. **Create Agent:** create an agent using this API by connecting to 
-the bedrock client.
+Create a custom orchestration flow in your application by using the 
+Retrieve API to retrieve information directly from the knowledge base.
 
-2. **Create Agent Action Group:** create and assign an action group to the agent 
-(with corresponding lambda and openAPI schema)
+In this lab you will:
 
-3. **Prepare Agent:** Prepare an agent for deployment.
-
-4. **Create Agent Alias:** Creating the agent alias to use in the duration of 
-invoking the agent and getting the response
-
-5. **Invoke Agent:** Invoke the agent that you created to get a response from 
-it while it queries from the knowledge base
-
-6. **Delete Agent Action Group:** Delete an action group from the agent 
-configuration
-
-7. **Delete Agent Alias:** Delete an existing alias of the agent
-
-8. **Delete Agent Version:** Delete any existing versions of the agent
-
-9. **Delete Agent:** Delete the entire agent
+1. Create an [Amazon OpenSearch Serverless](https://aws.amazon.com/opensearch-service/features/serverless/) vector database 
+2. Create an [index](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-vector-search.html) for your vector database to perform vector search
+3. Create your knowledge base and its required IAM role
+4. Create a data source from s3 files and associate it to your knowledge base
+5. Ingest the data from S3 to your knowledge base
+6. Associate your knowledge base to your agent
+7. Invoke your agent with a query that requires knowledge base access
 
 This folder contains the API schema, AWS Lamdbda function and notebook, 
-`create_and_invoke_agent` with the code for the use case.
+`create_and_invoke_agent_with_kb` with the code for the use case.
 
 You can find detailed instructions on the [Bedrock Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/en-US/90-agents).

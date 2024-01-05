@@ -6,7 +6,7 @@
     "description": "APIs for managing insurance claims by pulling list of open claims, identifying outstanding paperwork for each claim, identifying all claim details, and sending reminders to policy holders."
   },
   "paths": {
-    "/claims": {
+    "/open-items": {
       "get": {
         "summary": "Gets the list of all open insurance claims",
         "description": "Gets the list of all open insurance claims. Returns all claimIds that are open.",
@@ -42,7 +42,7 @@
         }
       }
     },
-    "/claims/{claimId}/outstanding-paperwork": {
+    "/open-items/{claimId}/outstanding-paperwork": {
       "get": {
         "summary": "Gets outstanding paperwork for a specific claim",
         "description": "Gets the list of pending documents that needs to be uploaded by the policy holder before the claim can be processed. The API takes in only one claim id and returns the list of documents that are pending to be uploaded. This API should be called for each claim id.",
@@ -82,7 +82,7 @@
         }
       }
     },
-    "/claims/{claimId}/detail": {
+    "/open-items/{claimId}/detail": {
       "get": {
         "summary": "Gets all details about a specific claim",
         "description": "Gets all details about a specific claim given a claim id.",
@@ -134,7 +134,7 @@
         }
       }
     },
-    "/send-reminder": {
+    "/notify": {
       "post": {
         "summary": "API to send reminder to the policy holder about pending documents for the open claim",
         "description": "Send reminder to the policy holder about pending documents for the open claim. The API takes in only one claim id and its pending documents at a time, sends the reminder and returns the tracking details for the reminder. This API should be called for each claim id you want to send reminders.",

@@ -15,8 +15,7 @@ def get_named_property(event, name):
         if item['name'] == name)['value']
 
 
-def claim_detail(payload):
-    claim_id = payload['parameters'][0]['value']
+def claim_detail(claim_id):
     if claim_id == 'claim-857':
         return {
             "response": {
@@ -81,32 +80,34 @@ def open_claims():
     }
 
 
-def outstanding_paperwork(parameters):
-    for parameter in parameters:
-        if parameter.get("value", None) == "claim-857":
-            return {
-                "response": {
-                    "pendingDocuments": "DriverLicense, VehicleRegistration"
-                }
+def outstanding_paperwork(claim_id):
+    outstanding_documents = {
+        "claim-857": {
+            "response": {
+                    "pendingDocuments": ["DriverLicense, VehicleRegistration"]
             }
-        elif parameter.get("value", None) == "claim-006":
-            return {
-                "response": {
-                    "pendingDocuments": "AccidentImages"
-                }
+        },
+        "claim-006": {
+            "response": {
+                    "pendingDocuments": ["AccidentImages"]
             }
-        else:
-            return {
-                "response": {
-                    "pendingDocuments": ""
-                }
+        }
+    }
+    if claim_id in outstanding_documents:
+        return outstanding_documents[claim_id]["response"]
+    else:
+        return {
+            "response": {
+                "pendingDocuments": ""
             }
+        }
 
 
-def send_reminder(payload):
-    print(payload)
+def send_reminder(claim_id, pending_documents):
     return {
         "response": {
+            "ClaimId": claim_id,
+            "PendingDocuments": pending_documents,
             "TrackingId": "50e8400-e29b-41d4-a716-446655440000",
             "Status": "InProgress"
         }
@@ -116,16 +117,18 @@ def send_reminder(payload):
 def lambda_handler(event, context):
     action = event['actionGroup']
     api_path = event['apiPath']
-
-    if api_path == '/claims':
+    if api_path == '/open-items':
         body = open_claims()
-    elif api_path == '/claims/{claimId}/outstanding-paperwork':
-        parameters = event['parameters']
-        body = outstanding_paperwork(parameters)
-    elif api_path == '/claims/{claimId}/detail':
-        body = claim_detail(event)
-    elif api_path == '/send-reminder':
-        body = send_reminder(event)
+    elif api_path == '/open-items/{claimId}/outstanding-paperwork':
+        claim_id = get_named_parameter(event, "claimId")
+        body = outstanding_paperwork(claim_id)
+    elif api_path == '/open-items/{claimId}/detail':
+        claim_id = get_named_parameter(event, "claimId")
+        body = claim_detail(claim_id)
+    elif api_path == '/notify':
+        claim_id = get_named_property(event, "claimId")
+        pending_documents = get_named_property(event, "pendingDocuments")
+        body = send_reminder(claim_id, pending_documents)
     else:
         body = {"{}::{} is not a valid api, try another one.".format(action, api_path)}
 
@@ -143,5 +146,5 @@ def lambda_handler(event, context):
         'responseBody': response_body
     }
 
-    mock_api_response = {'response': action_response}
-    return mock_api_response
+    response = {'response': action_response}
+    return response

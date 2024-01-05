@@ -107,10 +107,6 @@ def send_reminder(payload):
     print(payload)
     return {
         "response": {
-            # "sendReminderClaimId": data['claimId'],
-            # "sendReminderOutstandingPaperwork": data['pendingDocuments'],
-            # "sendReminderOutstandingPaperworkRequirements": data['pendingDocumentsRequirements'],
-            # "email_content": email,
             "sendReminderTrackingId": "50e8400-e29b-41d4-a716-446655440000",
             "sendReminderStatus": "InProgress"
         }
@@ -121,14 +117,14 @@ def lambda_handler(event, context):
     action = event['actionGroup']
     api_path = event['apiPath']
 
-    if api_path == '/claims':
+    if api_path == '/open-items':
         body = open_claims()
-    elif api_path == '/claims/{claimId}/outstanding-paperwork':
+    elif api_path == '/open-items/{claimId}/outstanding-paperwork':
         parameters = event['parameters']
         body = outstanding_paperwork(parameters)
-    elif api_path == '/claims/{claimId}/detail':
+    elif api_path == '/open-items/{claimId}/detail':
         body = claim_detail(event)
-    elif api_path == '/send-reminder':
+    elif api_path == '/notify':
         body = send_reminder(event)
     else:
         body = {"{}::{} is not a valid api, try another one.".format(action, api_path)}
@@ -147,5 +143,5 @@ def lambda_handler(event, context):
         'responseBody': response_body
     }
 
-    mock_api_response = {'response': action_response}
-    return mock_api_response
+    response = {'response': action_response}
+    return response

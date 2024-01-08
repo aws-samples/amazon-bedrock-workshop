@@ -62,7 +62,7 @@ class BedrockClientSingleton:
         if model_id is not None:
             self._model_id = model_id
 
-        model_parameter = {"temperature": 0.0, "top_p": .5, "max_tokens_to_sample": 2000}
+        model_parameter = {}
 
         self._llm = Bedrock(
             model_id=self._model_id,

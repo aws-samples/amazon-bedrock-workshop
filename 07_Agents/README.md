@@ -39,6 +39,8 @@ During this workshop, you will cover three modules:
 2. **Building Agents for Bedrock using Boto3 SDK**: In this module, you will create agents for Bedrock programmatically using the insurance claim agent example. The files for this module are available in the `insurance_claims_agent/without_kb` folder
 3. **Integrating Knowledge Bases to your Agents**: In this module, you will create and integrate a Knowledge Base to your insurance claims agent both via AWS console and via Boto3 SDK. The files for this module are available in the `insurance_claims_agent/with_kb` folder.
 
+4. **Understanding Inner workings of Agents**: In this module we will learn how the `agents concept ` works in general. The files for this are under weather_service_agent [Agents Intro](./weather_service_agent/00_Function_DIY_Agents.ipynb)
+
 ## Setup
 Before running any of the labs in this section ensure you've run the [Bedrock boto3 setup notebook](../00_Intro/bedrock_boto3_setup.ipynb#Prerequisites).
 

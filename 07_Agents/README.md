@@ -34,10 +34,12 @@ From the simplest instruction only agent to complex assistants that combine Acti
 ## Workshop Notebooks
 During this workshop, you will cover three modules:
 
-1. **Building Agents for Bedrock using AWS Console**: In this module, you will walk you through agents for Bedrock setup on AWS console using the customer service agent example. The files for this module are available in the `customer_service_agent` folder.
+1. **Building Agents for Bedrock using AWS Console**: In this module, you will walk you through agents for Bedrock setup on AWS console using the customer service agent example. Since we will use the console the process to create the Agents will be manual. The steps to follow will be available in the [Customer service](./customer_service_agent/README.md) folder.
 
 2. **Building Agents for Bedrock using Boto3 SDK**: In this module, you will create agents for Bedrock programmatically using the insurance claim agent example. The files for this module are available in the `insurance_claims_agent/without_kb` folder
 3. **Integrating Knowledge Bases to your Agents**: In this module, you will create and integrate a Knowledge Base to your insurance claims agent both via AWS console and via Boto3 SDK. The files for this module are available in the `insurance_claims_agent/with_kb` folder.
+
+4. **Understanding Inner workings of Agents**: In this module we will learn how the `agents concept ` works in general. The files for this are under weather_service_agent [Agents Intro](./weather_service_agent/00_Function_DIY_Agents.ipynb)
 
 ## Setup
 Before running any of the labs in this section ensure you've run the [Bedrock boto3 setup notebook](../00_Intro/bedrock_boto3_setup.ipynb#Prerequisites).

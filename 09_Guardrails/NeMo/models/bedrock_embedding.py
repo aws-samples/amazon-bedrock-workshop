@@ -184,12 +184,12 @@ class BedrockEmbeddingsIndex(EmbeddingsIndex):
         return docs
 
     def _save_index_to_disk(self):
-        self._index.save_local(f"./vector_store/db_{self._id}_faiss.index")
+        self._index.save_local(f"./NeMo/vector_store/db_{self._id}_faiss.index")
 
     def _load_index_from_disk(self):
         try:
             embeddings = self._model.get_internal()
-            self._index = FAISS.load_local(f"./vector_store/db_{self._id}_faiss.index", embeddings)
+            self._index = FAISS.load_local(f"./NeMo/vector_store/db_{self._id}_faiss.index", embeddings)
 
         except Exception as e:
             return None

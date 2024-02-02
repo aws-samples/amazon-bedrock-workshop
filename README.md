@@ -15,6 +15,7 @@ Labs include:
 - **Image Generation** \[Estimated time to complete - 30 mins\]
 - **Code Generation** \[Estimated time to complete - 30 mins\]
 - **Chatbot Guardrails** \[Estimated time to complete - 45 mins\]
+- **Custom Models** \[Estimated time to complete - 120 mins\]
 
 <div align="center">
 
@@ -134,3 +135,7 @@ This repository contains notebook examples for the Bedrock Architecture Patterns
 
    - **Further Reading:**
      - Familiarize yourself with the basic concepts of guardrails and their implementation in NeMo by exploring the [NeMo-Guardrails documentation](https://github.com/NVIDIA/NeMo). This section helps in understanding how guardrails contribute to the safety, reliability, and ethical handling of LLMs.
+
+### Custom Models
+
+- [Fine-tune and Evaluate Llama2 for Summarization](./10_CustomModels/02_fine-tune_and_evaluate_llama2_bedrock_summarization.ipynb): Demonstrates an end-to-end workflow for fine-tuning, provisioning and evaluating the Foundation Models (FMs) in Amazon Bedrock.

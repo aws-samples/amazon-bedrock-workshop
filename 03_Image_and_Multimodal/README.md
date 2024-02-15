@@ -1,4 +1,4 @@
-# Lab 5 - Image Generation and Multimodal Embeddings
+# Lab 3 - Image Generation and Multimodal Embeddings
 
 ## Overview
 
@@ -66,6 +66,6 @@ In this workshop, you will be able to learn about Image Generation using Amazon 
 Before running any of the labs in this section ensure you've run the [Bedrock boto3 setup notebook](../00_Intro/bedrock_boto3_setup.ipynb#Prerequisites).
 
 ## Helper
-To facilitate image generation, there is a utility class `Bedrock` implementation in `/utils/bedrock.py`. This helps you to generate images easily.
+To facilitate image generation, there is a utility class `Bedrock` implementation in `./utils/bedrock.py`. This helps you to generate images easily.
 
 You can also explore different `style_preset`  options [here](https://platform.stability.ai/docs/features/animation/parameters#available-styles).

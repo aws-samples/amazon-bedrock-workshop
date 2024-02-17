@@ -15,7 +15,7 @@ Labs include:
 - **Image Generation** \[Estimated time to complete - 30 mins\]
 - **Code Generation** \[Estimated time to complete - 30 mins\]
 - **Chatbot Guardrails** \[Estimated time to complete - 45 mins\]
-- **Custom Models** \[Estimated time to complete - 120 mins\]
+- **Custom Models** \[Estimated time to complete - 150 mins\]
 
 <div align="center">
 

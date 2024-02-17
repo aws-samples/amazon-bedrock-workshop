@@ -30,7 +30,6 @@ This module walks you through how to customize models through fine-tuning and co
 This module can be executed by any developer familiar with Python, also by data scientists and other technical people who aspire to customize FMs in Bedrock. 
 
 ## Setup
-- Before running any of the labs in this section ensure you've run the [Bedrock boto3 setup notebook](./bedrock_boto3_setup.ipynb#Prerequisites).
 - In this module, please run the [00_setup.ipynb](./00_setup.ipynb) first to make sure resources are properly set up for the following notebooks in this lab.
 - At the end of the module, please run the [04_cleanup.ipynb](./04_cleanup.ipynb) to make sure resources are removed to avoid unnecessary costs.
 

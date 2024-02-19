@@ -28,7 +28,7 @@ We will generate an email response to a customer where the customer had provided
 
 
 ## Setup
-Before running any of the labs in this section ensure you've run the [Bedrock boto3 setup notebook](../00_Intro/bedrock_boto3_setup.ipynb#Prerequisites).
+Before running any of the labs in this section ensure you've run the [Bedrock boto3 setup notebook](../00_Prerequisites/bedrock_basics.ipynb#Prerequisites).
 
 
 ## Architecture

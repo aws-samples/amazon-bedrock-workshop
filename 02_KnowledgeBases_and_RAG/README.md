@@ -10,6 +10,8 @@
 - [3_customized-rag-retrieve-api-langchain-claude-v2.ipynb](./3\_customized-rag-retrieve-api-langchain-claude-v2.ipynb) - Code sample for using the `RetrieveQA` chain from LangChain and Amazon Knowledge Base as the retriever.
 
 
+Remember to use the [4_CLEAN_UP.ipynb](./4\_CLEAN_UP.ipynb)
+
 ***
 
 ### Note

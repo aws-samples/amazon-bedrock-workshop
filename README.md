@@ -15,7 +15,7 @@ Labs include:
     - Entity extraction
 - **02 - Knowledge bases and RAG** \[Estimated time to complete - 45 mins\]
     - Managed RAG retrieve and generate example
-    - Langchain RAG retireve and generate example
+    - Langchain RAG retrieve and generate example
 - **03 - Model customization** \[Estimated time to complete - 30 mins\]
     - Coming soon
 - **04 - Image and Multimodal** \[Estimated time to complete - 30 mins\]

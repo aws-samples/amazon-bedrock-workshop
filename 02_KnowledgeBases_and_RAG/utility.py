@@ -223,4 +223,4 @@ def interactive_sleep(seconds: int):
         dots += '.'
         print(dots, end='\r')
         time.sleep(1)
-    print(' Done!')
+    print('Done!')

@@ -35,7 +35,7 @@ From the simplest instruction only agent to complex assistants that combine Acti
 During this workshop, you will cover two modules:
 
 1. **Building Agents for Bedrock using Boto3 SDK**: In this module, you will create agents for Bedrock programmatically using the insurance claim agent example. The files for this module are available in the `insurance_claims_agent/without_kb` folder
-2. **Integrating Knowledge Bases to your Agents**: In this module, you will create and integrate a Knowledge Base to your insurance claims agent both via AWS console and via Boto3 SDK. The files for this module are available in the `insurance_claims_agent/with_kb` folder.
+2. **Integrating Knowledge Bases to your Agents**: In this module, you will create and integrate a Knowledge Base to your insurance claims agent via Boto3 SDK. The files for this module are available in the `insurance_claims_agent/with_kb` folder.
 
 
 ## Setup

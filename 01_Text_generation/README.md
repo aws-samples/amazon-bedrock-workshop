@@ -4,7 +4,7 @@
 
 In this lab, you will learn how to generate text using LLMs on Amazon Bedrock by using the Bedrock API. 
 
-We will first generate text using a zero-shot prompt. The zero-shot prompt provides instruction to generate text content without providing a detailed context. We will explore zero-shot email generation using Bedrock API (BoTo3). Then we will show how to improve the quality of the generated text by providing additional context in the prompt. Additionally, we will also look at text summarization, name entity recognition, and code generation examples.
+We will first generate text using a zero-shot prompt. The zero-shot prompt provides instruction to generate text content without providing a detailed context. We will explore zero-shot email generation using Bedrock API (Boto3). Then we will show how to improve the quality of the generated text by providing additional context in the prompt. Additionally, we will also look at text summarization, name entity recognition, and code generation examples.
 
 ## Audience
 

@@ -1,4 +1,4 @@
-# Lab 10 - Custom Models 
+# Lab 3 - Custom Models 
 
 
 <div class="alert alert-block alert-warning">

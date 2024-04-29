@@ -1,9 +1,9 @@
-# Lab 7.3 - Integrating Knowledge Bases to your Agents
+# Lab 5.3 - Integrating Knowledge Bases to your Agents
 
 ## Overview
 In this lab we will demonstrate how to integrate a [Knowledge Base for Amazon Bedrock](https://aws.amazon.com/bedrock/knowledge-bases/) to your Agents via [AWS Boto3 SDK](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
 
-Knowledge base for Amazon Bedrock provides you the capability of amass 
+Knowledge bases for Amazon Bedrock allows you to aggregate 
 data sources into a repository of information. With knowledge bases, you 
 can easily build an application that takes advantage of retrieval 
 augmented generation (RAG), a technique in which the retrieval of 
@@ -32,7 +32,7 @@ In this lab you will:
 6. Associate your knowledge base to your agent
 7. Invoke your agent with a query that requires knowledge base access
 
-This folder contains the API schema, AWS Lamdbda function and notebook, 
+This folder contains the API schema, AWS Lambda function and notebook, 
 `create_and_invoke_agent_with_kb` with the code for the use case.
 
 You can find detailed instructions on the [Bedrock Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/en-US/90-agents).

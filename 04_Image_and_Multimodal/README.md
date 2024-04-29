@@ -1,4 +1,4 @@
-# Lab 3 - Image Generation and Multimodal Embeddings
+# Lab 4 - Image Generation and Multimodal Embeddings
 
 ## Overview
 

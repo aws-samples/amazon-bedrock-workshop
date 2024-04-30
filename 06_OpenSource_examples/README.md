@@ -1,24 +1,24 @@
-# Using Open Source tooling in Amazon Bedrock Workshop
+# Lab 6 - Using Open Source tooling in Amazon Bedrock Workshop
 
-This hands-on workshop, aimed at developers and solution builders, introduces how to leverage foundation models (FMs) through [Amazon Bedrock](https://aws.amazon.com/bedrock/) and supporting Open Source libraries. Amazon Bedrock works extremely well with Open source toling like Langchain, LlamaIndex and a variety of Vector Databases. You can also use hybrid approach of leveraging KnowledgeBase Within this series of labs, you'll explore some of the most common usage patterns we are seeing with our customers for Generative AI. We will show techniques for generating text and images, creating value for organizations by improving productivity. This is achieved by leveraging foundation models to help in composing emails, summarizing text, answering questions, building chatbots, and creating images. While the focus of this workshop is for you to gain hands-on experience implementing these patterns via Bedrock APIs and SDKs and with open-source packages like [LangChain](https://python.langchain.com/docs/get_started/introduction) and [FAISS](https://faiss.ai/index.html).
+This hands-on workshop is aimed at developers and solution builders. It demonstrates how to leverage foundation models (FMs) through [Amazon Bedrock](https://aws.amazon.com/bedrock/) and supporting open source libraries. Amazon Bedrock works extremely well with open source tooling like LangChain, LlamaIndex and a variety of vector databases. You can use a hybrid approach that leverages Bedrock KnowledgeBase within these labs, and explore some of the most common usage patterns we are seeing with our customers for Generative AI. We will show you techniques for generating text and images, creating value for organizations by improving productivity. This is achieved by leveraging foundation models to compose emails, summarize text, answer questions, and create images. While the focus of this workshop is for you to get hands-on experience implementing these patterns via Bedrock APIs and SDKs, you can also use open-source packages like [LangChain](https://python.langchain.com/docs/get_started/introduction) and [FAISS](https://faiss.ai/index.html).
 
 Labs include:
 
 - **01 - Text Generation** \[Estimated time to complete - 45 mins\]
-    - Text generation with Bedrock with Langchain
+    - Text generation with Bedrock with LangChain
     - Text summarization with Titan and Claude
     - Long Text generation with LCEL chains
     - Code Translation
-- **02 - Langchain and Knowledge bases for RAG** \[Estimated time to complete - 45 mins\]
+- **02 - LangChain and Knowledge bases for RAG** \[Estimated time to complete - 45 mins\]
     - Managed RAG retrieve and generate example
-    - Langchain RAG retireve and generate example
-- **03 - Langchain Chatbots** \[Estimated time to complete - 30 mins\]
+    - LangChain RAG retrieve and generate example
+- **03 - LangChain Chatbots** \[Estimated time to complete - 30 mins\]
     - Build Chatbots with Claude, Titan and Llama models
-- **04 - Gaurdrails with Open Source** \[Estimated time to complete - 30 mins\]
-    - Leverage NeMo for Gaurdrails
+- **04 - Guardrails with Open Source** \[Estimated time to complete - 30 mins\]
+    - Leverage NeMo for Guardrails
 - **05 - Open source Agents** \[Estimated time to complete - 30 mins\]
-    - Function Caling 
-    - Open source orchesteration using LlamaIndex and langchain
+    - Function Calling 
+    - Open source orchestration using LlamaIndex and LangChain
 
 
 You can also refer to these [Step-by-step guided instructions on the workshop website](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/en-US).

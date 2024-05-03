@@ -19,6 +19,8 @@ Labs include:
 - **05 - Open source Agents** \[Estimated time to complete - 30 mins\]
     - Function Caling 
     - Open source orchesteration using LlamaIndex and langchain
+    - Open source with Retriever and Agents with Claude V3
+    - Open Source agents with Claude V3
 
 
 You can also refer to these [Step-by-step guided instructions on the workshop website](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/en-US).

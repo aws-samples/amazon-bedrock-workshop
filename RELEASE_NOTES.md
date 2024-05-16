@@ -2,7 +2,7 @@
 - changed pre-req notebook
     - Titan text premier (TTP) tested and works
     - Titan emb v2 tested and works
-    - claude Haiku v2 instead of v2 in the messages API
+    - claude Haiku v2 instead of v2 in the messages API 
 - changed few 01_Text_generation notebooks:
     - 00 now has both Claude and TTP
     - 01 now uses TTP

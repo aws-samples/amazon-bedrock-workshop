@@ -1,4 +1,7 @@
-### 5/1/2024
+### 5/20/2024
+- Rolling back TTP to Titan large to accomodate more Workshop Studio runs
+
+### 5/10/2024
 - changed pre-req notebook
     - Titan text premier (TTP) tested and works
     - Titan emb v2 tested and works

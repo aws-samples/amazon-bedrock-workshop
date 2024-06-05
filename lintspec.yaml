@@ -1,0 +1,11 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: 3.12
+    commands:
+      - pip3 install black 
+      - pip3 install "black[jupyter]"
+  pre_build:
+    commands:
+      - black --check .

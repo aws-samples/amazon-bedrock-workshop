@@ -1,4 +1,4 @@
-name: 'Check Branch'
+name: 'Protect Main Branch'
 on:
   pull_request:
     branches: [ main ]
@@ -6,8 +6,14 @@ jobs:
   check_branch:
     runs-on: ubuntu-latest
     steps:
-      - name: Check branch
-        if: github.base_ref == 'main' && github.head_ref != 'dev'
+      - name: BlockPRFromFork
+        if: github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          echo "ERROR: Pull requests from forks are not allowed to the main branch."
+          exit 1
+
+      - name: AllowDevMerge
+        if: github.base_ref == 'main' && github.head_ref != 'dev' && github.event.pull_request.head.repo.full_name == github.repository
         run: |
           echo "ERROR: You can only merge to main from dev."
           exit 1

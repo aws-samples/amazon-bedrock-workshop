@@ -1,5 +1,8 @@
 ### 5/20/2024
-- Rolling back TTP to Titan large to accomodate more Workshop Studio runs
+- rolled back TTP to Titan Large in text generation
+- rolled back Claude 3 to 2.1 in basic testing of RAG folder (0_ notebook)
+- fixed utility file saying "Done!" every 30 seconds. Now it just does the dots. Can improve further but this should work for now.
+- fixed %store etc. issues in RAG folder
 
 ### 5/10/2024
 - changed pre-req notebook

@@ -2,6 +2,8 @@ import boto3
 import json
 import time
 import zipfile
+import logging
+import pprint
 from io import BytesIO
 
 iam_client = boto3.client('iam')
@@ -13,6 +15,9 @@ dynamodb_client = boto3.client('dynamodb')
 dynamodb_resource = boto3.resource('dynamodb')
 lambda_client = boto3.client('lambda')
 bedrock_agent_client = boto3.client('bedrock-agent')
+bedrock_agent_runtime_client = boto3.client('bedrock-agent-runtime')
+logging.basicConfig(format='[%(asctime)s] p%(process)s {%(filename)s:%(lineno)d} %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def create_dynamodb(table_name):
@@ -38,7 +43,7 @@ def create_dynamodb(table_name):
         print(f'Creating table {table_name}...')
         table.wait_until_exists()
         print(f'Table {table_name} created successfully!')
-    except:
+    except dynamodb_client.Client.exceptions.ResourceInUseException:
         print(f'Table {table_name} already exists, skipping table creation step')
 
 
@@ -61,7 +66,7 @@ def create_lambda(lambda_function_name, lambda_iam_role):
             Code={'ZipFile': zip_content},
             Handler='lambda_function.lambda_handler'
         )
-    except:
+    except lambda_client.Client.exceptions.ResourceConflictException:
         print("Lambda function already exists, retrieving it")
         lambda_function = lambda_client.get_function(
             FunctionName=lambda_function_name
@@ -106,7 +111,6 @@ def create_lambda_role(agent_name, dynamodb_table_name):
         RoleName=lambda_function_role,
         PolicyArn='arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
     )
-    
 
     # Create a policy to grant access to the DynamoDB table
     dynamodb_access_policy = {
@@ -133,7 +137,7 @@ def create_lambda_role(agent_name, dynamodb_table_name):
             PolicyName=dynamodb_access_policy_name,
             PolicyDocument=dynamodb_access_policy_json
         )
-    except:
+    except iam_client.exceptions.EntityAlreadyExistsException:
         dynamodb_access_policy = iam_client.get_policy(
             PolicyArn=f"arn:aws:iam::{account_id}:policy/{dynamodb_access_policy_name}"
         )
@@ -144,6 +148,44 @@ def create_lambda_role(agent_name, dynamodb_table_name):
         PolicyArn=dynamodb_access_policy['Policy']['Arn']
     )
     return lambda_iam_role
+
+
+def invoke_agent_helper(query, session_id, agent_id, alias_id, enable_trace=False, session_state=None):
+    end_session: bool = False
+    if not session_state:
+        session_state = {}
+
+    # invoke the agent API
+    agent_response = bedrock_agent_runtime_client.invoke_agent(
+        inputText=query,
+        agentId=agent_id,
+        agentAliasId=alias_id,
+        sessionId=session_id,
+        enableTrace=enable_trace,
+        endSession=end_session,
+        sessionState=session_state
+    )
+
+    if enable_trace:
+        logger.info(pprint.pprint(agent_response))
+
+    event_stream = agent_response['completion']
+    try:
+        for event in event_stream:
+            if 'chunk' in event:
+                data = event['chunk']['bytes']
+                if enable_trace:
+                    logger.info(f"Final answer ->\n{data.decode('utf8')}")
+                agent_answer = data.decode('utf8')
+                return agent_answer
+                # End event indicates that the request finished successfully
+            elif 'trace' in event:
+                if enable_trace:
+                    logger.info(json.dumps(event['trace'], indent=2))
+            else:
+                raise Exception("unexpected event.", event)
+    except Exception as e:
+        raise Exception("unexpected event.", e)
 
 
 def create_agent_role(agent_name, agent_foundation_model, kb_id=None):
@@ -187,7 +229,7 @@ def create_agent_role(agent_name, agent_foundation_model, kb_id=None):
             PolicyName=agent_bedrock_allow_policy_name,
             PolicyDocument=bedrock_policy_json
         )
-    except:
+    except iam_client.exceptions.EntityAlreadyExistsException:
         agent_bedrock_policy = iam_client.get_policy(
             PolicyArn=f"arn:aws:iam::{account_id}:policy/{agent_bedrock_allow_policy_name}"
         )
@@ -213,11 +255,10 @@ def create_agent_role(agent_name, agent_foundation_model, kb_id=None):
 
         # Pause to make sure role is created
         time.sleep(10)
-    except:
+    except iam_client.Client.exceptions.EntityAlreadyExistsException:
         agent_role = iam_client.get_role(
             RoleName=agent_role_name,
         )
-        
 
     iam_client.attach_role_policy(
         RoleName=agent_role_name,
@@ -270,7 +311,7 @@ def delete_agent_roles_and_policies(agent_name, kb_policy_name):
             print(f"Could not delete role {role_name}")
             print(e)
 
-    for policy in [agent_bedrock_allow_policy_name, dynamodb_access_policy_name]:
+    for policy in [agent_bedrock_allow_policy_name, kb_policy_name, dynamodb_access_policy_name]:
         try:
             iam_client.delete_policy(
                 PolicyArn=f'arn:aws:iam::{account_id}:policy/{policy}'

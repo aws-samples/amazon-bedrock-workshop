@@ -50,3 +50,7 @@ This agent also connects to an action group that provides functionalities for ha
 
 The action group created in this example, uses Feature Definition to define the functionalities for `create_booking`, `get_booking_details` and `delete_booking`.
 The action group execution connects with a Lambda function that interacts with an Amazon DynamoDB table.
+
+## Agents deep dive workshop
+These labs are a part of the [Amazon Bedrock Workshop](https://catalog.workshops.aws/amazon-bedrock) content and provides a high-level overview of Agents for Amazon Bedrock content.
+For a deep dive into Agents concepts, including return of control, advanced prompts and others, you can check the [Agents for Amazon Bedrock Workshop](https://catalog.workshops.aws/agents-for-amazon-bedrock/en-US) content

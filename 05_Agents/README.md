@@ -52,5 +52,5 @@ The action group created in this example, uses Feature Definition to define the 
 The action group execution connects with a Lambda function that interacts with an Amazon DynamoDB table.
 
 ## Agents deep dive workshop
-These labs are a part of the [Amazon Bedrock Workshop](https://catalog.workshops.aws/amazon-bedrock) content and provides a high-level overview of Agents for Amazon Bedrock content.
-For a deep dive into Agents concepts, including return of control, advanced prompts and others, you can check the [Agents for Amazon Bedrock Workshop](https://catalog.workshops.aws/agents-for-amazon-bedrock/en-US) content
+The Agents for Amazon Bedrock labs in this workshop provide a high-level overview of the Agents content.
+For a deep dive into Agents concepts, including concepts such as return of control, advanced prompts and others, you can check the [Agents for Amazon Bedrock Workshop](https://catalog.workshops.aws/agents-for-amazon-bedrock/en-US)

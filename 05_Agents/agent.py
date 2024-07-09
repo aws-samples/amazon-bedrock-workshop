@@ -43,7 +43,7 @@ def create_dynamodb(table_name):
         print(f'Creating table {table_name}...')
         table.wait_until_exists()
         print(f'Table {table_name} created successfully!')
-    except dynamodb_client.Client.exceptions.ResourceInUseException:
+    except dynamodb_client.exceptions.ResourceInUseException:
         print(f'Table {table_name} already exists, skipping table creation step')
 
 
@@ -66,7 +66,7 @@ def create_lambda(lambda_function_name, lambda_iam_role):
             Code={'ZipFile': zip_content},
             Handler='lambda_function.lambda_handler'
         )
-    except lambda_client.Client.exceptions.ResourceConflictException:
+    except lambda_client.exceptions.ResourceConflictException:
         print("Lambda function already exists, retrieving it")
         lambda_function = lambda_client.get_function(
             FunctionName=lambda_function_name
@@ -255,7 +255,7 @@ def create_agent_role(agent_name, agent_foundation_model, kb_id=None):
 
         # Pause to make sure role is created
         time.sleep(10)
-    except iam_client.Client.exceptions.EntityAlreadyExistsException:
+    except iam_client.exceptions.EntityAlreadyExistsException:
         agent_role = iam_client.get_role(
             RoleName=agent_role_name,
         )

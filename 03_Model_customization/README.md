@@ -38,4 +38,4 @@ This module can be executed by any developer familiar with Python, also by data 
 
 On this workshop, you will be able to learn following patterns on customizing FMs in Bedrock:
 
-2. [Fine-tune and Evaluate Llama2 in Bedrock for Summarization](./02_fine-tune_and_evaluate_llama2_bedrock_summarization.ipynb): Demonstrates an end-to-end workflow for fine-tuning, provisioning and evaluating a Meta Llama2 in Amazon Bedrock.
+2. [Fine-tune and Evaluate Llama2 in Bedrock for Summarization](./02_fine-tuning_llama2.ipynb): Demonstrates an end-to-end workflow for fine-tuning, provisioning and evaluating a Meta Llama2 in Amazon Bedrock.

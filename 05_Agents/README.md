@@ -35,13 +35,13 @@ From the simplest instruction only agent to complex assistants that combine Acti
 ## Workshop Notebooks
 During this workshop, you will cover three modules:
 
-1. **Building Agents for Bedrock using Boto3 SDK**: In this module, you will create agents for Bedrock programmatically using the restaurant agent example. This module uses the `01_create_agent.ipynb` file
-2. **Integrating Knowledge Bases to your Agents**: In this module, you will create a Knowledge Base and update your restaurant agent to connect this knowledge via Boto3 SDK. This module uses the `02_associate_knowledge_base_to_agent.ipynb` file
-3. **Test your Agent**: In this module, you will invoke your agent with different prompts. This module uses the `03_invoke_agent.ipynb` file 
-4. **Clean up Resources**: In the last module you will dissociate all resources from your agent and delete them. This module uses the `04_clean_up_agent_resources.ipynb` file
+1. **Building Agents for Bedrock using Boto3 SDK**: In this module, you will create agents for Bedrock programmatically using the restaurant agent example. This module uses the [01_create_agent.ipynb](01_create_agent.ipynb) file
+2. **Integrating Knowledge Bases to your Agents**: In this module, you will create a Knowledge Base and update your restaurant agent to connect this knowledge via Boto3 SDK. This module uses the [02_associate_knowledge_base_to_agent.ipynb](02_associate_knowledge_base_to_agent.ipynb) file
+3. **Test your Agent**: In this module, you will invoke your agent with different prompts. This module uses the [03_invoke_agent.ipynb](03_invoke_agent.ipynb) file 
+4. **Clean up Resources**: In the last module you will dissociate all resources from your agent and delete them. This module uses the [04_clean_up_agent_resources.ipynb](04_clean_up_agent_resources.ipynb) file
 
 ## Setup
-Before running any of the labs in this section ensure you've installed the requirements from `requirements.txt` file.
+Before running any of the labs in this section ensure you've installed the requirements from [requirements.txt](requirements.txt) file.
 
 ## Architecture
 In this lab we will create a restaurant assistant agent that connects with a Knowledge Base for Amazon Bedrock containing the restaurant's different menus.

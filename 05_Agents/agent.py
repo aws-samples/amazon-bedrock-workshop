@@ -1,3 +1,4 @@
+import os
 import boto3
 import json
 import time
@@ -5,6 +6,9 @@ import zipfile
 import logging
 import pprint
 from io import BytesIO
+from IPython.display import display, Markdown
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 
 iam_client = boto3.client('iam')
 sts_client = boto3.client('sts')
@@ -47,7 +51,7 @@ def create_dynamodb(table_name):
         print(f'Table {table_name} already exists, skipping table creation step')
 
 
-def create_lambda(lambda_function_name, lambda_iam_role):
+def create_lambda(lambda_function_name, lambda_iam_role, table_name):
     # add to function
 
     # Package up the lambda function code
@@ -63,6 +67,7 @@ def create_lambda(lambda_function_name, lambda_iam_role):
             Runtime='python3.12',
             Timeout=60,
             Role=lambda_iam_role['Role']['Arn'],
+            Environment={'Variables': {'table_name': table_name}},
             Code={'ZipFile': zip_content},
             Handler='lambda_function.lambda_handler'
         )
@@ -150,21 +155,24 @@ def create_lambda_role(agent_name, dynamodb_table_name):
     return lambda_iam_role
 
 
-def invoke_agent_helper(query, session_id, agent_id, alias_id, enable_trace=False, session_state=None):
-    end_session: bool = False
+def invoke_agent_helper(query, session_id, agent_id, alias_id, enable_trace=False, session_state=None, memory_id=None, show_code_use=False, end_session = False):
     if not session_state:
         session_state = {}
 
     # invoke the agent API
-    agent_response = bedrock_agent_runtime_client.invoke_agent(
-        inputText=query,
-        agentId=agent_id,
-        agentAliasId=alias_id,
-        sessionId=session_id,
-        enableTrace=enable_trace,
-        endSession=end_session,
-        sessionState=session_state
-    )
+    agent_kwargs = {
+        'inputText': query,
+        'agentId': agent_id,
+        'agentAliasId': alias_id,
+        'sessionId': session_id,
+        'enableTrace': enable_trace,
+        'endSession': end_session,
+        'sessionState': session_state
+    }
+    if memory_id:
+        agent_kwargs['memoryId'] = memory_id
+
+    agent_response = bedrock_agent_runtime_client.invoke_agent(**agent_kwargs)
 
     if enable_trace:
         logger.info(pprint.pprint(agent_response))
@@ -178,15 +186,113 @@ def invoke_agent_helper(query, session_id, agent_id, alias_id, enable_trace=Fals
                     logger.info(f"Final answer ->\n{data.decode('utf8')}")
                 agent_answer = data.decode('utf8')
                 return agent_answer
-                # End event indicates that the request finished successfully
-            elif 'trace' in event:
-                if enable_trace:
-                    logger.info(json.dumps(event['trace'], indent=2))
-            else:
-                raise Exception("unexpected event.", event)
+                
+            if 'files' in event.keys():
+                files_event = event['files']
+                display(Markdown("### Files"))
+                files_list = files_event['files']
+                for this_file in files_list:
+                    print(f"{this_file['name']} ({this_file['type']})")
+                    file_bytes = this_file['bytes']
+    
+                    # save bytes to file, given the name of file and the bytes 
+                    file_name = os.path.join('output', this_file['name'])
+                    with open(file_name, 'wb') as f:
+                        f.write(file_bytes)
+                    if this_file['type'] == 'image/png' or this_file['type'] == 'image/jpeg':
+                        img = mpimg.imread(file_name)
+                        plt.imshow(img)
+                        plt.show()
+    
+            if 'trace' in event.keys() and enable_trace:
+                trace_event = event.get('trace')['trace']['orchestrationTrace']
+    
+                if 'modelInvocationInput' in trace_event.keys():
+                    pass
+    
+                if 'rationale' in trace_event.keys():
+                    rationale = trace_event['rationale']['text']
+                    display(Markdown(f"### Rationale\n{rationale}"))
+    
+                if 'invocationInput' in trace_event.keys() and show_code_use:
+                    inv_input = trace_event['invocationInput']
+                    if 'codeInterpreterInvocationInput' in inv_input:
+                        gen_code = inv_input['codeInterpreterInvocationInput']['code']
+                        code = f"```python\n{gen_code}\n```"
+                        display(Markdown(f"### Generated code\n{code}"))
+    
+                if 'observation' in trace_event.keys():
+                    obs = trace_event['observation']
+                    if 'codeInterpreterInvocationOutput' in obs:
+                        if 'executionOutput' in obs['codeInterpreterInvocationOutput'].keys() and show_code_use:
+                            raw_output = obs['codeInterpreterInvocationOutput']['executionOutput']
+                            output = f"```\n{raw_output}\n```"
+                            display(Markdown(f"### Output from code execution\n{output}"))
+    
+                        if 'executionError' in obs['codeInterpreterInvocationOutput'].keys():
+                            display(Markdown(f"### Error from code execution\n{obs['codeInterpreterInvocationOutput']['executionError']}"))
+    
+                        if 'files' in obs['codeInterpreterInvocationOutput'].keys():
+                            display(Markdown("### Files generated\n"))
+                            display(Markdown(f"{obs['codeInterpreterInvocationOutput']['files']}"))
+    
+                    if 'finalResponse' in obs:                    
+                        final_resp = obs['finalResponse']['text']
+                        display(Markdown(f"### Final response\n{final_resp}"))
+                        return final_resp
     except Exception as e:
         raise Exception("unexpected event.", e)
 
+# Return a session state populated with the files from the supplied list of filenames
+def add_file_to_session_state(file_name, use_case='CODE_INTERPRETER', session_state=None):
+    if use_case != "CHAT" and use_case != "CODE_INTERPRETER":
+        raise ValueError("Use case must be either 'CHAT' or 'CODE_INTERPRETER'")
+    if not session_state:
+        session_state = {
+            "files": []
+        }
+    type = file_name.split(".")[-1].upper()
+    name = file_name.split("/")[-1]
+
+    if type == "CSV":
+        media_type = "text/csv" 
+    elif type == "PDF":
+        media_type = "application/pdf"
+    elif type in ["XLS", "XLSX"]:
+        media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    else:
+        media_type = "text/plain"
+
+    named_file = {
+        "name": name,
+        "source": {
+            "sourceType": "BYTE_CONTENT", 
+            "byteContent": {
+                "mediaType": media_type,
+                "data": open(file_name, "rb").read()
+            }
+        },
+        "useCase": use_case
+    }
+    session_state['files'].append(named_file)
+
+    return session_state
+
+def wait_memory_creation(agent_id, agent_alias_id, memory_id):
+    start_memory=time.time()
+    memory_content = None
+    if memory_id is not None:
+        while not memory_content:
+            time.sleep(5)
+            memory_content=bedrock_agent_runtime_client.get_agent_memory(
+                agentAliasId=agent_alias_id,
+                agentId=agent_id,
+                memoryId=memory_id,
+                memoryType='SESSION_SUMMARY'
+            )['memoryContents']
+        end_memory=time.time()
+        memory_creation_time=(end_memory-start_memory)
+    return memory_creation_time, memory_content
 
 def create_agent_role(agent_name, agent_foundation_model, kb_id=None):
     agent_bedrock_allow_policy_name = f"{agent_name}-ba"

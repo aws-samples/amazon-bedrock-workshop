@@ -1,0 +1,17 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - pip3 install awscli --upgrade --user
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo "$CODEBUILD_RESOLVED_SOURCE_VERSION"
+      - |
+        ipynb_files=$(git diff HEAD~ HEAD --stat --name-only | grep '\.ipynb$')
+        echo "Jupyter Notebook files changed in this commit:"
+        echo "$ipynb_files"
+        python3 config/build.py "$ipynb_files" $JobInfoTableName $S3LogBucketName $SageMakerRole $CODEBUILD_RESOLVED_SOURCE_VERSION
+  post_build:
+    commands:
+      - echo Build completed on `date`

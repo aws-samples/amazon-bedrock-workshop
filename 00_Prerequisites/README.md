@@ -1,4 +1,4 @@
-# Lab 0 - Introduction to Bedrock
+# Lab 0 - Introduction to Amazon Bedrock
 
 This lab will walk you through the basics of connecting to the Amazon Bedrock service from Python with boto3.
 

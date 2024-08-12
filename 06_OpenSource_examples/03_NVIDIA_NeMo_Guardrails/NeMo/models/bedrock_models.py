@@ -8,10 +8,12 @@ class BedrockClientSingleton:
     # Singleton instance attributes, initially set to None.
     _instance = None
     _embeddings_model = None
-    _model_id = 'anthropic.claude-v2'  # Default model ID, can be replaced with 'anthropic.claude-instant-v1'.
-    _embeddings_model_id = 'amazon.titan-embed-text-v1'  # Default embeddings model ID.
+    _model_id = "anthropic.claude-v2"  # Default model ID, can be replaced with 'anthropic.claude-instant-v1'.
+    _embeddings_model_id = "amazon.titan-embed-text-v1"  # Default embeddings model ID.
     _llm = None  # Large Language Model (LLM) instance.
-    _knowledge_base = None  # Placeholder for a knowledge base that might be used with the LLM.
+    _knowledge_base = (
+        None  # Placeholder for a knowledge base that might be used with the LLM.
+    )
     _bedrock_client = None  # The Bedrock API client instance.
 
     @property
@@ -49,7 +51,7 @@ class BedrockClientSingleton:
         self._bedrock_client = bedrock.get_bedrock_client(
             assumed_role=os.environ.get("BEDROCK_ASSUME_ROLE", None),
             region=os.environ.get("AWS_DEFAULT_REGION", None),
-            runtime=True
+            runtime=True,
         )
 
     def init_llm(self, model_id):
@@ -72,13 +74,13 @@ class BedrockClientSingleton:
 
     def get_embeddings(self, embeddings_model_id: str):
         """
-            Retrieves the embeddings model based on the provided model ID.
+        Retrieves the embeddings model based on the provided model ID.
 
-            Args:
-                embeddings_model_id: The model ID for the embeddings model to retrieve.
+        Args:
+            embeddings_model_id: The model ID for the embeddings model to retrieve.
 
-            Returns:
-                An instance of the BedrockEmbeddings class initialized with the specified model ID.
+        Returns:
+            An instance of the BedrockEmbeddings class initialized with the specified model ID.
         """
         self.init_bedrock_client(None)
 
@@ -87,10 +89,11 @@ class BedrockClientSingleton:
 
         if self._embeddings_model is None:
             self._embeddings_model = BedrockEmbeddings(
-                model_id=self._embeddings_model_id,
-                client=self._bedrock_client)
+                model_id=self._embeddings_model_id, client=self._bedrock_client
+            )
 
         return self._embeddings_model
+
 
 # Instantiation of the BedrockClientSingleton which can be used throughout the code.
 BedrockModels = BedrockClientSingleton()

@@ -4,6 +4,7 @@ from nemoguardrails import LLMRails, RailsConfig
 from langchain.vectorstores import FAISS
 from typing import List
 
+
 def _get_index_name_from_id(name: str):
     if "build" in name:
         return "KnowledgeBase"
@@ -15,6 +16,7 @@ def _get_index_name_from_id(name: str):
         return "NeMo Conversations Flows"
     return name
 
+
 def _get_model_config(config: RailsConfig, type: str):
     """Quick helper to return the config for a specific model type."""
     for model_config in config.models:
@@ -24,6 +26,7 @@ def _get_model_config(config: RailsConfig, type: str):
 
 def _split_text(document: str, meta: dict[str]) -> List[IndexItem]:
     from langchain.text_splitter import RecursiveCharacterTextSplitter
+
     # - in our testing Character split works better with this PDF data set
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
@@ -36,7 +39,7 @@ def _split_text(document: str, meta: dict[str]) -> List[IndexItem]:
 
 def normalize_index_item(text: str) -> IndexItem:
     ii = IndexItem(text=text, meta={})
-    ii.meta['body'] = text
+    ii.meta["body"] = text
     return ii
 
 
@@ -61,13 +64,9 @@ class BedrockEmbeddingsIndex(EmbeddingsIndex):
 
         self._model = init_embedding_model(embedding_model=self.embedding_model)
 
-
-
-
     @property
     def id(self):
         return self._id
-
 
     @property
     def loaded_from_disk(self):
@@ -116,6 +115,7 @@ class BedrockEmbeddingsIndex(EmbeddingsIndex):
         if "build" in self._id:
             # part of the temp solution
             from . import BedrockModels
+
             models = BedrockModels
             models.knowledge_base = self
 
@@ -157,7 +157,9 @@ class BedrockEmbeddingsIndex(EmbeddingsIndex):
             # create a list of dict from List[IndexItem].meta
             metadata = [item.meta for item in self._items]
 
-            self._index = FAISS.from_texts(texts, self._model.get_internal(), metadatas=metadata)
+            self._index = FAISS.from_texts(
+                texts, self._model.get_internal(), metadatas=metadata
+            )
             # save the index to disk
             print(f"{index_name} vector store index built.")
             self._save_index_to_disk()
@@ -166,8 +168,6 @@ class BedrockEmbeddingsIndex(EmbeddingsIndex):
             err_message = f"{e} >> Faiss _index build failed"
             # remove
             print(err_message)
-
-
 
     def get_index(self):
         return self._index
@@ -189,7 +189,9 @@ class BedrockEmbeddingsIndex(EmbeddingsIndex):
     def _load_index_from_disk(self):
         try:
             embeddings = self._model.get_internal()
-            self._index = FAISS.load_local(f"./NeMo/vector_store/db_{self._id}_faiss.index", embeddings)
+            self._index = FAISS.load_local(
+                f"./NeMo/vector_store/db_{self._id}_faiss.index", embeddings
+            )
 
         except Exception as e:
             return None
@@ -203,8 +205,11 @@ class BedrockEmbeddingModel(EmbeddingModel):
     def __init__(self, embeddings_model_id: str):
         self.model_id = embeddings_model_id
         from . import BedrockModels
+
         bedrock_models = BedrockModels
-        self.model = bedrock_models.get_embeddings(embeddings_model_id=embeddings_model_id)
+        self.model = bedrock_models.get_embeddings(
+            embeddings_model_id=embeddings_model_id
+        )
         self.embeddings = None
         self.embedding_size = len(self.encode(["test"])[0])
         # print(f"embedding_size - {self.embedding_size}")

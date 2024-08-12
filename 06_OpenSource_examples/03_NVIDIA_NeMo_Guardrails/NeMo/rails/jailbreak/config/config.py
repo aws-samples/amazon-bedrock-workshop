@@ -3,13 +3,13 @@ from nemoguardrails.llm.providers import register_llm_provider
 from nemoguardrails.llm.helpers import get_llm_instance_wrapper
 import sys, os
 
+
 def init(app: LLMRails):
 
     for path in sys.path:
         if "guardrails" in path.lower():
-            sys.path.append(os.path.join(path, 'NeMo'))
+            sys.path.append(os.path.join(path, "NeMo"))
             break
-
 
     from models import (
         BedrockModels,
@@ -17,7 +17,7 @@ def init(app: LLMRails):
         bedrock_output_moderation,
         bedrock_check_jailbreak,
         bedrock_v2_parser,
-        bedrock_claude_v2_parser
+        bedrock_claude_v2_parser,
     )
 
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -41,5 +41,6 @@ def init(app: LLMRails):
     )
     register_llm_provider("amazon_bedrock", llm_wrapper)
     bedrock_models.get_embeddings(embeddings_model_id="amazon.titan-embed-text-v1")
-    app.register_embedding_search_provider("amazon_bedrock_embedding", BedrockEmbeddingsIndex)
-
+    app.register_embedding_search_provider(
+        "amazon_bedrock_embedding", BedrockEmbeddingsIndex
+    )

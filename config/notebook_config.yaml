@@ -1,0 +1,153 @@
+OrderNotebook:
+  00_Prerequisites/bedrock_basics.ipynb:
+    id: 10
+    filename: bedrock_basics.ipynb
+    filepath: 00_Prerequisites
+  
+  01_Text_generation/00_text_generation_w_bedrock.ipynb:
+    id: 20
+    filename: 00_text_generation_w_bedrock.ipynb
+    filepath: 01_Text_generation
+    commands_lifecycle_config:
+      - 'pip install --no-build-isolation --force-reinstall "boto3>=1.28.57" "awscli>=1.29.57" "botocore>=1.31.57"'
+
+  01_Text_generation/01_code_generation_w_bedrock.ipynb:
+    id: 20
+    filename: 01_code_generation_w_bedrock.ipynb
+    filepath: 01_Text_generation
+    commands_lifecycle_config:
+      - 'pip install --no-build-isolation --force-reinstall "boto3>=1.28.57" "awscli>=1.29.57" "botocore>=1.31.57"'
+
+  01_Text_generation/02_text-summarization-titan+claude.ipynb:
+    id: 30
+    filename: 02_text-summarization-titan+claude.ipynb
+    filepath: 01_Text_generation
+    commands_lifecycle_config:
+      - 'pip install --no-build-isolation --force-reinstall "boto3>=1.28.57" "awscli>=1.29.57" "botocore>=1.31.57"'
+  
+  01_Text_generation/03_qa_with_bedrock_titan.ipynb: 
+    id: 40
+    filename: 03_qa_with_bedrock_titan.ipynb
+    filepath: 01_Text_generation
+    commands_lifecycle_config:
+      - 'pip install --no-build-isolation --force-reinstall "boto3>=1.28.57" "awscli>=1.29.57" "botocore>=1.31.57"'
+  
+  01_Text_generation/04_entity_extraction.ipynb:
+    id: 50
+    filename: 04_entity_extraction.ipynb
+    filepath: 01_Text_generation
+    commands_lifecycle_config:
+      - 'pip install --no-build-isolation --force-reinstall "boto3>=1.28.57" "awscli>=1.29.57" "botocore>=1.31.57"'
+  
+  02_KnowledgeBases_and_RAG/0_create_ingest_documents_test_kb.ipynb:
+    id: 60
+    filename: 0_create_ingest_documents_test_kb.ipynb
+    filepath: 02_KnowledgeBases_and_RAG
+    copy_artifacts_to_s3: 
+      - local_filepath: 02_KnowledgeBases_and_RAG/utility.py
+        bucket_filename: utility.py
+    notebook_clean: 
+      - local_filepath: 02_KnowledgeBases_and_RAG/4_CLEAN_UP.ipynb
+        bucket_filename: 4_CLEAN_UP.ipynb
+  
+  02_KnowledgeBases_and_RAG/1_managed-rag-kb-retrieve-generate-api.ipynb:
+    id: 70
+    filename: 1_managed-rag-kb-retrieve-generate-api.ipynb
+    filepath: 02_KnowledgeBases_and_RAG
+    notebook_dependency:
+      - local_filepath: 02_KnowledgeBases_and_RAG/0_create_ingest_documents_test_kb.ipynb
+        bucket_filename: 0_create_ingest_documents_test_kb.ipynb
+  
+  02_KnowledgeBases_and_RAG/2_Langchain-rag-retrieve-api-mistral-and-claude-v2.ipynb:
+    id: 80
+    filename: 2_Langchain-rag-retrieve-api-mistral-and-claude-v2.ipynb
+    filepath: 02_KnowledgeBases_and_RAG
+    notebook_dependency:
+      - local_filepath: 02_KnowledgeBases_and_RAG/0_create_ingest_documents_test_kb.ipynb
+        bucket_filename: 0_create_ingest_documents_test_kb.ipynb
+  
+  02_KnowledgeBases_and_RAG/3_Langchain-rag-retrieve-api-claude-3.ipynb:
+    id: 90
+    filename: 3_Langchain-rag-retrieve-api-claude-3.ipynb
+    filepath: 02_KnowledgeBases_and_RAG
+    notebook_dependency:
+      - local_filepath: 02_KnowledgeBases_and_RAG/0_create_ingest_documents_test_kb.ipynb
+        bucket_filename: 0_create_ingest_documents_test_kb.ipynb
+
+  04_Image_and_Multimodal/bedrock-stable-diffusionXL.ipynb:
+    id: 100
+    filename: bedrock-stable-diffusionXL.ipynb
+    filepath: 04_Image_and_Multimodal
+
+  04_Image_and_Multimodal/bedrock-titan-image-generator.ipynb:
+    id: 110
+    filename: bedrock-titan-image-generator.ipynb
+    filepath: 04_Image_and_Multimodal
+
+  04_Image_and_Multimodal/bedrock-titan-multimodal-embeddings.ipynb:
+    id: 120
+    filename: bedrock-titan-multimodal-embeddings.ipynb
+    filepath: 04_Image_and_Multimodal
+
+  05_Agents/insurance_claims_agent/with_kb/create_and_invoke_agent_with_kb.ipynb:
+    id: 140
+    filename: create_and_invoke_agent_with_kb.ipynb
+    filepath: 05_Agents/insurance_claims_agent/with_kb
+    copy_artifacts_to_s3: 
+      - local_filepath: 05_Agents/insurance_claims_agent/with_kb/insurance_claims_agent_openapi_schema_with_kb.json
+        bucket_filename: insurance_claims_agent_openapi_schema_with_kb.json
+      - local_filepath: 05_Agents/insurance_claims_agent/with_kb/lambda_function.py
+        bucket_filename: lambda_function.py
+      - local_filepath: 05_Agents/insurance_claims_agent/with_kb/kb_documents/AccidentImages_file_requirements.docx
+        bucket_filename: kb_documents/AccidentImages_file_requirements.docx
+      - local_filepath: 05_Agents/insurance_claims_agent/with_kb/kb_documents/AccidentReport_file_requirements.docx
+        bucket_filename: kb_documents/AccidentReport_file_requirements.docx
+      - local_filepath: 05_Agents/insurance_claims_agent/with_kb/kb_documents/Driverlicense_file_requirements.docx
+        bucket_filename: kb_documents/Driverlicense_file_requirements.docx
+      - local_filepath: 05_Agents/insurance_claims_agent/with_kb/kb_documents/VehicleRegistration_file_requirements.docx
+        bucket_filename: kb_documents/VehicleRegistration_file_requirements.docx
+
+  05_Agents/insurance_claims_agent/without_kb/create_and_invoke_agent.ipynb:
+    id: 150
+    filename: create_and_invoke_agent.ipynb
+    filepath: 05_Agents/insurance_claims_agent/without_kb
+    copy_artifacts_to_s3: 
+      - local_filepath: 05_Agents/insurance_claims_agent/without_kb/insurance_claims_agent_openapi_schema.json
+        bucket_filename: insurance_claims_agent_openapi_schema.json
+      - local_filepath: 05_Agents/insurance_claims_agent/without_kb/lambda_function.py
+        bucket_filename: lambda_function.py
+  
+  06_OpenSource_examples/00_Langchain_TextGeneration_examples/01_zero_shot_generation.ipynb:
+    id: 160
+    filename: 01_zero_shot_generation.ipynb
+    filepath: 06_OpenSource_examples/00_Langchain_TextGeneration_examples/00_Langchain_TextGeneration_examples
+
+  06_OpenSource_examples/00_Langchain_TextGeneration_examples/02_code_interpret_w_langchain.ipynb:
+    id: 170
+    filename: 02_code_interpret_w_langchain.ipynb
+    filepath: 06_OpenSource_examples/00_Langchain_TextGeneration_examples/00_Langchain_TextGeneration_examples
+  
+  06_OpenSource_examples/00_Langchain_TextGeneration_examples/03_code_translate_w_langchain.ipynb:
+    id: 180
+    filename: 03_code_translate_w_langchain.ipynb
+    filepath: 06_OpenSource_examples/00_Langchain_TextGeneration_examples/00_Langchain_TextGeneration_examples
+
+  06_OpenSource_examples/00_Langchain_TextGeneration_examples/04_long text summarization using LCEL chains on Langchain.ipynb:
+    id: 190
+    filename: 04_long text summarization using LCEL chains on Langchain.ipynb
+    filepath: 06_OpenSource_examples/00_Langchain_TextGeneration_examples/00_Langchain_TextGeneration_examples
+    copy_artifacts_to_s3: 
+      - local_filepath: 06_OpenSource_examples/00_Langchain_TextGeneration_examples/00_Langchain_TextGeneration_examples/letters/2022-letter.txt
+        bucket_filename: letters/2022-letter.txt
+
+  06_OpenSource_examples/00_Langchain_TextGeneration_examples/05_long-text-summarization-titan Langchain.ipynb:
+    id: 200
+    filename: 05_long-text-summarization-titan Langchain.ipynb
+    filepath: 06_OpenSource_examples/00_Langchain_TextGeneration_examples/00_Langchain_TextGeneration_examples
+    copy_artifacts_to_s3: 
+      - local_filepath: 06_OpenSource_examples/00_Langchain_TextGeneration_examples/00_Langchain_TextGeneration_examples/letters/2022-letter.txt
+        bucket_filename: letters/2022-letter.txt
+      - local_filepath: 06_OpenSource_examples/00_Langchain_TextGeneration_examples/00_Langchain_TextGeneration_examples/utils/__init__.py
+        bucket_filename: utils/__init__.py
+      - local_filepath: 06_OpenSource_examples/00_Langchain_TextGeneration_examples/00_Langchain_TextGeneration_examples/utils/bedrock.py
+        bucket_filename: utils/bedrock.py

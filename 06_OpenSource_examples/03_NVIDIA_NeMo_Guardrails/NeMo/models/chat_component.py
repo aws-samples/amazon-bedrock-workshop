@@ -3,7 +3,6 @@ from IPython.display import HTML, display
 from ipywidgets import widgets
 
 
-
 # create class which renders the chat component
 class ChatComponent:
     def __init__(self, llm):
@@ -19,7 +18,11 @@ class ChatComponent:
         load_image_file = open("images/loading.gif", "rb")
         loading_image = load_image_file.read()
         self.loading_bar = widgets.Image(
-            value=loading_image, format="gif", width="20", height="20", layout={"display": "None"}
+            value=loading_image,
+            format="gif",
+            width="20",
+            height="20",
+            layout={"display": "None"},
         )
 
     def text_event_handler(self, *args):
@@ -58,7 +61,7 @@ class ChatComponent:
 
         # Formatting answer for output
         # Replacing all $ otherwise matjax would format them in a strange way
-        answer_formatted = self.answer.replace('$', r'\$')
+        answer_formatted = self.answer.replace("$", r"\$")
         a = (
             f'<div class="chat-message-left pb-4"><div>'
             + f'<img src="images/w_ai.png" class="rounded-circle mr-1" width="40" height="40">'
@@ -71,6 +74,7 @@ class ChatComponent:
         self.loading_bar.layout.display = "none"
 
         self.output.append_display_data(HTML(a))
+
     def render(self):
         # Render chat component
         display(
@@ -92,4 +96,3 @@ class ChatComponent:
                 layout=widgets.Layout(display="flex", flex_flow="row"),
             )
         )
-

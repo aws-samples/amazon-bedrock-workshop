@@ -1,0 +1,22 @@
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@master
+        with:
+          python-version: 3.12
+      - name: install black
+        run: |
+          pip3 install black
+      - name: install black jupyter
+        run: |
+          pip3 install "black[jupyter]"
+      - name: run black
+        run: |
+          black --check . 

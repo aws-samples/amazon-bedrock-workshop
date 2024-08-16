@@ -1,8 +1,8 @@
 ### 8/8/2024
 
--New (cool) shortlink for you to remember and share! https://catalog.workshops.aws/amazon-bedrock :blob-cat-party:
+- New (cool) shortlink for you to remember and share! https://catalog.workshops.aws/amazon-bedrock :blob-cat-party:
 
--Bedrock Workshop will now be run in the new JupyterLab on SageMaker Studio and not classic Studio notebooks
+- Bedrock Workshop will now be run in the new JupyterLab on SageMaker Studio and not classic Studio notebooks
 
 - Instructions and Prereq’s have been changed in the pinned build (to be published) ... *Changes go live on 8/15* :alert:
 

@@ -1,3 +1,18 @@
+### 8/8/2024
+On 8/8, we announced in our enablement session that several changes were underway with respect to the Amazon Bedrock workshop, and some of you may not have joined that event. Here is a summary of changes we made:
+New (cool) shortlink for you to remember and share! https://catalog.workshops.aws/amazon-bedrock :blob-cat-party:
+Bedrock Workshop will now be run in the new JupyterLab on SageMaker Studio and not classic Studio notebooks (:ty-thankyou: 
+@egfranco
+, 
+@pnipinto
+); Instructions and Prereq’s have been changed in the pinned build (to be published) ... *Changes go live on 8/15* :alert:
+We still welcome your contributions; please email us with proposed changes before you start working on them
+For the github code, please continue to post issues/PRs https://github.com/aws-samples/amazon-bedrock-workshop/tree/main
+Weekly automated testing to make sure all labs run successfully! (:ty-thankyou: 
+@eashank
+, Eashan! )
+
+
 ### 5/20/2024
 - rolled back TTP to Titan Large in text generation
 - rolled back Claude 3 to 2.1 in basic testing of RAG folder (0_ notebook)

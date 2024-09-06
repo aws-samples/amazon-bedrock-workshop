@@ -7,7 +7,7 @@ Amazon Bedrock provides easy access to leading foundation models from multiple m
 
 ## Contents
 This folder contains examples to get you started with various inference patterns for Amazon Bedrock. Choose from the examples below to learn more:
-1. [Getting Started with Cross-region Inference](./cross-region-inference/Getting_started_with_Cross-region_Inference.ipynb) - Introductory sample to help you understand how to use cross-region inference feature from Amazon Bedrock.
+1. [Getting Started with Cross-region Inference](./Getting_started_with_Cross-region_Inference.ipynb) - Introductory sample to help you understand how to use cross-region inference feature from Amazon Bedrock.
 
 
 ## Contributing

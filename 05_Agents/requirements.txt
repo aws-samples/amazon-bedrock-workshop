@@ -3,3 +3,4 @@ opensearch-py
 botocore
 awscli
 retrying
+requests

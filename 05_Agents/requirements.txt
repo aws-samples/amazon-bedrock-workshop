@@ -4,3 +4,4 @@ botocore
 awscli
 retrying
 requests
+tqdm

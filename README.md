@@ -17,7 +17,8 @@ Labs include:
     - Managed RAG retrieve and generate example
     - Langchain RAG retrieve and generate example
 - **03 - Model customization** \[Estimated time to complete - 30 mins\] [![Test - pass](https://img.shields.io/badge/Test-pass-2ea44f)](https://)
-    - Coming soon
+    - Fine tuning Titan lite, Llama2
+    - **Note** - _You must run this on your own AWS account, and this will not work on AWS Workshop Studio!_
 - **04 - Image and Multimodal** \[Estimated time to complete - 30 mins\] [![Test - fail](https://img.shields.io/badge/Test-fail-red)](https://)
     - Bedrock Titan image generator
     - Bedrock Stable Diffusion XL

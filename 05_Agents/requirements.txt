@@ -7,3 +7,4 @@ requests
 tqdm
 aiobfd
 aiodag
+aiodatastore

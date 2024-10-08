@@ -6,3 +6,4 @@ retrying
 requests
 tqdm
 aiobfd
+aiodag

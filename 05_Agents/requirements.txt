@@ -5,3 +5,4 @@ awscli
 retrying
 requests
 tqdm
+aiobfd

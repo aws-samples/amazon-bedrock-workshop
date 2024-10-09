@@ -9,3 +9,4 @@ aiobfd
 aiodag
 aiodatastore
 hface
+hoopa

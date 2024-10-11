@@ -16,15 +16,12 @@ Labs include:
     - Build Chatbots with Claude, Titan and Llama models
 - **04 - Gaurdrails with Open Source** \[Estimated time to complete - 30 mins\]
     - Leverage NeMo for Gaurdrails
-- **05 - Open source Agents** \[Estimated time to complete - 30 mins\]
+- **05 - Open source Agents** \[Estimated time to complete - 45 mins\]
     - Function Caling 
     - Open source orchesteration using LlamaIndex and langchain
     - Open source with Retriever and Agents with Claude V3
     - Open Source agents with Claude V3
-- **06 - Feedback Loops** \[Estimated time to complete - 20 mins\]
-    - Feedback loop and fact-checking logic
-    - Implementation of a fact-checker with LangChain on Amazon Bedrock
-    - Running a summarizer with fact-checker to self-correct issues
+    - Implementation of a fact-checker with LangChain on Amazon Bedrock: a summarizer with fact-checker to self-correct issues
 
 You can also refer to these [Step-by-step guided instructions on the workshop website](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/en-US).
 

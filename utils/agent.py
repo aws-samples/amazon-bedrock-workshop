@@ -8,7 +8,7 @@ from io import BytesIO
 
 iam_client = boto3.client('iam')
 sts_client = boto3.client('sts')
-session = boto3.session.Session(profile_name='devoteam')
+session = boto3.session.Session()
 region = session.region_name
 account_id = sts_client.get_caller_identity()["Account"]
 dynamodb_client = boto3.client("dynamodb", region_name=region)
@@ -26,11 +26,16 @@ def create_lambda(lambda_function_name, lambda_iam_role):
     # Package up the lambda function code
     s = BytesIO()
     z = zipfile.ZipFile(s, 'w')
-    z.write("lambda_function.py")
+    z.write("annex/agent/lambda_function.py", "lambda_function.py")
     z.close()
     zip_content = s.getvalue()
     # Create Lambda Function
-    lambda_client.delete_function(FunctionName=lambda_function_name)
+    # delete function if it already exists, check if it exists first
+    try:
+        lambda_client.get_function(FunctionName=lambda_function_name)
+        lambda_client.delete_function(FunctionName=lambda_function_name)
+    except lambda_client.exceptions.ResourceNotFoundException:
+        pass
     lambda_function = lambda_client.create_function(
         FunctionName=lambda_function_name,
         Runtime='python3.12',

@@ -1,147 +1,70 @@
-#!/usr/bin/env python3
-# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-# SPDX-License-Identifier: MIT-0
 import json
+import uuid
+import boto3
+import urllib.request
+from urllib.parse import quote
 
 
-def get_named_parameter(event, name):
-    return next(item for item in event['parameters'] if item['name'] == name)['value']
+def lambda_handler(event, _):
+    """
+    This function gets the weather information for a given city
+    """
 
+    # Extract info from the event
+    actionGroup = event.get('actionGroup', '')
+    function = event.get('function', '')
+    city = event['parameters'][0]['value']
+    encoded_city = quote(city)
 
-def get_named_property(event, name):
-    return next(
-        item for item in
-        event['requestBody']['content']['application/json']['properties']
-        if item['name'] == name)['value']
+    # Get the location data based on the city
+    url = f'https://geocoding-api.open-meteo.com/v1/search?name={encoded_city}&count=1&language=en&format=json'
+    with urllib.request.urlopen(url) as response:
+        location_data = json.loads(response.read().decode())
+        if not location_data['results']:
+            return {"error": "City not found"}
+        
+        lat = location_data['results'][0]['latitude']
+        lon = location_data['results'][0]['longitude']
 
+    # Get the weather data based on the location
+    weather_url = f'https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto'
+    with urllib.request.urlopen(weather_url) as response:
+        weather_data = json.loads(response.read().decode())
 
-def claim_detail(payload):
-    claim_id = payload['parameters'][0]['value']
-    if claim_id == 'claim-857':
-        return {
-            "response": {
-                "claimId": claim_id,
-                "createdDate": "21-Jul-2023",
-                "lastActivityDate": "25-Jul-2023",
-                "status": "Open",
-                "policyType": "Vehicle"
-            }
-        }
-    elif claim_id == 'claim-006':
-        return {
-            "response": {
-                "claimId": claim_id,
-                "createdDate": "20-May-2023",
-                "lastActivityDate": "23-Jul-2023",
-                "status": "Open",
-                "policyType": "Vehicle"
-            }
-        }
-    elif claim_id == 'claim-999':
-        return {
-            "response": {
-                "claimId": claim_id,
-                "createdDate": "10-Jan-2023",
-                "lastActivityDate": "31-Feb-2023",
-                "status": "Completed",
-                "policyType": "Disability"
-            }
-        }
-    else:
-        return {
-            "response": {
-                "claimId": claim_id,
-                "createdDate": "18-Apr-2023",
-                "lastActivityDate": "20-Apr-2023",
-                "status": "Open",
-                "policyType": "Vehicle"
-            }
-        }
+    current = weather_data['current']
+    daily = weather_data['daily']
 
-
-def open_claims():
-    return {
-        "response": [
-            {
-                "claimId": "claim-006",
-                "policyHolderId": "A945684",
-                "claimStatus": "Open"
-            },
-            {
-                "claimId": "claim-857",
-                "policyHolderId": "A645987",
-                "claimStatus": "Open"
-            },
-            {
-                "claimId": "claim-334",
-                "policyHolderId": "A987654",
-                "claimStatus": "Open"
-            }
-        ]
+    # Prepare the response
+    weather_codes = {
+        0: "Clear sky", 1: "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
+        45: "Fog", 48: "Depositing rime fog",
+        51: "Light drizzle", 53: "Moderate drizzle", 55: "Dense drizzle",
+        61: "Slight rain", 63: "Moderate rain", 65: "Heavy rain",
+        71: "Slight snow fall", 73: "Moderate snow fall", 75: "Heavy snow fall",
+        77: "Snow grains", 80: "Slight rain showers", 81: "Moderate rain showers",
+        82: "Violent rain showers", 85: "Slight snow showers", 86: "Heavy snow showers",
+        95: "Thunderstorm", 96: "Thunderstorm with slight hail", 99: "Thunderstorm with heavy hail"
+    }
+    response_core =  {   
+        'temperature': current['temperature_2m'],
+        'condition': weather_codes.get(current['weather_code'], "Unknown"),
+        'humidity': current['relative_humidity_2m'],
+        'wind_speed': current['wind_speed_10m'],
+        'forecast_max': daily['temperature_2m_max'][0],
+        'forecast_min': daily['temperature_2m_min'][0],
+        'forecast_condition': weather_codes.get(daily['weather_code'][0], "Unknown")
     }
 
-
-def outstanding_paperwork(parameters):
-    for parameter in parameters:
-        if parameter.get("value", None) == "claim-857":
-            return {
-                "response": {
-                    "pendingDocuments": "DriverLicense, VehicleRegistration"
-                }
-            }
-        elif parameter.get("value", None) == "claim-006":
-            return {
-                "response": {
-                    "pendingDocuments": "AccidentImages"
-                }
-            }
-        else:
-            return {
-                "response": {
-                    "pendingDocuments": ""
-                }
-            }
-
-
-def send_reminder(payload):
-    print(payload)
-    return {
-        "response": {
-            "sendReminderTrackingId": "50e8400-e29b-41d4-a716-446655440000",
-            "sendReminderStatus": "InProgress"
-        }
-    }
-
-
-def lambda_handler(event, context):
-    action = event['actionGroup']
-    api_path = event['apiPath']
-
-    if api_path == '/open-items':
-        body = open_claims()
-    elif api_path == '/open-items/{claimId}/outstanding-paperwork':
-        parameters = event['parameters']
-        body = outstanding_paperwork(parameters)
-    elif api_path == '/open-items/{claimId}/detail':
-        body = claim_detail(event)
-    elif api_path == '/notify':
-        body = send_reminder(event)
-    else:
-        body = {"{}::{} is not a valid api, try another one.".format(action, api_path)}
-
-    response_body = {
-        'application/json': {
-            'body': str(body)
-        }
-    }
-
+    responseBody = {'TEXT': {'body': json.dumps(response_core)}}
     action_response = {
-        'actionGroup': event['actionGroup'],
-        'apiPath': event['apiPath'],
-        'httpMethod': event['httpMethod'],
-        'httpStatusCode': 200,
-        'responseBody': response_body
+        'actionGroup': actionGroup,
+        'function': function,
+        'functionResponse': {
+            'responseBody': responseBody
+        }
     }
+    function_response = {'response': action_response, 'messageVersion': event['messageVersion']}
 
-    response = {'response': action_response}
-    return response
+    return function_response
+
+    

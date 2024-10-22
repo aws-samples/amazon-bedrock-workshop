@@ -14,3 +14,4 @@ la-rag
 lyzr-rag
 certifi
 cohere
+urllib3

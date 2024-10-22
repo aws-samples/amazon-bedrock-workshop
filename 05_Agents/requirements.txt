@@ -13,3 +13,4 @@ hoopa
 la-rag
 lyzr-rag
 certifi
+cohere

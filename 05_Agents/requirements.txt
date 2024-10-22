@@ -22,3 +22,4 @@ charset-normalizer
 typing-extensions
 grpcio-status
 python-dateutil
+pyparsing

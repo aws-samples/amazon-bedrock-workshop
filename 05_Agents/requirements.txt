@@ -19,3 +19,4 @@ fsspec
 cryptography
 idna
 charset-normalizer
+typing-extensions

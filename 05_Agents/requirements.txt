@@ -15,4 +15,4 @@ lyzr-rag
 certifi
 cohere
 urllib3
-aiobotocore
+fsspec

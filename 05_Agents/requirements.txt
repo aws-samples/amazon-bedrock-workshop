@@ -20,3 +20,4 @@ cryptography
 idna
 charset-normalizer
 typing-extensions
+grpcio-status

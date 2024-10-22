@@ -12,3 +12,4 @@ hface
 hoopa
 la-rag
 lyzr-rag
+certifi

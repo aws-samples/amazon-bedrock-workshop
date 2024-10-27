@@ -24,3 +24,4 @@ grpcio-status
 python-dateutil
 pyparsing
 zipp
+jinja2

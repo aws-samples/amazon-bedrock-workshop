@@ -63,7 +63,7 @@ In this workshop, you will be able to learn about Image Generation using Amazon 
     ![Multimodal Embeddings](./images/multimodal-embeddings.png)
 
 ## Setup
-Before running any of the labs in this section ensure you've run the [Bedrock boto3 setup notebook](../00_Intro/bedrock_boto3_setup.ipynb#Prerequisites).
+Before running any of the labs in this section ensure you've run the [Bedrock boto3 setup notebook](../00_Prerequisites/bedrock_basics.ipynb).
 
 ## Helper
 To facilitate image generation, there is a utility class `Bedrock` implementation in `./utils/bedrock.py`. This helps you to generate images easily.

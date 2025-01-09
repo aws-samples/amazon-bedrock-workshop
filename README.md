@@ -15,13 +15,13 @@ Labs include:
     - Text summarization with Titan and Claude
     - QnA with Titan
     - Entity extraction
-- **02 - Knowledge bases and RAG** \[Estimated time to complete - 45 mins\] [![Test - fail](https://img.shields.io/badge/Test-fail-red)](https://)
+- **02 - Knowledge bases and RAG** \[Estimated time to complete - 45 mins\] [![Test - pass](https://img.shields.io/badge/Test-pass-2ea44f)](https://)
     - Managed RAG retrieve and generate example
     - Langchain RAG retrieve and generate example
 - **03 - Model customization** \[Estimated time to complete - 30 mins\] [![Test - pass](https://img.shields.io/badge/Test-pass-2ea44f)](https://)
     - Fine tuning Titan lite, Llama2
     - **Note** - _You must run this on your own AWS account, and this will not work on AWS Workshop Studio!_
-- **04 - Image and Multimodal** \[Estimated time to complete - 30 mins\] [![Test - fail](https://img.shields.io/badge/Test-fail-red)](https://)
+- **04 - Image and Multimodal** \[Estimated time to complete - 30 mins\] [![Test - pass](https://img.shields.io/badge/Test-pass-2ea44f)](https://)
     - Bedrock Titan image generator
     - Bedrock Stable Diffusion XL
     - Bedrock Titan Multimodal embeddings

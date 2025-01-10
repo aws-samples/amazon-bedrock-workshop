@@ -1,3 +1,9 @@
+### 1/5/2024
+- Added Nova canvas notebook
+- Added Nova Reel notebook
+- Added inline agents
+
+
 ### 8/8/2024
 
 - New (cool) shortlink for you to remember and share! https://catalog.workshops.aws/amazon-bedrock :blob-cat-party:

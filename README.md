@@ -104,3 +104,9 @@ You're now ready to explore the lab notebooks! Start with [00_Prerequisites/bedr
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aws-samples/amazon-bedrock-workshop&type=Date)](https://star-history.com/#aws-samples/amazon-bedrock-workshop&Date)
+
+# 👥 Contributors
+
+Thanks to our awesome contributors! 🚀🚀🚀
+
+[![contributors](https://contrib.rocks/image?repo=aws-samples/amazon-bedrock-workshop&max=2000)](https://github.com/aws-samples/amazon-bedrock-workshop/graphs/contributors)

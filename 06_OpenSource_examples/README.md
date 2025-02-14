@@ -16,7 +16,7 @@ Welcome to the **Open-Source Module**, where we demonstrate how to use [Amazon B
 **Amazon Bedrock** is a fully managed service that lets you easily build and scale generative AI applications with foundation models (FMs) from top AI providers, all accessible via a single API. In this module, we:
 
 Illustrate **high-level examples** of text generation, code translation, and summarization using Bedrock with **LangChain**.  
-Dive into **advanced agent-based setups** using RAG (retrieval-augmented generation), multi-agent frameworks, agent evaluation, and React-based agents (via **CREATE**) as an alternative to **LandGraph**’s workflow approach.
+Dive into **advanced agent-based setups** using RAG (retrieval-augmented generation), multi-agent frameworks, agent evaluation, and React-based agents (via **CrewAI**) as an alternative to **LandGraph**’s workflow approach.
 
 ---
 
@@ -68,7 +68,7 @@ Focuses on an intermediate agentic workflow in LandGraph, integrating additional
 - ***ragas-agent-evaluation.ipynb***:
 Explains evaluating agent performance using Ragas, focusing on retrieval and generation quality with Bedrock.
 - ***simple-crewai-agent-setup.ipynb***:
-Illustrates a minimal React agent approach using CREATE, contrasting with LandGraph workflows.
+Illustrates a minimal React agent approach using CrewAI, contrasting with LandGraph workflows.
 - ***simple-langragph-agent-setup.ipynb***:
 Provides a starting point for building a single-agent flow with LandGraph, leveraging Bedrock behind the scenes.
 ---

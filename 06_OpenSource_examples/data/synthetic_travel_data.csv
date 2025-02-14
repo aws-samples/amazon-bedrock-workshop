@@ -1,0 +1,589 @@
+Id,Name,Current_Location,Age,Past_Travel_Destinations,Number_of_Trips,Past_Travel_Destinations,Number_of_Trips,Flight_Number,Departure_City,Arrival_City,Flight_Date
+24,Philip Cook,Zurich,29,Ljubljana,1,Ljubljana,1,Z1823,Zurich,Ljubljana,2024-10-11
+918,Andrew Macdonald,Paris,62,"Lisbon, Lisbon, Bergen, Paris, Warsaw",5,"Lisbon, Lisbon, Bergen, Paris, Warsaw",5,O1142,Paris,Lisbon,2024-10-21
+,,,,,,,,U7234,Paris,Lisbon,2024-03-23
+,,,,,,,,H9041,Paris,Bergen,2024-03-25
+,,,,,,,,Y7505,Paris,Paris,2023-09-13
+,,,,,,,,X8568,Paris,Warsaw,2023-05-17
+709,Jonathan Garcia,Sacramento,43,New York,1,New York,1,P8336,Sacramento,New York,2023-07-10
+314,Wendy Yu,Moscow,34,"Prague, Valencia, Reykjavik, London",4,"Prague, Valencia, Reykjavik, London",4,P6922,Moscow,Prague,2023-01-02
+,,,,,,,,I1305,Moscow,Valencia,2024-05-26
+,,,,,,,,S2309,Moscow,Reykjavik,2023-04-14
+,,,,,,,,I3285,Moscow,London,2022-11-13
+429,James Camacho,Honolulu,58,Savannah,1,Savannah,1,P1380,Honolulu,Savannah,2023-08-18
+405,Michael Buckley,Boston,34,"San Diego, Seattle",2,"San Diego, Seattle",2,L4933,Boston,San Diego,2024-01-04
+,,,,,,,,T9701,Boston,Seattle,2023-09-08
+57,Richard Adams,Oslo,30,"Bergen, Brussels, Venice, Valencia",4,"Bergen, Brussels, Venice, Valencia",4,B4940,Oslo,Bergen,2024-01-24
+,,,,,,,,X6302,Oslo,Brussels,2023-01-27
+,,,,,,,,Z5293,Oslo,Venice,2024-06-14
+,,,,,,,,X3688,Oslo,Valencia,2022-12-19
+36,Tonya Frank,St. Petersburg,35,"Amsterdam, Malaga, Prague, Munich, Salzburg",5,"Amsterdam, Malaga, Prague, Munich, Salzburg",5,I2224,St. Petersburg,Amsterdam,2022-12-06
+,,,,,,,,N1951,St. Petersburg,Malaga,2023-08-09
+,,,,,,,,Y1095,St. Petersburg,Prague,2023-02-23
+,,,,,,,,B6582,St. Petersburg,Munich,2023-10-31
+,,,,,,,,F9633,St. Petersburg,Salzburg,2022-11-30
+731,Michelle Mckenzie DDS,Bologna,37,"Luxembourg, Luxembourg",2,"Luxembourg, Luxembourg",2,T4684,Bologna,Luxembourg,2023-10-19
+,,,,,,,,F3794,Bologna,Luxembourg,2022-12-09
+93,Nicholas Burke,Tallinn,28,"Berlin, Lyon",2,"Berlin, Lyon",2,X2409,Tallinn,Berlin,2023-03-24
+,,,,,,,,D3875,Tallinn,Lyon,2023-04-13
+582,Holly Reyes,Ljubljana,39,"Pittsburgh, Zurich",2,"Pittsburgh, Zurich",2,B1233,Ljubljana,Pittsburgh,2024-10-06
+,,,,,,,,E1228,Ljubljana,Zurich,2024-08-06
+35,Yvonne Delgado,Dubrovnik,71,"Madrid, London, Barcelona, St. Petersburg, Krakow",5,"Madrid, London, Barcelona, St. Petersburg, Krakow",5,F7777,Dubrovnik,Madrid,2024-10-14
+,,,,,,,,I2326,Dubrovnik,London,2023-09-20
+,,,,,,,,S4419,Dubrovnik,Barcelona,2024-04-25
+,,,,,,,,O2326,Dubrovnik,St. Petersburg,2024-06-22
+,,,,,,,,Q2646,Dubrovnik,Krakow,2022-12-07
+730,Jacob Nelson,Phoenix,19,Providence,1,Providence,1,F3455,Phoenix,Providence,2023-05-20
+101,Michele Russo,Jacksonville,22,"Savannah, Minneapolis",2,"Savannah, Minneapolis",2,Z5558,Jacksonville,Savannah,2024-10-10
+,,,,,,,,M2527,Jacksonville,Minneapolis,2024-03-03
+572,Emily Hurst,Salzburg,70,"Amsterdam, Lisbon",2,"Amsterdam, Lisbon",2,C9159,Salzburg,Amsterdam,2023-10-10
+,,,,,,,,Y4249,Salzburg,Lisbon,2024-08-06
+118,Shawn Rios,Baltimore,48,"Sacramento, Houston, San Francisco, Savannah, Oklahoma City",5,"Sacramento, Houston, San Francisco, Savannah, Oklahoma City",5,B1677,Baltimore,Sacramento,2022-12-15
+,,,,,,,,V2855,Baltimore,Houston,2024-07-11
+,,,,,,,,N2375,Baltimore,San Francisco,2023-10-22
+,,,,,,,,L8550,Baltimore,Savannah,2024-03-09
+,,,,,,,,A2988,Baltimore,Oklahoma City,2024-10-23
+809,James Aguilar,Baltimore,63,"New Orleans, Oklahoma City, Portland",3,"New Orleans, Oklahoma City, Portland",3,W3579,Baltimore,New Orleans,2024-03-12
+,,,,,,,,R5648,Baltimore,Oklahoma City,2023-06-18
+,,,,,,,,U5432,Baltimore,Portland,2024-09-14
+578,Jack Allen,Nice,71,"Malaga, Barcelona, Seville",3,"Malaga, Barcelona, Seville",3,D3865,Nice,Malaga,2024-03-03
+,,,,,,,,I9015,Nice,Barcelona,2023-05-30
+,,,,,,,,W7239,Nice,Seville,2023-07-09
+238,Jenna Rodriguez,Orlando,21,"Key West, Indianapolis, Houston, Sacramento, St. Louis",5,"Key West, Indianapolis, Houston, Sacramento, St. Louis",5,H9609,Orlando,Key West,2023-02-25
+,,,,,,,,A9464,Orlando,Indianapolis,2023-10-29
+,,,,,,,,N5925,Orlando,Houston,2023-04-29
+,,,,,,,,M6904,Orlando,Sacramento,2024-01-16
+,,,,,,,,B3200,Orlando,St. Louis,2024-09-15
+317,Christopher Hall,Washington,61,Nashville,1,Nashville,1,I4977,Washington,Nashville,2023-02-26
+394,Misty Walter,Chicago,23,"Savannah, Amsterdam",2,"Savannah, Amsterdam",2,L7184,Chicago,Savannah,2024-06-26
+,,,,,,,,Y5435,Chicago,Amsterdam,2023-03-07
+332,John Perry,Edinburgh,37,"Ljubljana, Gothenburg",2,"Ljubljana, Gothenburg",2,I3258,Edinburgh,Ljubljana,2024-04-03
+,,,,,,,,Y6564,Edinburgh,Gothenburg,2023-11-26
+218,Stephanie Hale,Istanbul,52,"Marseille, Krakow, Amsterdam",3,"Marseille, Krakow, Amsterdam",3,Y4819,Istanbul,Marseille,2023-09-21
+,,,,,,,,T7353,Istanbul,Krakow,2023-02-01
+,,,,,,,,E5659,Istanbul,Amsterdam,2024-10-23
+198,Michael Ballard,Houston,57,"New Orleans, Nashville, Asheville, Phoenix",4,"New Orleans, Nashville, Asheville, Phoenix",4,S9604,Houston,New Orleans,2023-06-23
+,,,,,,,,K2641,Houston,Nashville,2023-02-09
+,,,,,,,,B4810,Houston,Asheville,2022-11-25
+,,,,,,,,A9642,Houston,Phoenix,2023-08-01
+157,William Navarro,Nashville,68,"San Antonio, Fort Lauderdale, Sedona",3,"San Antonio, Fort Lauderdale, Sedona",3,U3608,Nashville,San Antonio,2023-05-19
+,,,,,,,,Q3497,Nashville,Fort Lauderdale,2024-09-30
+,,,,,,,,X9986,Nashville,Sedona,2023-07-27
+458,Louis Hall,Pittsburgh,29,"Fort Lauderdale, Tampa, Nashville, Houston, Dallas",5,"Fort Lauderdale, Tampa, Nashville, Houston, Dallas",5,L9257,Pittsburgh,Fort Lauderdale,2023-10-17
+,,,,,,,,C5878,Pittsburgh,Tampa,2023-05-09
+,,,,,,,,D7320,Pittsburgh,Nashville,2023-05-08
+,,,,,,,,X6504,Pittsburgh,Houston,2023-08-24
+,,,,,,,,E6637,Pittsburgh,Dallas,2023-04-09
+896,Marissa Hendrix,Savannah,36,Savannah,1,Savannah,1,H5889,Savannah,Savannah,2024-01-24
+132,Kelly Smith,Pittsburgh,41,"Savannah, Kansas City, Washington, Lisbon, Minneapolis",5,"Savannah, Kansas City, Washington, Lisbon, Minneapolis",5,C8488,Pittsburgh,Savannah,2023-12-07
+,,,,,,,,K7269,Pittsburgh,Kansas City,2024-04-09
+,,,,,,,,X3128,Pittsburgh,Washington,2022-11-26
+,,,,,,,,K5640,Pittsburgh,Lisbon,2024-05-17
+,,,,,,,,U7323,Pittsburgh,Minneapolis,2024-05-30
+373,Sandra Stephens,Jacksonville,68,"Sedona, Sedona, New Orleans",3,"Sedona, Sedona, New Orleans",3,C4264,Jacksonville,Sedona,2023-12-29
+,,,,,,,,U7898,Jacksonville,Sedona,2023-12-15
+,,,,,,,,S8099,Jacksonville,New Orleans,2023-02-23
+760,Wanda Alvarez,Kansas City,71,"Luxembourg, Cincinnati, Sedona, Seattle",4,"Luxembourg, Cincinnati, Sedona, Seattle",4,K6964,Kansas City,Luxembourg,2023-11-09
+,,,,,,,,A2314,Kansas City,Cincinnati,2024-09-20
+,,,,,,,,K1434,Kansas City,Sedona,2024-05-29
+,,,,,,,,D9263,Kansas City,Seattle,2023-08-19
+493,Brian Palmer,Phoenix,75,"Berlin, Las Vegas, Atlanta, Charlotte",4,"Berlin, Las Vegas, Atlanta, Charlotte",4,D4365,Phoenix,Berlin,2023-01-19
+,,,,,,,,G5575,Phoenix,Las Vegas,2023-08-29
+,,,,,,,,F4404,Phoenix,Atlanta,2023-09-06
+,,,,,,,,Y9073,Phoenix,Charlotte,2023-08-19
+460,Rhonda Nelson,Madrid,58,"Salzburg, Edinburgh, Dubrovnik, Venice",4,"Salzburg, Edinburgh, Dubrovnik, Venice",4,A7471,Madrid,Salzburg,2023-11-06
+,,,,,,,,H1117,Madrid,Edinburgh,2023-06-06
+,,,,,,,,F1744,Madrid,Dubrovnik,2024-04-15
+,,,,,,,,G8955,Madrid,Venice,2024-05-18
+853,Mr. Chase Stewart,Charleston,33,"Key West, Phoenix",2,"Key West, Phoenix",2,Q7576,Charleston,Key West,2023-09-04
+,,,,,,,,W1396,Charleston,Phoenix,2024-07-24
+667,Charles Fields,Porto,69,"Nice, Gothenburg, Rome, Malaga",4,"Nice, Gothenburg, Rome, Malaga",4,B9881,Porto,Nice,2024-08-29
+,,,,,,,,D3956,Porto,Gothenburg,2023-08-01
+,,,,,,,,Z4517,Porto,Rome,2024-05-18
+,,,,,,,,G5121,Porto,Malaga,2023-12-23
+325,Richard Wiggins,Reykjavik,59,"Salzburg, Lyon, London, Dublin, Moscow",5,"Salzburg, Lyon, London, Dublin, Moscow",5,W4633,Reykjavik,Salzburg,2022-11-20
+,,,,,,,,A3522,Reykjavik,Lyon,2023-04-05
+,,,,,,,,L9388,Reykjavik,London,2023-07-04
+,,,,,,,,H6040,Reykjavik,Dublin,2024-10-16
+,,,,,,,,R8682,Reykjavik,Moscow,2023-11-19
+337,Jason Weber,Kansas City,25,"New Orleans, Los Angeles",2,"New Orleans, Los Angeles",2,A5742,Kansas City,New Orleans,2023-06-06
+,,,,,,,,D5828,Kansas City,Los Angeles,2024-03-16
+302,Carla Patel,Bergen,47,"Reykjavik, Lisbon, Dublin, Milan",4,"Reykjavik, Lisbon, Dublin, Milan",4,N6707,Bergen,Reykjavik,2022-11-08
+,,,,,,,,G4357,Bergen,Lisbon,2024-04-08
+,,,,,,,,R4032,Bergen,Dublin,2024-09-05
+,,,,,,,,R5260,Bergen,Milan,2023-05-30
+868,John Williams,Las Vegas,56,"Orlando, Asheville, Baltimore",3,"Orlando, Asheville, Baltimore",3,R4479,Las Vegas,Orlando,2024-07-26
+,,,,,,,,Z5385,Las Vegas,Asheville,2024-07-01
+,,,,,,,,O3708,Las Vegas,Baltimore,2024-10-30
+563,Jacqueline Ross,Venice,51,"Ljubljana, Salzburg",2,"Ljubljana, Salzburg",2,P3652,Venice,Ljubljana,2022-11-15
+,,,,,,,,R5723,Venice,Salzburg,2024-06-19
+64,Alicia Mcintosh,Bergen,32,"Dubrovnik, Ljubljana, Vienna, Paris",4,"Dubrovnik, Ljubljana, Vienna, Paris",4,Q6562,Bergen,Dubrovnik,2023-11-05
+,,,,,,,,W9443,Bergen,Ljubljana,2023-07-11
+,,,,,,,,Z5803,Bergen,Vienna,2023-04-13
+,,,,,,,,L6176,Bergen,Paris,2023-03-11
+899,Calvin Patel,Fort Lauderdale,26,"Houston, Jacksonville, Denver, Milwaukee, Warsaw",5,"Houston, Jacksonville, Denver, Milwaukee, Warsaw",5,V7998,Fort Lauderdale,Houston,2024-04-30
+,,,,,,,,G2029,Fort Lauderdale,Jacksonville,2023-08-12
+,,,,,,,,S5425,Fort Lauderdale,Denver,2023-09-29
+,,,,,,,,O8046,Fort Lauderdale,Milwaukee,2022-12-27
+,,,,,,,,E5670,Fort Lauderdale,Warsaw,2023-04-12
+626,Jeffery Schneider,Charlotte,64,"Sedona, Oklahoma City, Chicago, Honolulu",4,"Sedona, Oklahoma City, Chicago, Honolulu",4,Q3077,Charlotte,Sedona,2023-03-17
+,,,,,,,,I8263,Charlotte,Oklahoma City,2024-08-16
+,,,,,,,,K7117,Charlotte,Chicago,2023-05-08
+,,,,,,,,F9315,Charlotte,Honolulu,2023-01-26
+878,Alyssa Johnson,Bordeaux,42,"Florence, Krakow",2,"Florence, Krakow",2,R4423,Bordeaux,Florence,2023-01-17
+,,,,,,,,H3098,Bordeaux,Krakow,2022-12-09
+275,Ryan Harper Jr.,San Francisco,64,Austin,1,Austin,1,S2933,San Francisco,Austin,2024-04-04
+919,Janice Moore,San Jose,25,Asheville,1,Asheville,1,C2303,San Jose,Asheville,2023-06-30
+891,Lucas Williams,Minneapolis,73,"Pittsburgh, Nashville",2,"Pittsburgh, Nashville",2,Q7295,Minneapolis,Pittsburgh,2024-05-25
+,,,,,,,,Y1620,Minneapolis,Nashville,2023-09-02
+239,Angela Patton,Austin,69,Orlando,1,Orlando,1,M2608,Austin,Orlando,2023-02-07
+456,Edward Scott,Baltimore,44,St. Louis,1,St. Louis,1,R9643,Baltimore,St. Louis,2024-10-02
+809,Zachary Jimenez,Washington,68,"Key West, Boston",2,"Key West, Boston",2,W3516,Washington,Key West,2024-08-10
+,,,,,,,,A9833,Washington,Boston,2023-04-02
+103,Wendy Lowe,Istanbul,27,"Lisbon, Ljubljana, Cologne",3,"Lisbon, Ljubljana, Cologne",3,L3949,Istanbul,Lisbon,2024-02-08
+,,,,,,,,A1309,Istanbul,Ljubljana,2024-03-05
+,,,,,,,,S2946,Istanbul,Cologne,2023-07-30
+120,William Terry,Pittsburgh,49,"New York, New Orleans, Newport",3,"New York, New Orleans, Newport",3,A4979,Pittsburgh,New York,2022-12-19
+,,,,,,,,G5602,Pittsburgh,New Orleans,2023-06-26
+,,,,,,,,I3994,Pittsburgh,Newport,2022-12-24
+881,Brandon Zimmerman,Charlotte,23,"Orlando, Honolulu",2,"Orlando, Honolulu",2,X2718,Charlotte,Orlando,2023-10-11
+,,,,,,,,Q7527,Charlotte,Honolulu,2024-04-06
+982,Stuart Figueroa,Oklahoma City,75,"Washington, Nashville, Austin, Nashville",4,"Washington, Nashville, Austin, Nashville",4,W8601,Oklahoma City,Washington,2023-11-22
+,,,,,,,,M5221,Oklahoma City,Nashville,2023-09-16
+,,,,,,,,A1275,Oklahoma City,Austin,2023-04-04
+,,,,,,,,X4455,Oklahoma City,Nashville,2024-04-23
+26,Scott Walker,Vienna,39,San Francisco,1,San Francisco,1,S4575,Vienna,San Francisco,2023-05-08
+485,Stephanie Hill,Cincinnati,33,San Jose,1,San Jose,1,C1321,Cincinnati,San Jose,2023-09-18
+39,Heather Schmidt,San Diego,64,"Dallas, Boston, Savannah",3,"Dallas, Boston, Savannah",3,U2175,San Diego,Dallas,2024-07-09
+,,,,,,,,K3079,San Diego,Boston,2023-07-10
+,,,,,,,,S6608,San Diego,Savannah,2024-08-26
+222,Crystal Gray,Nashville,53,"Orlando, Richmond, Jacksonville, New York, Savannah",5,"Orlando, Richmond, Jacksonville, New York, Savannah",5,C9249,Nashville,Orlando,2023-03-05
+,,,,,,,,C3677,Nashville,Richmond,2024-04-14
+,,,,,,,,N5675,Nashville,Jacksonville,2023-04-18
+,,,,,,,,F5912,Nashville,New York,2023-10-27
+,,,,,,,,B1017,Nashville,Savannah,2024-11-06
+754,Gregory Jones,Portland,41,"Seattle, Denver, Washington",3,"Seattle, Denver, Washington",3,P9805,Portland,Seattle,2023-03-12
+,,,,,,,,C2161,Portland,Denver,2023-12-08
+,,,,,,,,V2628,Portland,Washington,2024-10-20
+645,Belinda Wilson DVM,Gothenburg,63,"Marseille, Venice",2,"Marseille, Venice",2,F1544,Gothenburg,Marseille,2023-05-14
+,,,,,,,,M5038,Gothenburg,Venice,2023-09-07
+940,Juan Nelson,Prague,34,"Amsterdam, Prague, Rome, Helsinki, St. Petersburg",5,"Amsterdam, Prague, Rome, Helsinki, St. Petersburg",5,I9683,Prague,Amsterdam,2024-08-01
+,,,,,,,,D1034,Prague,Prague,2024-09-14
+,,,,,,,,G9871,Prague,Rome,2024-01-17
+,,,,,,,,Z4629,Prague,Helsinki,2024-08-29
+,,,,,,,,T9288,Prague,St. Petersburg,2024-08-31
+613,Lisa Zhang,Marseille,35,"London, Salzburg",2,"London, Salzburg",2,C5606,Marseille,London,2024-10-16
+,,,,,,,,S9995,Marseille,Salzburg,2024-02-10
+681,Douglas Johnson,Zurich,68,"Dublin, Washington",2,"Dublin, Washington",2,Q7858,Zurich,Dublin,2023-10-17
+,,,,,,,,R2697,Zurich,Washington,2022-12-16
+428,Tracy Castaneda,Moscow,34,"Cologne, Gothenburg, Naples, Seville, Lyon",5,"Cologne, Gothenburg, Naples, Seville, Lyon",5,W3749,Moscow,Cologne,2024-06-05
+,,,,,,,,Y1947,Moscow,Gothenburg,2024-08-04
+,,,,,,,,O5424,Moscow,Naples,2022-12-12
+,,,,,,,,L7293,Moscow,Seville,2024-03-24
+,,,,,,,,N8744,Moscow,Lyon,2024-05-25
+356,Kyle Jackson,Malaga,68,"Krakow, Helsinki, Salzburg, Lisbon",4,"Krakow, Helsinki, Salzburg, Lisbon",4,U3351,Malaga,Krakow,2023-03-13
+,,,,,,,,O4901,Malaga,Helsinki,2023-03-08
+,,,,,,,,V4505,Malaga,Salzburg,2023-10-15
+,,,,,,,,Q9609,Malaga,Lisbon,2023-10-11
+736,Daniel Coleman,London,36,"Moscow, Milan, Porto",3,"Moscow, Milan, Porto",3,T4516,London,Moscow,2024-02-06
+,,,,,,,,G8313,London,Milan,2023-11-19
+,,,,,,,,K3584,London,Porto,2024-04-27
+354,Cassandra David,Cologne,50,"Bratislava, Oklahoma City",2,"Bratislava, Oklahoma City",2,W3085,Cologne,Bratislava,2023-05-09
+,,,,,,,,A3117,Cologne,Oklahoma City,2024-01-06
+501,Rhonda Bush,Washington,20,"Las Vegas, Charlotte, Scottsdale, Jacksonville, Oklahoma City",5,"Las Vegas, Charlotte, Scottsdale, Jacksonville, Oklahoma City",5,D3166,Washington,Las Vegas,2024-10-21
+,,,,,,,,A7458,Washington,Charlotte,2023-07-10
+,,,,,,,,P1573,Washington,Scottsdale,2022-11-24
+,,,,,,,,Z6299,Washington,Jacksonville,2023-09-05
+,,,,,,,,I1699,Washington,Oklahoma City,2024-09-15
+572,Michael Nolan MD,Atlanta,28,Denver,1,Denver,1,B1466,Atlanta,Denver,2023-07-23
+686,Terry Vazquez,Milwaukee,38,"Seattle, San Francisco, Key West, Tampa",4,"Seattle, San Francisco, Key West, Tampa",4,J9340,Milwaukee,Seattle,2024-05-23
+,,,,,,,,S5250,Milwaukee,San Francisco,2023-07-22
+,,,,,,,,N8348,Milwaukee,Key West,2023-02-14
+,,,,,,,,U7200,Milwaukee,Tampa,2023-03-25
+407,Katie Carter,Amsterdam,56,"Budapest, Lisbon, Budapest, Bergen",4,"Budapest, Lisbon, Budapest, Bergen",4,W7581,Amsterdam,Budapest,2023-08-17
+,,,,,,,,R4805,Amsterdam,Lisbon,2024-04-26
+,,,,,,,,G4460,Amsterdam,Budapest,2023-12-04
+,,,,,,,,D7881,Amsterdam,Bergen,2023-04-16
+875,Jacob Rogers,Las Vegas,50,"Milwaukee, San Diego, San Antonio",3,"Milwaukee, San Diego, San Antonio",3,F6369,Las Vegas,Milwaukee,2024-04-04
+,,,,,,,,H8177,Las Vegas,San Diego,2023-05-25
+,,,,,,,,N1590,Las Vegas,San Antonio,2024-05-04
+622,Billy Jensen,Austin,63,Baltimore,1,Baltimore,1,P2195,Austin,Baltimore,2024-03-23
+937,Jackson Pham,New Orleans,73,"Santa Fe, Chicago, San Francisco",3,"Santa Fe, Chicago, San Francisco",3,E5472,New Orleans,Santa Fe,2024-01-04
+,,,,,,,,J6593,New Orleans,Chicago,2024-08-12
+,,,,,,,,P9832,New Orleans,San Francisco,2022-11-11
+930,Jennifer Martinez,San Jose,75,"Las Vegas, Fort Lauderdale, Denver, Asheville",4,"Las Vegas, Fort Lauderdale, Denver, Asheville",4,G4252,San Jose,Las Vegas,2023-10-21
+,,,,,,,,Q3792,San Jose,Fort Lauderdale,2024-03-11
+,,,,,,,,A8900,San Jose,Denver,2023-11-10
+,,,,,,,,S6742,San Jose,Asheville,2024-03-30
+260,Tyler Lewis,St. Louis,59,"San Jose, Indianapolis, Geneva, Seville, Santa Fe",5,"San Jose, Indianapolis, Geneva, Seville, Santa Fe",5,G6202,St. Louis,San Jose,2023-05-29
+,,,,,,,,W4816,St. Louis,Indianapolis,2024-10-26
+,,,,,,,,P7147,St. Louis,Geneva,2023-12-10
+,,,,,,,,X5042,St. Louis,Seville,2023-11-13
+,,,,,,,,M5793,St. Louis,Santa Fe,2024-10-24
+766,Cassandra Johnson,Paris,65,"Ljubljana, Geneva, London, Madrid",4,"Ljubljana, Geneva, London, Madrid",4,T2795,Paris,Ljubljana,2023-05-14
+,,,,,,,,R9939,Paris,Geneva,2022-12-13
+,,,,,,,,M3833,Paris,London,2023-04-19
+,,,,,,,,Y1808,Paris,Madrid,2023-11-08
+19,Steve Hutchinson,Vienna,49,"Dublin, Florence, Cologne, Paris",4,"Dublin, Florence, Cologne, Paris",4,F1529,Vienna,Dublin,2023-01-15
+,,,,,,,,B5144,Vienna,Florence,2024-07-01
+,,,,,,,,K7286,Vienna,Cologne,2024-10-22
+,,,,,,,,U5683,Vienna,Paris,2024-08-16
+491,Ryan Harris,St. Louis,33,"Fort Lauderdale, Portland, Las Vegas, Indianapolis, Savannah",5,"Fort Lauderdale, Portland, Las Vegas, Indianapolis, Savannah",5,S6223,St. Louis,Fort Lauderdale,2023-07-10
+,,,,,,,,J7122,St. Louis,Portland,2024-03-03
+,,,,,,,,W6256,St. Louis,Las Vegas,2023-10-24
+,,,,,,,,Y4863,St. Louis,Indianapolis,2023-03-17
+,,,,,,,,P3778,St. Louis,Savannah,2023-12-03
+684,Kathleen Smith,Baltimore,71,"Tampa, San Diego, Key West, San Jose, Cincinnati",5,"Tampa, San Diego, Key West, San Jose, Cincinnati",5,U8718,Baltimore,Tampa,2024-08-09
+,,,,,,,,M2940,Baltimore,San Diego,2022-12-05
+,,,,,,,,Z6891,Baltimore,Key West,2023-12-05
+,,,,,,,,Y4181,Baltimore,San Jose,2023-12-25
+,,,,,,,,A9504,Baltimore,Cincinnati,2024-05-18
+487,Kim Dennis,Lyon,67,"Nice, Marseille, Malaga",3,"Nice, Marseille, Malaga",3,U5521,Lyon,Nice,2023-12-17
+,,,,,,,,G8524,Lyon,Marseille,2023-06-28
+,,,,,,,,R7846,Lyon,Malaga,2022-11-20
+330,Ryan Roberts,Gothenburg,37,"Geneva, Brussels, Sacramento, Reykjavik",4,"Geneva, Brussels, Sacramento, Reykjavik",4,B6440,Gothenburg,Geneva,2024-07-29
+,,,,,,,,U9073,Gothenburg,Brussels,2023-09-28
+,,,,,,,,Y3467,Gothenburg,Sacramento,2024-10-30
+,,,,,,,,J7708,Gothenburg,Reykjavik,2023-06-27
+630,Travis Torres,Phoenix,44,Orlando,1,Orlando,1,Z6077,Phoenix,Orlando,2024-03-04
+903,Timothy Hancock,Philadelphia,58,"Sacramento, Moscow, Berlin",3,"Sacramento, Moscow, Berlin",3,W2469,Philadelphia,Sacramento,2023-06-13
+,,,,,,,,X2037,Philadelphia,Moscow,2024-07-23
+,,,,,,,,P4971,Philadelphia,Berlin,2024-08-27
+374,Carol Mann,Las Vegas,23,Pittsburgh,1,Pittsburgh,1,P3342,Las Vegas,Pittsburgh,2024-09-10
+382,Christopher Taylor,Budapest,21,"St. Petersburg, Helsinki, Reykjavik",3,"St. Petersburg, Helsinki, Reykjavik",3,X7790,Budapest,St. Petersburg,2022-11-17
+,,,,,,,,T9322,Budapest,Helsinki,2023-03-05
+,,,,,,,,C5991,Budapest,Reykjavik,2023-02-13
+626,Thomas Baird,Sedona,27,"Milwaukee, Asheville, Milwaukee",3,"Milwaukee, Asheville, Milwaukee",3,E6598,Sedona,Milwaukee,2024-01-30
+,,,,,,,,I4416,Sedona,Asheville,2023-01-30
+,,,,,,,,A5912,Sedona,Milwaukee,2024-04-22
+791,David Clark,Seville,20,Prague,1,Prague,1,Q1990,Seville,Prague,2023-07-21
+260,Justin Johnson,Austin,19,"Seville, Jacksonville, Atlanta, Houston, Pittsburgh",5,"Seville, Jacksonville, Atlanta, Houston, Pittsburgh",5,T9608,Austin,Seville,2023-12-29
+,,,,,,,,N2237,Austin,Jacksonville,2024-04-20
+,,,,,,,,D9852,Austin,Atlanta,2023-01-07
+,,,,,,,,I1338,Austin,Houston,2024-03-14
+,,,,,,,,K8149,Austin,Pittsburgh,2024-03-22
+767,Brenda Hayes,Lisbon,64,"Vienna, Tallinn, Salt Lake City",3,"Vienna, Tallinn, Salt Lake City",3,B8700,Lisbon,Vienna,2023-03-05
+,,,,,,,,T1266,Lisbon,Tallinn,2024-06-29
+,,,,,,,,I7372,Lisbon,Salt Lake City,2023-04-14
+821,Yolanda Collier,Edinburgh,55,Madrid,1,Madrid,1,X9421,Edinburgh,Madrid,2022-11-22
+344,Alicia Richmond,Atlanta,22,Richmond,1,Richmond,1,U5700,Atlanta,Richmond,2022-12-02
+703,Jack Thompson,Edinburgh,25,"Krakow, Moscow",2,"Krakow, Moscow",2,V4033,Edinburgh,Krakow,2023-10-14
+,,,,,,,,G5923,Edinburgh,Moscow,2023-01-18
+223,Christina Murphy,Salzburg,73,"Nice, Copenhagen, Milan, Key West",4,"Nice, Copenhagen, Milan, Key West",4,F4961,Salzburg,Nice,2024-05-15
+,,,,,,,,D1134,Salzburg,Copenhagen,2023-10-08
+,,,,,,,,R3800,Salzburg,Milan,2024-03-05
+,,,,,,,,L7267,Salzburg,Key West,2023-12-29
+760,Kelly Wilson,Reykjavik,56,"Lisbon, San Jose, Stockholm, Stockholm, Sedona",5,"Lisbon, San Jose, Stockholm, Stockholm, Sedona",5,L2726,Reykjavik,Lisbon,2024-01-17
+,,,,,,,,F5125,Reykjavik,San Jose,2024-03-30
+,,,,,,,,W7987,Reykjavik,Stockholm,2023-10-10
+,,,,,,,,G9699,Reykjavik,Stockholm,2022-12-09
+,,,,,,,,T8869,Reykjavik,Sedona,2023-04-08
+405,William Casey,Budapest,37,Oslo,1,Oslo,1,E3116,Budapest,Oslo,2024-01-05
+63,Gregg Guerrero,Salzburg,52,"Barcelona, Cologne, Amsterdam, Milan",4,"Barcelona, Cologne, Amsterdam, Milan",4,F1409,Salzburg,Barcelona,2023-07-07
+,,,,,,,,Y1320,Salzburg,Cologne,2024-05-04
+,,,,,,,,F4369,Salzburg,Amsterdam,2023-05-28
+,,,,,,,,F7361,Salzburg,Milan,2023-06-04
+162,Terri Bishop,Denver,42,"Key West, Seattle, Bratislava, Houston",4,"Key West, Seattle, Bratislava, Houston",4,X8419,Denver,Key West,2023-12-23
+,,,,,,,,Q4879,Denver,Seattle,2024-08-11
+,,,,,,,,E7556,Denver,Bratislava,2023-03-24
+,,,,,,,,Z4007,Denver,Houston,2023-04-17
+646,Hannah Klein,Savannah,34,"Honolulu, Charlotte, San Diego, Copenhagen",4,"Honolulu, Charlotte, San Diego, Copenhagen",4,D3930,Savannah,Honolulu,2023-04-18
+,,,,,,,,G8063,Savannah,Charlotte,2023-09-26
+,,,,,,,,E4569,Savannah,San Diego,2023-01-24
+,,,,,,,,V6694,Savannah,Copenhagen,2024-04-22
+666,Amber Miller,Newport,50,"Seattle, Kansas City",2,"Seattle, Kansas City",2,C1839,Newport,Seattle,2024-05-20
+,,,,,,,,M8640,Newport,Kansas City,2023-09-10
+61,Michael Watkins,Pittsburgh,59,"Cincinnati, Santa Fe, Savannah, San Diego",4,"Cincinnati, Santa Fe, Savannah, San Diego",4,T8686,Pittsburgh,Cincinnati,2022-12-14
+,,,,,,,,V8907,Pittsburgh,Santa Fe,2024-07-16
+,,,,,,,,F1642,Pittsburgh,Savannah,2023-10-22
+,,,,,,,,R4904,Pittsburgh,San Diego,2023-03-09
+589,Kyle Reyes,Charlotte,33,"Charlotte, Los Angeles, Atlanta",3,"Charlotte, Los Angeles, Atlanta",3,J1275,Charlotte,Charlotte,2022-12-22
+,,,,,,,,Q6152,Charlotte,Los Angeles,2024-09-28
+,,,,,,,,L3581,Charlotte,Atlanta,2024-01-01
+759,Kathy Davidson,San Diego,41,New York,1,New York,1,T3325,San Diego,New York,2024-01-01
+727,Rachel Johnson,St. Petersburg,50,"Reykjavik, Vienna, Marseille, Prague, Dubrovnik",5,"Reykjavik, Vienna, Marseille, Prague, Dubrovnik",5,Z1062,St. Petersburg,Reykjavik,2023-05-14
+,,,,,,,,Y5233,St. Petersburg,Vienna,2024-09-16
+,,,,,,,,R4985,St. Petersburg,Marseille,2023-04-15
+,,,,,,,,O4290,St. Petersburg,Prague,2024-04-17
+,,,,,,,,A8888,St. Petersburg,Dubrovnik,2024-08-12
+852,Robert Moore DVM,Indianapolis,20,"Los Angeles, Portland, Phoenix",3,"Los Angeles, Portland, Phoenix",3,W6684,Indianapolis,Los Angeles,2024-03-26
+,,,,,,,,V7128,Indianapolis,Portland,2023-06-26
+,,,,,,,,I8308,Indianapolis,Phoenix,2024-03-29
+224,Jared Willis,Houston,26,San Antonio,1,San Antonio,1,J7469,Houston,San Antonio,2024-01-11
+968,Bryce Gonzalez MD,Santa Fe,39,San Antonio,1,San Antonio,1,L8401,Santa Fe,San Antonio,2023-02-24
+203,Brittany Singh,Milan,41,Philadelphia,1,Philadelphia,1,V8471,Milan,Philadelphia,2023-05-02
+676,George Jones,Las Vegas,51,"Los Angeles, Denver",2,"Los Angeles, Denver",2,J5522,Las Vegas,Los Angeles,2023-02-06
+,,,,,,,,N3065,Las Vegas,Denver,2023-06-10
+7,Kevin Lee,Nice,39,Nice,1,Nice,1,R8133,Nice,Nice,2024-07-25
+295,Amanda Johnson,Seattle,31,"Kansas City, New York",2,"Kansas City, New York",2,B8350,Seattle,Kansas City,2024-05-28
+,,,,,,,,H5102,Seattle,New York,2023-09-12
+62,Andrea Mitchell,Krakow,44,"Zurich, Lyon",2,"Zurich, Lyon",2,Y9202,Krakow,Zurich,2024-02-07
+,,,,,,,,H2457,Krakow,Lyon,2023-01-14
+122,Patrick Christian,Honolulu,31,Jacksonville,1,Jacksonville,1,J1226,Honolulu,Jacksonville,2022-12-29
+319,Kathleen Fisher,St. Petersburg,31,"Paris, Krakow, London, Dubrovnik",4,"Paris, Krakow, London, Dubrovnik",4,I2896,St. Petersburg,Paris,2022-12-08
+,,,,,,,,R9390,St. Petersburg,Krakow,2024-08-14
+,,,,,,,,I4463,St. Petersburg,London,2024-05-15
+,,,,,,,,A8507,St. Petersburg,Dubrovnik,2024-09-18
+182,Margaret Hernandez,Berlin,70,"Philadelphia, Marseille",2,"Philadelphia, Marseille",2,V8033,Berlin,Philadelphia,2024-07-16
+,,,,,,,,L3889,Berlin,Marseille,2023-03-19
+998,Anthony Carr,Charleston,61,"Fort Lauderdale, Oklahoma City",2,"Fort Lauderdale, Oklahoma City",2,Z3198,Charleston,Fort Lauderdale,2024-03-22
+,,,,,,,,I4753,Charleston,Oklahoma City,2024-09-01
+394,Laura Bell,Moscow,38,Naples,1,Naples,1,H9964,Moscow,Naples,2024-03-06
+446,Nicholas Alvarez,Denver,38,St. Louis,1,St. Louis,1,T7475,Denver,St. Louis,2023-01-04
+76,Paul West,Portland,70,Washington,1,Washington,1,L1461,Portland,Washington,2023-11-01
+67,Melissa Garcia,Minneapolis,39,"Kansas City, Los Angeles",2,"Kansas City, Los Angeles",2,N3013,Minneapolis,Kansas City,2024-06-05
+,,,,,,,,X3771,Minneapolis,Los Angeles,2023-12-02
+53,Stephen Matthews,Charlotte,47,"Sacramento, San Antonio",2,"Sacramento, San Antonio",2,D1574,Charlotte,Sacramento,2023-05-07
+,,,,,,,,D1454,Charlotte,San Antonio,2023-08-27
+729,David Bowers,Sedona,31,Minneapolis,1,Minneapolis,1,B3051,Sedona,Minneapolis,2024-06-22
+344,Debbie Warren,Barcelona,42,"Lisbon, Luxembourg, Bologna",3,"Lisbon, Luxembourg, Bologna",3,J8001,Barcelona,Lisbon,2023-04-26
+,,,,,,,,M6153,Barcelona,Luxembourg,2024-10-31
+,,,,,,,,E6484,Barcelona,Bologna,2023-04-25
+686,Marcus James,Warsaw,26,"Krakow, Reykjavik, Berlin, Athens",4,"Krakow, Reykjavik, Berlin, Athens",4,M7827,Warsaw,Krakow,2023-02-19
+,,,,,,,,B4058,Warsaw,Reykjavik,2023-10-06
+,,,,,,,,M5794,Warsaw,Berlin,2023-05-12
+,,,,,,,,E7277,Warsaw,Athens,2023-10-22
+796,Robin Taylor,Savannah,30,"St. Louis, San Diego, Providence",3,"St. Louis, San Diego, Providence",3,P3976,Savannah,St. Louis,2023-02-06
+,,,,,,,,S6054,Savannah,San Diego,2023-04-24
+,,,,,,,,X5600,Savannah,Providence,2024-02-29
+18,Kimberly Crawford,Edinburgh,32,"Valencia, Barcelona",2,"Valencia, Barcelona",2,X6068,Edinburgh,Valencia,2023-11-13
+,,,,,,,,U7738,Edinburgh,Barcelona,2024-06-10
+30,Angela Rogers,Baltimore,50,"Tampa, Sacramento, San Antonio",3,"Tampa, Sacramento, San Antonio",3,V8521,Baltimore,Tampa,2024-10-20
+,,,,,,,,Y3080,Baltimore,Sacramento,2023-01-07
+,,,,,,,,B3345,Baltimore,San Antonio,2023-12-01
+754,Michaela Oneill,Dallas,67,Las Vegas,1,Las Vegas,1,G6597,Dallas,Las Vegas,2023-08-21
+974,Chelsea Lozano,Stockholm,67,"Naples, Zurich, Naples",3,"Naples, Zurich, Naples",3,U4466,Stockholm,Naples,2023-06-23
+,,,,,,,,J2093,Stockholm,Zurich,2024-08-28
+,,,,,,,,T6202,Stockholm,Naples,2023-01-25
+427,Ryan Wolfe,Dubrovnik,66,"Helsinki, Munich, Helsinki, Stockholm",4,"Helsinki, Munich, Helsinki, Stockholm",4,T7292,Dubrovnik,Helsinki,2024-08-28
+,,,,,,,,Q4875,Dubrovnik,Munich,2024-06-22
+,,,,,,,,D4707,Dubrovnik,Helsinki,2023-07-27
+,,,,,,,,X1023,Dubrovnik,Stockholm,2024-08-04
+636,Anna Robinson,Edinburgh,63,"Bologna, Cincinnati",2,"Bologna, Cincinnati",2,R6845,Edinburgh,Bologna,2023-05-05
+,,,,,,,,Q4289,Edinburgh,Cincinnati,2023-11-05
+876,Ronald Brewer,Helsinki,49,"Malaga, Dublin, Prague, Ljubljana, Athens",5,"Malaga, Dublin, Prague, Ljubljana, Athens",5,J4021,Helsinki,Malaga,2023-05-27
+,,,,,,,,Q2521,Helsinki,Dublin,2024-03-20
+,,,,,,,,E7733,Helsinki,Prague,2023-10-25
+,,,,,,,,T6257,Helsinki,Ljubljana,2024-08-16
+,,,,,,,,T9235,Helsinki,Athens,2024-10-01
+149,Ashley Williams,Baltimore,41,"Chicago, Jacksonville, Denver, Washington",4,"Chicago, Jacksonville, Denver, Washington",4,G5705,Baltimore,Chicago,2023-06-14
+,,,,,,,,K2365,Baltimore,Jacksonville,2024-09-20
+,,,,,,,,W1465,Baltimore,Denver,2023-05-19
+,,,,,,,,W5845,Baltimore,Washington,2023-07-11
+762,Stephen Contreras,Lisbon,24,"Salzburg, Dublin, Cologne, Copenhagen",4,"Salzburg, Dublin, Cologne, Copenhagen",4,I1707,Lisbon,Salzburg,2023-09-21
+,,,,,,,,C2209,Lisbon,Dublin,2022-12-12
+,,,,,,,,H3807,Lisbon,Cologne,2023-11-27
+,,,,,,,,R8092,Lisbon,Copenhagen,2023-04-20
+96,Abigail Hogan,Cincinnati,70,"Seattle, Seattle, Sacramento",3,"Seattle, Seattle, Sacramento",3,R1764,Cincinnati,Seattle,2023-01-16
+,,,,,,,,R8331,Cincinnati,Seattle,2023-11-27
+,,,,,,,,M6656,Cincinnati,Sacramento,2024-09-21
+557,Alexa Morales,Sedona,56,Atlanta,1,Atlanta,1,C6271,Sedona,Atlanta,2023-11-29
+618,Karen Fuentes,Budapest,73,Atlanta,1,Atlanta,1,M8930,Budapest,Atlanta,2024-08-24
+106,Lindsey Ward,Warsaw,44,"Dublin, Copenhagen",2,"Dublin, Copenhagen",2,K7469,Warsaw,Dublin,2024-10-29
+,,,,,,,,W5114,Warsaw,Copenhagen,2024-09-12
+912,Joshua Nolan,Sedona,68,Oklahoma City,1,Oklahoma City,1,K2805,Sedona,Oklahoma City,2024-08-13
+267,Wayne James,Reykjavik,61,"Tallinn, Nice, Tallinn, Asheville, Orlando",5,"Tallinn, Nice, Tallinn, Asheville, Orlando",5,L9412,Reykjavik,Tallinn,2023-10-20
+,,,,,,,,I6939,Reykjavik,Nice,2023-10-14
+,,,,,,,,J2457,Reykjavik,Tallinn,2024-08-06
+,,,,,,,,Y8794,Reykjavik,Asheville,2024-03-16
+,,,,,,,,I3063,Reykjavik,Orlando,2023-09-08
+602,Debra Perez,Barcelona,49,"St. Petersburg, Brussels, Reykjavik, Savannah, St. Petersburg",5,"St. Petersburg, Brussels, Reykjavik, Savannah, St. Petersburg",5,F9985,Barcelona,St. Petersburg,2024-02-28
+,,,,,,,,J2306,Barcelona,Brussels,2024-10-05
+,,,,,,,,X5686,Barcelona,Reykjavik,2023-08-25
+,,,,,,,,O6890,Barcelona,Savannah,2024-06-22
+,,,,,,,,W9378,Barcelona,St. Petersburg,2024-02-03
+633,Jeff Hensley,Krakow,74,"Vienna, Bratislava, Berlin",3,"Vienna, Bratislava, Berlin",3,D1873,Krakow,Vienna,2024-08-31
+,,,,,,,,Z7755,Krakow,Bratislava,2024-08-12
+,,,,,,,,E9749,Krakow,Berlin,2024-01-05
+992,Willie Edwards,Istanbul,27,"Athens, Naples, Geneva, Porto",4,"Athens, Naples, Geneva, Porto",4,R7337,Istanbul,Athens,2023-11-23
+,,,,,,,,B8913,Istanbul,Naples,2023-06-04
+,,,,,,,,N1930,Istanbul,Geneva,2024-05-19
+,,,,,,,,X8036,Istanbul,Porto,2023-03-05
+920,Justin Mays,Luxembourg,48,Gothenburg,1,Gothenburg,1,K9667,Luxembourg,Gothenburg,2024-03-05
+340,Jacqueline Sims,San Jose,73,"Las Vegas, San Jose, Kansas City, Richmond, Santa Fe",5,"Las Vegas, San Jose, Kansas City, Richmond, Santa Fe",5,S1489,San Jose,Las Vegas,2022-11-15
+,,,,,,,,R9901,San Jose,San Jose,2023-05-23
+,,,,,,,,T2175,San Jose,Kansas City,2023-10-23
+,,,,,,,,W6454,San Jose,Richmond,2023-04-11
+,,,,,,,,C6513,San Jose,Santa Fe,2022-11-09
+369,Amy Barnett,St. Petersburg,75,"Nice, Indianapolis, Austin, Moscow, Salzburg",5,"Nice, Indianapolis, Austin, Moscow, Salzburg",5,G7516,St. Petersburg,Nice,2023-03-26
+,,,,,,,,E5663,St. Petersburg,Indianapolis,2024-03-03
+,,,,,,,,Z2076,St. Petersburg,Austin,2024-06-21
+,,,,,,,,N5402,St. Petersburg,Moscow,2023-01-17
+,,,,,,,,E5472,St. Petersburg,Salzburg,2023-03-29
+313,Gabriella Maddox,Bordeaux,50,"Madrid, London, Malaga",3,"Madrid, London, Malaga",3,X2007,Bordeaux,Madrid,2024-02-09
+,,,,,,,,O2886,Bordeaux,London,2023-04-27
+,,,,,,,,Q3213,Bordeaux,Malaga,2023-08-31
+216,Anthony Lee,Bergen,30,"Budapest, Marseille, Porto, Prague",4,"Budapest, Marseille, Porto, Prague",4,X5398,Bergen,Budapest,2023-03-17
+,,,,,,,,Z8352,Bergen,Marseille,2023-12-31
+,,,,,,,,E4763,Bergen,Porto,2024-09-17
+,,,,,,,,B4046,Bergen,Prague,2024-08-30
+848,Robert Patel,Nashville,71,"Phoenix, Cincinnati",2,"Phoenix, Cincinnati",2,B8016,Nashville,Phoenix,2024-03-20
+,,,,,,,,K5760,Nashville,Cincinnati,2023-03-16
+717,Allen Myers,Cincinnati,75,"Jacksonville, Kansas City, Baltimore",3,"Jacksonville, Kansas City, Baltimore",3,X6437,Cincinnati,Jacksonville,2023-12-27
+,,,,,,,,K5350,Cincinnati,Kansas City,2023-01-15
+,,,,,,,,B6477,Cincinnati,Baltimore,2024-02-02
+107,Alexis Odom,Seattle,52,"Boston, Atlanta",2,"Boston, Atlanta",2,S1219,Seattle,Boston,2024-05-07
+,,,,,,,,H7087,Seattle,Atlanta,2024-08-12
+566,Christy Robertson,London,54,"Nice, Malaga",2,"Nice, Malaga",2,I2630,London,Nice,2024-03-30
+,,,,,,,,T2407,London,Malaga,2023-05-25
+158,Evan Harrison,Los Angeles,70,"Cincinnati, Charlotte",2,"Cincinnati, Charlotte",2,D6305,Los Angeles,Cincinnati,2024-08-04
+,,,,,,,,I7332,Los Angeles,Charlotte,2023-04-15
+189,Anthony Smith,Warsaw,65,"Geneva, Bologna, Marseille, Madrid, Venice",5,"Geneva, Bologna, Marseille, Madrid, Venice",5,U2241,Warsaw,Geneva,2023-01-26
+,,,,,,,,V8289,Warsaw,Bologna,2023-06-15
+,,,,,,,,E6838,Warsaw,Marseille,2023-12-03
+,,,,,,,,E9704,Warsaw,Madrid,2023-09-14
+,,,,,,,,R7174,Warsaw,Venice,2023-05-11
+566,Jennifer Howell,Washington,20,Savannah,1,Savannah,1,T1641,Washington,Savannah,2024-06-27
+602,Emily Torres,Milan,43,"Bratislava, Lyon, Naples, Florence, Bratislava",5,"Bratislava, Lyon, Naples, Florence, Bratislava",5,S3217,Milan,Bratislava,2024-10-12
+,,,,,,,,C5878,Milan,Lyon,2023-10-21
+,,,,,,,,I5100,Milan,Naples,2023-02-22
+,,,,,,,,H3773,Milan,Florence,2024-10-04
+,,,,,,,,Q4578,Milan,Bratislava,2022-11-20
+580,Yvette Sanders,Austin,64,"Denver, Santa Fe, Cincinnati, Washington",4,"Denver, Santa Fe, Cincinnati, Washington",4,S5832,Austin,Denver,2023-08-31
+,,,,,,,,P6317,Austin,Santa Fe,2023-09-30
+,,,,,,,,R9242,Austin,Cincinnati,2024-08-19
+,,,,,,,,K8970,Austin,Washington,2024-03-28
+777,Troy Saunders,Santa Fe,75,Nashville,1,Nashville,1,S9934,Santa Fe,Nashville,2024-05-11
+392,Alexis Edwards,Reykjavik,49,"Ljubljana, Tallinn, Stockholm, Vienna",4,"Ljubljana, Tallinn, Stockholm, Vienna",4,A9069,Reykjavik,Ljubljana,2024-01-06
+,,,,,,,,J1068,Reykjavik,Tallinn,2024-04-09
+,,,,,,,,Y7899,Reykjavik,Stockholm,2024-10-05
+,,,,,,,,L6828,Reykjavik,Vienna,2024-04-03
+478,Rebekah Brown,Honolulu,50,"Lyon, Las Vegas, Barcelona, Providence",4,"Lyon, Las Vegas, Barcelona, Providence",4,I3251,Honolulu,Lyon,2023-08-21
+,,,,,,,,E6774,Honolulu,Las Vegas,2024-01-14
+,,,,,,,,A1300,Honolulu,Barcelona,2024-01-22
+,,,,,,,,A8724,Honolulu,Providence,2023-06-21
+233,William Smith,Rome,32,"Vienna, Vienna, Tallinn, Lyon, Nice",5,"Vienna, Vienna, Tallinn, Lyon, Nice",5,O9881,Rome,Vienna,2024-10-21
+,,,,,,,,O2362,Rome,Vienna,2024-02-25
+,,,,,,,,Y5541,Rome,Tallinn,2024-05-01
+,,,,,,,,P4215,Rome,Lyon,2023-02-22
+,,,,,,,,L3362,Rome,Nice,2023-07-30
+51,Mark Heath,Lyon,46,"Dubrovnik, Ljubljana, Dubrovnik, Venice, Barcelona",5,"Dubrovnik, Ljubljana, Dubrovnik, Venice, Barcelona",5,H7560,Lyon,Dubrovnik,2023-10-08
+,,,,,,,,V6950,Lyon,Ljubljana,2023-02-14
+,,,,,,,,X2105,Lyon,Dubrovnik,2024-10-24
+,,,,,,,,N9506,Lyon,Venice,2024-11-01
+,,,,,,,,Y5685,Lyon,Barcelona,2024-01-28
+113,Hayley Sanders,Rome,33,"Athens, Edinburgh",2,"Athens, Edinburgh",2,P8477,Rome,Athens,2024-06-10
+,,,,,,,,D5179,Rome,Edinburgh,2023-10-10
+609,Todd Stone,Bordeaux,67,"London, Malaga, Barcelona, Berlin",4,"London, Malaga, Barcelona, Berlin",4,H6290,Bordeaux,London,2024-06-25
+,,,,,,,,P5019,Bordeaux,Malaga,2023-05-24
+,,,,,,,,K7774,Bordeaux,Barcelona,2023-05-25
+,,,,,,,,R9625,Bordeaux,Berlin,2024-06-15
+471,Erin Trevino,Berlin,60,"Dublin, Stockholm",2,"Dublin, Stockholm",2,R5693,Berlin,Dublin,2024-08-26
+,,,,,,,,L5340,Berlin,Stockholm,2023-05-19
+112,Kevin Clarke,Rome,73,"Vienna, Oslo",2,"Vienna, Oslo",2,W2459,Rome,Vienna,2024-04-25
+,,,,,,,,G1049,Rome,Oslo,2024-01-21
+118,Michael Jones,Reykjavik,37,Naples,1,Naples,1,U8992,Reykjavik,Naples,2023-05-12
+117,Kyle Owen,Munich,58,"Warsaw, Oslo, Bordeaux",3,"Warsaw, Oslo, Bordeaux",3,S5967,Munich,Warsaw,2024-05-14
+,,,,,,,,M3227,Munich,Oslo,2023-08-11
+,,,,,,,,O7511,Munich,Bordeaux,2024-08-24
+584,Steven Costa,Santa Fe,51,"San Antonio, Rome, Phoenix, San Diego, Philadelphia",5,"San Antonio, Rome, Phoenix, San Diego, Philadelphia",5,E4008,Santa Fe,San Antonio,2023-07-05
+,,,,,,,,M5411,Santa Fe,Rome,2022-11-09
+,,,,,,,,B8668,Santa Fe,Phoenix,2023-06-10
+,,,,,,,,J8031,Santa Fe,San Diego,2022-11-20
+,,,,,,,,F4912,Santa Fe,Philadelphia,2024-10-06
+433,Robert Campbell,San Jose,72,"Denver, Vienna, Santa Fe, Baltimore, Portland",5,"Denver, Vienna, Santa Fe, Baltimore, Portland",5,N6068,San Jose,Denver,2023-01-30
+,,,,,,,,W5846,San Jose,Vienna,2024-03-28
+,,,,,,,,U2137,San Jose,Santa Fe,2023-12-31
+,,,,,,,,X6061,San Jose,Baltimore,2022-12-22
+,,,,,,,,N4438,San Jose,Portland,2024-10-21
+170,Jessica Leonard,Gothenburg,65,"St. Petersburg, Brussels, Milan",3,"St. Petersburg, Brussels, Milan",3,U8061,Gothenburg,St. Petersburg,2023-12-05
+,,,,,,,,E2314,Gothenburg,Brussels,2023-04-22
+,,,,,,,,S3944,Gothenburg,Milan,2023-11-13
+67,Jesus Casey,Indianapolis,38,"Denver, Denver, Phoenix",3,"Denver, Denver, Phoenix",3,A1874,Indianapolis,Denver,2023-04-09
+,,,,,,,,S4834,Indianapolis,Denver,2022-11-09
+,,,,,,,,A4981,Indianapolis,Phoenix,2023-01-21
+177,Christopher Wilson,Istanbul,39,"Madrid, Rome, Luxembourg",3,"Madrid, Rome, Luxembourg",3,L6657,Istanbul,Madrid,2024-07-24
+,,,,,,,,R7445,Istanbul,Rome,2022-12-05
+,,,,,,,,F1544,Istanbul,Luxembourg,2024-01-09
+62,Erica Wilkinson,Kansas City,44,"Baltimore, Jacksonville",2,"Baltimore, Jacksonville",2,I4148,Kansas City,Baltimore,2023-06-28
+,,,,,,,,T7466,Kansas City,Jacksonville,2023-10-31
+773,Shannon Reynolds,Edinburgh,48,"Brussels, Dubrovnik",2,"Brussels, Dubrovnik",2,W5322,Edinburgh,Brussels,2024-09-03
+,,,,,,,,Q8074,Edinburgh,Dubrovnik,2024-08-26
+824,Thomas Thompson,Houston,62,"Sacramento, New Orleans, Portland, Indianapolis, Sacramento",5,"Sacramento, New Orleans, Portland, Indianapolis, Sacramento",5,E9610,Houston,Sacramento,2023-08-19
+,,,,,,,,W2171,Houston,New Orleans,2023-06-12
+,,,,,,,,R4786,Houston,Portland,2023-11-15
+,,,,,,,,T5536,Houston,Indianapolis,2023-04-03
+,,,,,,,,T5120,Houston,Sacramento,2024-05-05
+22,Jose Wang,Portland,53,"Tampa, Salt Lake City",2,"Tampa, Salt Lake City",2,U3281,Portland,Tampa,2023-05-25
+,,,,,,,,V4609,Portland,Salt Lake City,2023-02-19
+595,Rita Bennett,Berlin,71,"Valencia, Athens, Bergen",3,"Valencia, Athens, Bergen",3,Z5931,Berlin,Valencia,2023-07-26
+,,,,,,,,D6729,Berlin,Athens,2023-07-16
+,,,,,,,,T3107,Berlin,Bergen,2024-05-14
+967,Barbara Moore,San Jose,63,"Los Angeles, Tampa, Phoenix",3,"Los Angeles, Tampa, Phoenix",3,L7287,San Jose,Los Angeles,2024-06-02
+,,,,,,,,H6052,San Jose,Tampa,2024-01-29
+,,,,,,,,M3892,San Jose,Phoenix,2023-08-03
+852,Lynn Watson,Porto,23,"Rome, Reykjavik, Gothenburg",3,"Rome, Reykjavik, Gothenburg",3,Z3414,Porto,Rome,2024-05-18
+,,,,,,,,B5108,Porto,Reykjavik,2023-01-21
+,,,,,,,,Y8054,Porto,Gothenburg,2024-10-20
+471,Melody Cummings,Milwaukee,67,"Baltimore, Denver, Miami",3,"Baltimore, Denver, Miami",3,M5773,Milwaukee,Baltimore,2022-11-13
+,,,,,,,,Z5652,Milwaukee,Denver,2023-04-09
+,,,,,,,,G9782,Milwaukee,Miami,2024-05-07
+276,John Hall,Oslo,30,"Athens, Lyon, Geneva, Athens, Newport",5,"Athens, Lyon, Geneva, Athens, Newport",5,J2124,Oslo,Athens,2024-06-08
+,,,,,,,,H2538,Oslo,Lyon,2022-12-24
+,,,,,,,,T4116,Oslo,Geneva,2023-09-13
+,,,,,,,,C3742,Oslo,Athens,2023-03-21
+,,,,,,,,U1797,Oslo,Newport,2024-10-11
+23,Heather Williams,Athens,36,"Baltimore, Helsinki",2,"Baltimore, Helsinki",2,P1382,Athens,Baltimore,2022-12-17
+,,,,,,,,Z4647,Athens,Helsinki,2024-08-06
+261,Kelly Johnson,Oklahoma City,55,"Oklahoma City, Fort Lauderdale, New Orleans, Los Angeles, New Orleans",5,"Oklahoma City, Fort Lauderdale, New Orleans, Los Angeles, New Orleans",5,V5132,Oklahoma City,Oklahoma City,2023-02-11
+,,,,,,,,M5397,Oklahoma City,Fort Lauderdale,2024-02-29
+,,,,,,,,Y8688,Oklahoma City,New Orleans,2024-07-27
+,,,,,,,,T1691,Oklahoma City,Los Angeles,2024-09-01
+,,,,,,,,F8162,Oklahoma City,New Orleans,2023-07-06
+817,Monica Coleman,Tampa,72,"New York, San Francisco, Houston, Tampa, St. Louis",5,"New York, San Francisco, Houston, Tampa, St. Louis",5,Z7187,Tampa,New York,2024-05-22
+,,,,,,,,U8505,Tampa,San Francisco,2024-10-14
+,,,,,,,,J2212,Tampa,Houston,2024-04-15
+,,,,,,,,A8309,Tampa,Tampa,2023-06-18
+,,,,,,,,N6378,Tampa,St. Louis,2023-04-11
+774,Isaiah Aguirre,Boston,25,"Santa Fe, Pittsburgh, Houston, Marseille, San Diego",5,"Santa Fe, Pittsburgh, Houston, Marseille, San Diego",5,F3822,Boston,Santa Fe,2024-01-05
+,,,,,,,,D5528,Boston,Pittsburgh,2023-12-10
+,,,,,,,,I3771,Boston,Houston,2024-08-29
+,,,,,,,,E4866,Boston,Marseille,2024-08-02
+,,,,,,,,E5946,Boston,San Diego,2023-02-04
+122,Tom Nichols,London,61,"Milan, Athens, Munich",3,"Milan, Athens, Munich",3,I9803,London,Milan,2023-08-20
+,,,,,,,,I5879,London,Athens,2023-05-19
+,,,,,,,,H9596,London,Munich,2023-11-14
+58,Jay White,Boston,70,"Sedona, Phoenix, Chicago, San Francisco",4,"Sedona, Phoenix, Chicago, San Francisco",4,L6106,Boston,Sedona,2023-01-28
+,,,,,,,,E8246,Boston,Phoenix,2024-02-11
+,,,,,,,,Y3638,Boston,Chicago,2024-07-03
+,,,,,,,,G5778,Boston,San Francisco,2024-06-05
+797,John Wong,St. Louis,44,"Denver, Kansas City, Barcelona, Dallas, Jacksonville",5,"Denver, Kansas City, Barcelona, Dallas, Jacksonville",5,Z3379,St. Louis,Denver,2023-09-17
+,,,,,,,,D5201,St. Louis,Kansas City,2024-05-13
+,,,,,,,,F3914,St. Louis,Barcelona,2024-08-30
+,,,,,,,,F8407,St. Louis,Dallas,2022-11-26
+,,,,,,,,D1587,St. Louis,Jacksonville,2024-06-27
+584,Michael Davis,Madrid,44,Berlin,1,Berlin,1,Z1303,Madrid,Berlin,2023-10-11
+988,Catherine Mata,Newport,20,Honolulu,1,Honolulu,1,Y6764,Newport,Honolulu,2024-03-28
+948,Dennis Mckee,Brussels,67,"Bratislava, St. Petersburg",2,"Bratislava, St. Petersburg",2,X5646,Brussels,Bratislava,2024-10-22
+,,,,,,,,H2887,Brussels,St. Petersburg,2023-01-20
+286,Laurie Garza,Chicago,27,Atlanta,1,Atlanta,1,W5635,Chicago,Atlanta,2024-08-22
+6,Lynn Gonzales,Stockholm,47,"Gothenburg, Valencia",2,"Gothenburg, Valencia",2,T8551,Stockholm,Gothenburg,2022-12-19
+,,,,,,,,B6649,Stockholm,Valencia,2024-06-04
+602,Rebecca Morgan,Florence,18,"Malaga, Gothenburg",2,"Malaga, Gothenburg",2,C7662,Florence,Malaga,2024-09-14
+,,,,,,,,Z3371,Florence,Gothenburg,2023-01-09
+619,Charles Frazier,Edinburgh,68,"Munich, Savannah, Naples, Florence",4,"Munich, Savannah, Naples, Florence",4,Z2553,Edinburgh,Munich,2023-09-12
+,,,,,,,,J5408,Edinburgh,Savannah,2024-06-15
+,,,,,,,,D9087,Edinburgh,Naples,2023-08-01
+,,,,,,,,H3011,Edinburgh,Florence,2024-09-25
+268,Kelly Griffith,Zurich,62,"Prague, Venice, Cologne, Brussels",4,"Prague, Venice, Cologne, Brussels",4,X8757,Zurich,Prague,2022-11-19
+,,,,,,,,A5950,Zurich,Venice,2024-02-05
+,,,,,,,,T5932,Zurich,Cologne,2023-12-07
+,,,,,,,,N9163,Zurich,Brussels,2024-05-08
+457,Robert Cortez,Berlin,32,"Milan, Budapest, Salzburg, Athens, Amsterdam",5,"Milan, Budapest, Salzburg, Athens, Amsterdam",5,L7663,Berlin,Milan,2023-07-07
+,,,,,,,,L9762,Berlin,Budapest,2023-05-04
+,,,,,,,,P9487,Berlin,Salzburg,2024-02-29
+,,,,,,,,X2933,Berlin,Athens,2023-03-18
+,,,,,,,,Q6517,Berlin,Amsterdam,2024-09-22
+945,Tiffany Ford,Richmond,69,"Houston, Asheville, New Orleans, Minneapolis, New Orleans",5,"Houston, Asheville, New Orleans, Minneapolis, New Orleans",5,V8754,Richmond,Houston,2024-01-25
+,,,,,,,,Y5551,Richmond,Asheville,2023-04-01
+,,,,,,,,B2724,Richmond,New Orleans,2024-07-17
+,,,,,,,,K7817,Richmond,Minneapolis,2024-06-20
+,,,,,,,,F5254,Richmond,New Orleans,2024-03-01
+472,David Salas,Venice,42,"Edinburgh, Florence, Madrid",3,"Edinburgh, Florence, Madrid",3,U6706,Venice,Edinburgh,2024-02-13
+,,,,,,,,A6030,Venice,Florence,2024-03-13
+,,,,,,,,M6601,Venice,Madrid,2024-09-24
+862,Katie Novak,Helsinki,53,"Cologne, Valencia, Prague, Paris, St. Petersburg",5,"Cologne, Valencia, Prague, Paris, St. Petersburg",5,G9089,Helsinki,Cologne,2024-04-17
+,,,,,,,,J2541,Helsinki,Valencia,2022-12-26
+,,,,,,,,Z7033,Helsinki,Prague,2024-05-01
+,,,,,,,,G7902,Helsinki,Paris,2024-02-15
+,,,,,,,,J7465,Helsinki,St. Petersburg,2024-02-26

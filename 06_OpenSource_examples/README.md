@@ -37,7 +37,7 @@ You can run the `.ipynb` notebooks locally or in a managed environment (e.g., Am
 
 **Clone the Repository**  
    ```bash
-   git clone https://github.com/<your-username>/amazon-bedrock-workshop.git
+   git clone https://github.com/aws-samples/amazon-bedrock-workshop.git
    cd amazon-bedrock-workshop/06_OpenSource_examples
    run pip install -r requirements.txt
 ```

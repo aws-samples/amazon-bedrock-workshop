@@ -1,8 +1,8 @@
-langchain_aws==0.2.13
-langchain_core==0.2.13
-langchain==0.3.19
+langchain_aws
+langchain_core
+langchain
 transformers==4.49.0
-pandas==2.2.3
+pandas
 langgraph==0.2.74
 langchain_community==0.3.18
 faker==36.1.1

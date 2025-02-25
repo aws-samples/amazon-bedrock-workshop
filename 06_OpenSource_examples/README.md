@@ -1,79 +1,81 @@
-# Using Open Source tooling in Amazon Bedrock Workshop
+# Open-Source Module: Amazon Bedrock Integration with LangChain and Agentic Frameworks
 
-This hands-on workshop, aimed at developers and solution builders, introduces how to leverage foundation models (FMs) through [Amazon Bedrock](https://aws.amazon.com/bedrock/) and supporting Open Source libraries. Amazon Bedrock works extremely well with Open source toling like Langchain, LlamaIndex and a variety of Vector Databases. You can also use hybrid approach of leveraging KnowledgeBase Within this series of labs, you'll explore some of the most common usage patterns we are seeing with our customers for Generative AI. We will show techniques for generating text and images, creating value for organizations by improving productivity. This is achieved by leveraging foundation models to help in composing emails, summarizing text, answering questions, building chatbots, and creating images. While the focus of this workshop is for you to gain hands-on experience implementing these patterns via Bedrock APIs and SDKs and with open-source packages like [LangChain](https://python.langchain.com/docs/get_started/introduction) and [FAISS](https://faiss.ai/index.html).
+Welcome to the **Open-Source Module**, where we demonstrate how to use [Amazon Bedrock](https://aws.amazon.com/bedrock/) with popular open-source libraries and frameworks. This repository includes a series of Jupyter notebooks that range from **high-level LangChain use cases** to **advanced agentic frameworks** with retrieval-augmented generation (RAG) and agent evaluation. Additionally, we provide an example using **CrewAI** for building a React-style agents, contrasting with the Agentic workflow approach in **LandGraph**.
 
-Labs include:
+## Table of Contents
+- [Overview](#overview)  
+- [Prerequisites](#prerequisites)  
+- [Installation](#installation)  
+- [High-Level Use Cases Notebooks](#high-level-use-cases)
+- [Agentic Frameworks, Evaluations and RAG](#agentic-frameworks-evaluations-and-rag)
 
-- **01 - Text Generation** \[Estimated time to complete - 45 mins\]
-    - Text generation with Bedrock with Langchain
-    - Text summarization with Titan and Claude
-    - Long Text generation with LCEL chains
-    - Code Translation
-- **02 - Langchain and Knowledge bases for RAG** \[Estimated time to complete - 45 mins\]
-    - Managed RAG retrieve and generate example
-    - Langchain RAG retireve and generate example
-- **03 - Langchain Chatbots** \[Estimated time to complete - 30 mins\]
-    - Build Chatbots with Claude, Titan and Llama models
-- **04 - Gaurdrails with Open Source** \[Estimated time to complete - 30 mins\]
-    - Leverage NeMo for Gaurdrails
-- **05 - Open source Agents** \[Estimated time to complete - 45 mins\]
-    - Function Caling 
-    - Open source orchesteration using LlamaIndex and langchain
-    - Open source with Retriever and Agents with Claude V3
-    - Open Source agents with Claude V3
-    - Implementation of a fact-checker with LangChain on Amazon Bedrock: a summarizer with fact-checker to self-correct issues
+---
 
-You can also refer to these [Step-by-step guided instructions on the workshop website](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/en-US).
+## Overview
 
+**Amazon Bedrock** is a fully managed service that lets you easily build and scale generative AI applications with foundation models (FMs) from top AI providers, all accessible via a single API. In this module, we:
 
-## Getting started
+Illustrate **high-level examples** of text generation, code translation, and summarization using Bedrock with **LangChain**.  
+Dive into **advanced agent-based setups** using RAG (retrieval-augmented generation), multi-agent frameworks, agent evaluation, and React-based agents (via **CrewAI**) as an alternative to **LandGraph**’s workflow approach.
 
-### Choose a notebook environment
+---
 
-This workshop is presented as a series of **Python notebooks**, which you can run from the environment of your choice:
+## Prerequisites
 
-- For a fully-managed environment with rich AI/ML features, we'd recommend using [SageMaker Studio](https://aws.amazon.com/sagemaker/studio/). To get started quickly, you can refer to the [instructions for domain quick setup](https://docs.aws.amazon.com/sagemaker/latest/dg/onboard-quick-start.html).
-- For a fully-managed but more basic experience, you could instead [create a SageMaker Notebook Instance](https://docs.aws.amazon.com/sagemaker/latest/dg/howitworks-create-ws.html).
-- If you prefer to use your existing (local or other) notebook environment, make sure it has [credentials for calling AWS](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
+**AWS Account & Credentials**  
+You’ll need access to Amazon Bedrock. Ensure your AWS CLI or environment variables are properly configured to allow these notebooks to authenticate.
 
+**Python 3.12+**  
+Install and use a version of Python that is 3.12 or higher.
 
-### Enable AWS IAM permissions for Bedrock
+**JupyterLab or Jupyter Notebook**  
+You can run the `.ipynb` notebooks locally or in a managed environment (e.g., Amazon SageMaker).
 
-The AWS identity you assume from your notebook environment (which is the [*Studio/notebook Execution Role*](https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html) from SageMaker, or could be a role or IAM User for self-managed notebooks), must have sufficient [AWS IAM permissions](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html) to call the Amazon Bedrock service.
+---
 
-To grant Bedrock access to your identity, you can:
+## Installation
 
-- Open the [AWS IAM Console](https://us-east-1.console.aws.amazon.com/iam/home?#)
-- Find your [Role](https://us-east-1.console.aws.amazon.com/iamv2/home?#/roles) (if using SageMaker or otherwise assuming an IAM Role), or else [User](https://us-east-1.console.aws.amazon.com/iamv2/home?#/users)
-- Select *Add Permissions > Create Inline Policy* to attach new inline permissions, open the *JSON* editor and paste in the below example policy:
-
+**Clone the Repository**  
+   ```bash
+   git clone https://github.com/aws-samples/amazon-bedrock-workshop.git
+   cd amazon-bedrock-workshop/06_OpenSource_examples
+   run pip install -r requirements.txt
 ```
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "BedrockFullAccess",
-            "Effect": "Allow",
-            "Action": ["bedrock:*"],
-            "Resource": "*"
-        }
-    ]
-}
-```
+---
+## Notebook Descriptions
 
-> ⚠️ **Note:** With Amazon SageMaker, your notebook execution role will typically be *separate* from the user or role that you log in to the AWS Console with. If you'd like to explore the AWS Console for Amazon Bedrock, you'll need to grant permissions to your Console user/role too.
+### High-Level Use Cases
+
+These notebooks are located in `text-generation-with-langchain` and demonstrate core ways to use Amazon Bedrock with LangChain:
+- ***01_zero_shot_generation.ipynb***:
+Zero-shot text generation with foundation models on Bedrock, wrapped in LangChain’s prompt interface.
+- ***02_code_interpret_w_langchain.ipynb***:
+Code interpretation and generation, showing how to integrate Bedrock models with LangChain abstractions for developer workflows.
+- ***03_code_translate_w_langchain.ipynb***:
+Demonstrates code translation from one programming language to another, powered by Bedrock + LangChain’s flexible prompt layering.
+- ***04_long_text_summarization_using_LCEL_chains_on_Langchain.ipynb***:
+Explores how to summarize lengthy documents or text using LCEL (Language Chain Execution Logic) in LangChain, backed by Bedrock models.
+
+### Agentic Frameworks, Evaluations and RAG
+
+Beyond the high-level examples, you’ll find a set of notebooks that delve into agent frameworks, retrieval-augmented generation, and agent evaluation (using **Ragas**). Some of these also highlight the difference between a React agent approach (using **CrewAI**) and a workflow agentic approach (using **LandGraph**).
+- ***advance-langragph-multi-agent-setup.ipynb***: 
+Shows how to set up a multi-agent environment leveraging LandGraph workflows and Amazon Bedrock.
+- ***find-relevant-information-using-RAG.ipynb***:
+Demonstrates retrieval-augmented generation (RAG) with Bedrock for more accurate and context-rich responses.
+- ***intermediate-langragph-agent-setup-w-tools.ipynb***:
+Focuses on an intermediate agentic workflow in LandGraph, integrating additional tools to handle complex tasks.
+- ***ragas-agent-evaluation.ipynb***:
+Explains evaluating agent performance using Ragas, focusing on retrieval and generation quality with Bedrock.
+- ***simple-crewai-agent-setup.ipynb***:
+Illustrates a minimal React agent approach using CrewAI, contrasting with LandGraph workflows.
+- ***simple-langragph-agent-setup.ipynb***:
+Provides a starting point for building a single-agent flow with LandGraph, leveraging Bedrock behind the scenes.
+---
+AWS Configuration
+Make sure your environment is set up with AWS credentials that can call Amazon Bedrock. If necessary, export environment variables or configure the AWS CLI.
+Run & Explore
+Execute the cells in each notebook sequentially. You can modify prompts, model parameters, agent setups, or workflows to see how results change.
 
 For more information on the fine-grained action and resource permissions in Bedrock, check out the Bedrock Developer Guide.
 
-
-### Clone and use the notebooks
-
-> ℹ️ **Note:** In SageMaker Studio, you can open a "System Terminal" to run these commands by clicking *File > New > Terminal*
-
-Once your notebook environment is set up, clone this workshop repository into it.
-
-```sh
-sudo yum install -y unzip
-git clone https://github.com/aws-samples/amazon-bedrock-workshop.git
-cd amazon-bedrock-workshop
-```

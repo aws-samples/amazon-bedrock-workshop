@@ -1,4 +1,5 @@
 langchain_aws==0.2.13
+langchain_core==0.2.13
 langchain==0.3.19
 transformers==4.49.0
 pandas==2.2.3
@@ -7,3 +8,5 @@ langchain_community==0.3.18
 faker==36.1.1
 faiss-cpu==1.10.0
 crewai==0.102.0
+PyPDF2==3.0.1
+duckduckgo-search==7.5.0

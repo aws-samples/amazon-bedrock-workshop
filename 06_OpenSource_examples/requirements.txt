@@ -1,10 +1,11 @@
+langchain
 langchain_aws
 langchain_core
 langchain
 transformers==4.49.0
 pandas
-langgraph==0.2.74
-langchain_community==0.3.18
+langgraph
+langchain_community
 faker==36.1.1
 faiss-cpu==1.10.0
 crewai==0.102.0

@@ -6,6 +6,7 @@ This guide walks you through the process of creating an AI agent with code inter
 
 - An AWS account with access to Amazon Bedrock
 - Familiarity with the AWS Management Console
+- Enable required models from Amazon Bedrock Model Access. 
 
 ## Step-by-Step Instructions
 

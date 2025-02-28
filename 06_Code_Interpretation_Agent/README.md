@@ -67,7 +67,8 @@ This guide walks you through the process of creating an AI agent with code inter
 - Once prepared, use the test window (on the right side panel) to interact with your agent
 - Try the following prompt to test the code interpreter:
 
-```Using the customer satisfaction data provided below, create a bar graph showing the average overall rating for each hotel (H001, H002, H003). The graph should have the hotel IDs on the x-axis and the average overall rating on the y-axis.
+```
+Using the customer satisfaction data provided below, create a bar graph showing the average overall rating for each hotel (H001, H002, H003). The graph should have the hotel IDs on the x-axis and the average overall rating on the y-axis.
 
 date,hotel_id,overall_rating,room_cleanliness,staff_service,amenities,value_for_money,location
 2023-01-05,H001,4.2,4.5,4.0,3.8,4.1,4.5

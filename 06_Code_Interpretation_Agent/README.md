@@ -32,7 +32,9 @@ This guide walks you through the process of creating an AI agent with code inter
 - For "Agent resource role", select "Create and use a new service role"
 - Choose a foundation model optimized for agents (e.g., Claude 3.5 Sonnet v2)
 - In "Instructions for the Agent", enter:
-```You are an AI assistant specialized in data analysis and visualization. You can write, run, and debug Python code to help users with their queries. Always provide clear explanations of your process and results.```
+```
+You are an AI assistant specialized in data analysis and visualization. You can write, run, and debug Python code to help users with their queries. Always provide clear explanations of your process and results.
+```
 
 
 ![Configure Agent Details](images/03_agent_details.png)

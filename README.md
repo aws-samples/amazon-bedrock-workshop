@@ -10,12 +10,9 @@ Within this series of labs, you'll explore some of the most common usage pattern
 
 Labs include:
 
-- **01 - Text Generation** \[Estimated time to complete - 45 mins\] [![Test - pass](https://img.shields.io/badge/Test-pass-2ea44f)](https://)
-    - Text generation with Bedrock
-    - Text summarization with Titan and Claude
-    - QnA with Titan
-    - Entity extraction
-- **02 - Knowledge bases and RAG** \[Estimated time to complete - 45 mins\] [![Test - pass](https://img.shields.io/badge/Test-pass-2ea44f)](https://)
+- **01 - Text Generation** \[Estimated time to complete - 15 mins\] [![Test - pass](https://img.shields.io/badge/Test-pass-2ea44f)](https://)
+    - Text, code generation with Bedrock
+- **02 - Knowledge bases and RAG** \[Estimated time to complete - 35 mins\] [![Test - pass](https://img.shields.io/badge/Test-pass-2ea44f)](https://)
     - Managed RAG retrieve and generate example
     - Langchain RAG retrieve and generate example
 - **03 - Model customization** \[Estimated time to complete - 30 mins\] [![Test - pass](https://img.shields.io/badge/Test-pass-2ea44f)](https://)

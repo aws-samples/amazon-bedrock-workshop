@@ -22,6 +22,7 @@ Labs include:
     - Bedrock Titan image generator
     - Bedrock Stable Diffusion XL
     - Bedrock Titan Multimodal embeddings
+    - Nova Reel and Canvas notebooks
 - **05 - Agents** \[Estimated time to complete - 30 mins\] [![Test - pass](https://img.shields.io/badge/Test-pass-2ea44f)](https://)
     - Customer service agent
     - Insurance claims agent

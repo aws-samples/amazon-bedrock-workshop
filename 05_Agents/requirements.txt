@@ -18,4 +18,3 @@ urllib3
 fsspec
 cryptography
 idna
-charset-normalizer

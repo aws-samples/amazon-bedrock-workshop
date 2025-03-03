@@ -99,7 +99,114 @@ cd amazon-bedrock-workshop
 [![HitCount](https://hits.dwyl.com/aws-samples/amazon-bedrock-workshop.svg?style=flat-square&show=unique)](http://hits.dwyl.com/aws-samples/amazon-bedrock-workshop)
 
 
-You're now ready to explore the lab notebooks! Start with [00_Prerequisites/bedrock_basics.ipynb](00_Prerequisites/bedrock_basics.ipynb) for details on how to install the Bedrock SDKs, create a client, and start calling the APIs from Python.
+You're now ready to explore the lab notebooks! Start with [00_Prerequisites/bedrock_basics.ipynb](00_Prerequisites/bedrock_basics.ipynb) for details on how to install the Bedrock SDKs, create a client, and start calling the APIs from Python. Here is the directory structure at a high level:
+
+```
+Directory structure:
+└── aws-samples-amazon-bedrock-workshop/
+    ├── README.md
+    ├── CODE_OF_CONDUCT.md
+    ├── CONTRIBUTING.md
+    ├── LICENSE
+    ├── RELEASE_NOTES.md
+    ├── 00_Prerequisites/
+    │   ├── README.md
+    │   ├── Getting_started_with_Converse_API.ipynb
+    │   └── bedrock_basics.ipynb
+    ├── 01_Text_generation/
+    │   ├── README.md
+    │   ├── 01_text_and_code_generation_w_bedrock.ipynb
+    │   ├── emails/
+    │   │   ├── 00_treasure_island.txt
+    │   │   └── 01_return.txt
+    │   └── images/
+    │       └── nova/
+    ├── 02_KnowledgeBases_and_RAG/
+    │   ├── README.md
+    │   ├── 0_create_ingest_documents_test_kb.ipynb
+    │   ├── 1_managed-rag-kb-retrieve-generate-api.ipynb
+    │   ├── 2_Langchain-rag-retrieve-api-mistral-and-claude-3-haiku.ipynb
+    │   ├── 3_Langchain-rag-retrieve-api-claude-3.ipynb
+    │   ├── 4_CLEAN_UP.ipynb
+    │   ├── requirements.txt
+    │   ├── utility.py
+    │   └── images/
+    ├── 03_Model_customization/
+    │   ├── README.md
+    │   ├── 00_setup.ipynb
+    │   ├── 01_fine-tuning-titan-lite.ipynb
+    │   ├── 02_fine-tuning_llama2.ipynb
+    │   ├── 03_continued_pretraining_titan_text.ipynb
+    │   └── 04_cleanup.ipynb
+    ├── 04_Image_and_Multimodal/
+    │   ├── README.md
+    │   ├── bedrock-titan-multimodal-embeddings.ipynb
+    │   ├── nova-canvas-notebook.ipynb
+    │   ├── nova-reel-notebook.ipynb
+    │   ├── AmazonNova/
+    │   │   ├── NovaCanvas/
+    │   │   │   ├── 00-NovaCanvas-prerequisites.ipynb
+    │   │   │   ├── 01-text-to-image.ipynb
+    │   │   │   ├── 02-image-inpainting.ipynb
+    │   │   │   ├── 03-image-outpainting.ipynb
+    │   │   │   ├── 04-background-removal.ipynb
+    │   │   │   ├── 05-image-variation.ipynb
+    │   │   │   ├── 06-image-conditioning.ipynb
+    │   │   │   ├── 07-color-conditioning.ipynb
+    │   │   │   ├── utils.py
+    │   │   │   └── images/
+    │   │   └── NovaReel/
+    │   │       ├── 00-NovaReel-prerequisites.ipynb
+    │   │       ├── 01-text-to-video.ipynb
+    │   │       ├── 02-image-to-video.ipynb
+    │   │       ├── video_gen_util.py
+    │   │       └── images/
+    │   └── images/
+    │       └── octank_color_palette.JPG
+    ├── 05_Agents/
+    │   ├── README.md
+    │   ├── 00_inline_agents.ipynb
+    │   ├── 01_create_agent.ipynb
+    │   ├── 02_associate_knowledge_base_to_agent.ipynb
+    │   ├── 03_invoke_agent.ipynb
+    │   ├── 04_clean_up_agent_resources.ipynb
+    │   ├── agent.py
+    │   ├── knowledge_base.py
+    │   ├── requirements.txt
+    │   ├── images/
+    │   └── kb_documents/
+    ├── 06_OpenSource_examples/
+    │   ├── README.md
+    │   ├── advance-langgraph-multi-agent-setup.ipynb
+    │   ├── find-relevant-information-using-RAG.ipynb
+    │   ├── intermediate-langgraph-agent-setup-w-tools.ipynb
+    │   ├── ragas-agent-evaluation.ipynb
+    │   ├── requirements.txt
+    │   ├── simple-crewai-agent-setup.ipynb
+    │   ├── simple-langgraph-agent-setup.ipynb
+    │   ├── utils.py
+    │   ├── data/
+    │   │   ├── section_doc_store.pkl
+    │   │   ├── section_vector_store.pkl
+    │   │   ├── synthetic_travel_data.csv
+    │   │   └── travel_guides/
+    │   ├── images/
+    │   └── text-generation-with-langchain/
+    │       ├── 01_zero_shot_generation.ipynb
+    │       ├── 02_code_interpret_w_langchain.ipynb
+    │       ├── 03_code_translate_w_langchain.ipynb
+    │       ├── 04_long text summarization using LCEL chains on Langchain.ipynb
+    │       ├── images/
+    │       └── letters/
+    │           └── 2022-letter.txt
+    ├── 07_Cross_Region_Inference/
+    │   ├── README.md
+    │   └── Getting_started_with_Cross-region_Inference.ipynb
+    ├── imgs/
+    └── .github/
+        └── ISSUE_TEMPLATE/
+            └── bug_report.md
+```
 
 ## Star History
 

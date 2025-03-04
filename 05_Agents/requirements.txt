@@ -17,4 +17,3 @@ cohere
 urllib3
 fsspec
 cryptography
-idna

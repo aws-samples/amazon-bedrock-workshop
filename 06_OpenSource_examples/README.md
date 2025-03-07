@@ -1,6 +1,6 @@
 # Open-Source Module: Amazon Bedrock Integration with LangChain and Agentic Frameworks
 
-Welcome to the **Open-Source Module**, where we demonstrate how to use [Amazon Bedrock](https://aws.amazon.com/bedrock/) with popular open-source libraries and frameworks. This repository includes a series of Jupyter notebooks that range from **high-level LangChain use cases** to **advanced agentic frameworks** with retrieval-augmented generation (RAG) and agent evaluation. Additionally, we provide an example using **CrewAI** for building a React-style agents, contrasting with the Agentic workflow approach in **LandGraph**.
+Welcome to the **Open-Source Module**, where we demonstrate how to use [Amazon Bedrock](https://aws.amazon.com/bedrock/) with popular open-source libraries and frameworks. This repository includes a series of Jupyter notebooks that range from **high-level LangChain use cases** to **advanced agentic frameworks** with retrieval-augmented generation (RAG) and agent evaluation. Additionally, we provide an example using **CrewAI** for building a React-style agents, contrasting with the Agentic workflow approach in **LangGraph**.
 
 ## Table of Contents
 - [Overview](#overview)  
@@ -16,7 +16,7 @@ Welcome to the **Open-Source Module**, where we demonstrate how to use [Amazon B
 **Amazon Bedrock** is a fully managed service that lets you easily build and scale generative AI applications with foundation models (FMs) from top AI providers, all accessible via a single API. In this module, we:
 
 Illustrate **high-level examples** of text generation, code translation, and summarization using Bedrock with **LangChain**.  
-Dive into **advanced agent-based setups** using RAG (retrieval-augmented generation), multi-agent frameworks, agent evaluation, and React-based agents (via **CrewAI**) as an alternative to **LandGraph**’s workflow approach.
+Dive into **advanced agent-based setups** using RAG (retrieval-augmented generation), multi-agent frameworks, agent evaluation, and React-based agents (via **CrewAI**) as an alternative to **LangGraph**’s workflow approach.
 
 ---
 
@@ -29,7 +29,7 @@ You’ll need access to Amazon Bedrock. Ensure your AWS CLI or environment varia
 Install and use a version of Python that is 3.12 or higher.
 
 **JupyterLab or Jupyter Notebook**  
-You can run the `.ipynb` notebooks locally or in a managed environment (e.g., Amazon SageMaker).
+You can run the `.ipynb` notebooks locally or in a managed environment (e.g., Amazon SageMaker AI).
 
 ---
 
@@ -58,19 +58,19 @@ Explores how to summarize lengthy documents or text using LCEL (Language Chain E
 
 ### Agentic Frameworks, Evaluations and RAG
 
-Beyond the high-level examples, you’ll find a set of notebooks that delve into agent frameworks, retrieval-augmented generation, and agent evaluation (using **Ragas**). Some of these also highlight the difference between a React agent approach (using **CrewAI**) and a workflow agentic approach (using **LandGraph**).
+Beyond the high-level examples, you’ll find a set of notebooks that delve into agent frameworks, retrieval-augmented generation, and agent evaluation (using **Ragas**). Some of these also highlight the difference between a React agent approach (using **CrewAI**) and a workflow agentic approach (using **LangGraph**).
 - ***advance-langragph-multi-agent-setup.ipynb***: 
-Shows how to set up a multi-agent environment leveraging LandGraph workflows and Amazon Bedrock.
+Shows how to set up a multi-agent environment leveraging LangGraph workflows and Amazon Bedrock.
 - ***find-relevant-information-using-RAG.ipynb***:
 Demonstrates retrieval-augmented generation (RAG) with Bedrock for more accurate and context-rich responses.
 - ***intermediate-langragph-agent-setup-w-tools.ipynb***:
-Focuses on an intermediate agentic workflow in LandGraph, integrating additional tools to handle complex tasks.
+Focuses on an intermediate agentic workflow in LangGraph, integrating additional tools to handle complex tasks.
 - ***ragas-agent-evaluation.ipynb***:
 Explains evaluating agent performance using Ragas, focusing on retrieval and generation quality with Bedrock.
 - ***simple-crewai-agent-setup.ipynb***:
-Illustrates a minimal React agent approach using CrewAI, contrasting with LandGraph workflows.
+Illustrates a minimal React agent approach using CrewAI, contrasting with LangGraph workflows.
 - ***simple-langragph-agent-setup.ipynb***:
-Provides a starting point for building a single-agent flow with LandGraph, leveraging Bedrock behind the scenes.
+Provides a starting point for building a single-agent flow with LangGraph, leveraging Bedrock behind the scenes.
 ---
 AWS Configuration
 Make sure your environment is set up with AWS credentials that can call Amazon Bedrock. If necessary, export environment variables or configure the AWS CLI.

@@ -2,6 +2,7 @@ langchain
 langchain_aws
 langchain_core
 langchain
+ragas
 transformers==4.49.0
 pandas
 langgraph
@@ -11,3 +12,5 @@ faiss-cpu==1.10.0
 crewai==0.102.0
 PyPDF2==3.0.1
 duckduckgo-search==7.5.0
+wikipedia
+rapidfuzz==3.12.2

@@ -36,17 +36,22 @@ You can run the `.ipynb` notebooks locally or in a managed environment (e.g., Am
 ## Installation
 
 **Clone the Repository**  
-   ```bash
-   git clone https://github.com/aws-samples/amazon-bedrock-workshop.git
-   cd amazon-bedrock-workshop/06_OpenSource_examples
-   run pip install -r requirements.txt
+
+```bash
+git clone https://github.com/aws-samples/amazon-bedrock-workshop.git
+cd amazon-bedrock-workshop/06_OpenSource_examples
+pip install -r requirements.txt
 ```
 ---
 ## Notebook Descriptions
 
+These notebooks are each independent and can be executed in any order.
+
 ### High-Level Use Cases
 
-These notebooks are located in `text-generation-with-langchain` and demonstrate core ways to use Amazon Bedrock with LangChain:
+These notebooks are located in the `text-generation-with-langchain/` directory and demonstrate core ways to use Amazon Bedrock with LangChain:
+- ***00_simple_chatbot.ipynb***:
+Create a multi-lingal greeter chatbot using langchain with conversation retention and prompt templating. 
 - ***01_zero_shot_generation.ipynb***:
 Zero-shot text generation with foundation models on Bedrock, wrapped in LangChain’s prompt interface.
 - ***02_code_interpret_w_langchain.ipynb***:
@@ -77,5 +82,5 @@ Make sure your environment is set up with AWS credentials that can call Amazon B
 Run & Explore
 Execute the cells in each notebook sequentially. You can modify prompts, model parameters, agent setups, or workflows to see how results change.
 
-For more information on the fine-grained action and resource permissions in Bedrock, check out the Bedrock Developer Guide.
+For more information on the fine-grained action and resource permissions in Bedrock, check out the [Bedrock Developer Guide](https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html).
 

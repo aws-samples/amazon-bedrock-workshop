@@ -181,7 +181,7 @@ def invoke_agent_helper(query, session_id, agent_id, alias_id, enable_trace=Fals
                 # End event indicates that the request finished successfully
             elif 'trace' in event:
                 if enable_trace:
-                    logger.info(json.dumps(event['trace'], indent=2))
+                    logger.info(json.dumps(event['trace'], indent=2, default=str))
             else:
                 raise Exception("unexpected event.", event)
     except Exception as e:

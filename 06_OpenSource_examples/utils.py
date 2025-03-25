@@ -336,6 +336,10 @@ def generate_hotel_booking(booking_id, user_id, user_name):
     )
 
 def create_database():
+    try:
+        os.remove("data/travel_bookings.db")
+    except OSError:
+        pass
     conn = sqlite3.connect("data/travel_bookings.db")
     cursor = conn.cursor()
 

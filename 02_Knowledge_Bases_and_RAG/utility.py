@@ -132,13 +132,12 @@ def create_oss_policy_attach_bedrock_execution_role(collection_id, bedrock_kb_ex
         Description='Policy for accessing opensearch serverless',
     )
     oss_policy_arn = oss_policy["Policy"]["Arn"]
-    print("Opensearch serverless arn: ", oss_policy_arn)
 
     iam_client.attach_role_policy(
         RoleName=bedrock_kb_execution_role["Role"]["RoleName"],
         PolicyArn=oss_policy_arn
     )
-    return None
+    return oss_policy_arn
 
 
 def create_policies_in_oss(vector_store_name, aoss_client, bedrock_kb_execution_role_arn):

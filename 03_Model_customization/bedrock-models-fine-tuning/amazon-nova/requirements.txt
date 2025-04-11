@@ -1,0 +1,4 @@
+boto3
+transformers
+shortuuid
+matplotlib

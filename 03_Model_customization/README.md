@@ -30,12 +30,21 @@ This module walks you through how to customize models through fine-tuning and co
 This module can be executed by any developer familiar with Python, also by data scientists and other technical people who aspire to customize FMs in Bedrock. 
 
 ## Setup
-- In this module, please run the [00_setup.ipynb](./00_setup.ipynb) first to make sure resources are properly set up for the following notebooks in this lab.
-- At the end of the module, please run the [04_cleanup.ipynb](./04_cleanup.ipynb) to make sure resources are removed to avoid unnecessary costs.
+- In this module, please run the the 01_setup.ipynb notebook first to make sure resources are properly set up for the following notebooks in this lab.
+- At the end of the module, please run the 03_cleanup.ipynb to make sure resources are removed to avoid unnecessary costs.
 
 
 ## Patterns
 
-On this workshop, you will be able to learn following patterns on customizing FMs in Bedrock:
+In this workshop, you will be able to learn following patterns on customizing FMs in Bedrock:
 
-2. [Fine-tune and Evaluate Llama2 in Bedrock for Summarization](./02_fine-tune_and_evaluate_llama2_bedrock_summarization.ipynb): Demonstrates an end-to-end workflow for fine-tuning, provisioning and evaluating a Meta Llama2 in Amazon Bedrock.
+
+# Fine tuning - 
+
+1. [Fine-tune and Evaluate Amazon Nova in Bedrock ](./bedrock-models-fine-tuning/amazon-nova/01_Amazon_Nova_Finetuning_Walkthrough.ipynb): Demonstrates an end-to-end workflow for fine-tuning, provisioning and evaluating a Amazon Nova in Amazon Bedrock.
+2. [Fine-tune and Evaluate Claude Haiku in Bedrock](./bedrock-models-fine-tuning/claude-haiku/02_fine-tune_Claude_Haiku.ipynb): Demonstrates an end-to-end workflow for fine-tuning, provisioning and evaluating a Claude Haiku in Amazon Bedrock.
+3. [Fine-tune and Evaluate Meta Llama 3 in Bedrock](./bedrock-models-fine-tuning/meta-llama/Llama-3.2%20Multi-modal%20cusotmization/02_fine-tune_llama3.2.ipynb): Demonstrates an end-to-end workflow for fine-tuning, provisioning and evaluating a Meta Llama 3.2 multimodal customization in Amazon Bedrock.
+
+# Continued Pretraining - 
+
+1. [Continued Pretraining with Amazon Titan ](./continued%20Pre-training/02_continued_pretraining_titan_text.ipynb): Demonstrates an end-to-end workflow for continued pretraining Amazon Titan model in Amazon Bedrock.

@@ -2,11 +2,4 @@ awscli
 boto3
 botocore
 opensearch-py
-retrying
 requests-aws4auth
-ragas==0.1.9
-ipywidgets
-iprogress
-langchain
-langchain_aws
-langchain_community

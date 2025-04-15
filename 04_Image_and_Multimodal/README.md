@@ -1,4 +1,4 @@
-# Lab 3 - Image Generation and Multimodal Embeddings
+# Module 4 - Image Generation and Multimodal Embeddings
 
 ## Overview
 
@@ -50,22 +50,3 @@ Titan Multimodal Embeddings Generation 1 (G1) is a multimodal embeddings model f
 ## Target Audience
 
 Marketing companies, agencies, web-designers, and general companies can take advantage of this feature to generate brand new images, from scratch.
-
-## Patterns
-
-In this workshop, you will be able to learn about Image Generation using Amazon Bedrock starting with text or image input. Use Stable Diffusion as an example in the below graph, and Titan Image Generator can also be used for the same purpose. You will also learn about multimodal image indexing and searching. Note that until the time of preparing this workshop, only Titan Image Generator supports outpainting.
-
-1. Text to Image
-    ![Text to Image](./images/71-txt-2-img.png)
-2. Image to Image (Inpainting and Outpainting)
-    ![Text to Image](./images/72-img-2-img.png)
-3. Multimodal Embeddings
-    ![Multimodal Embeddings](./images/multimodal-embeddings.png)
-
-## Setup
-Before running any of the labs in this section ensure you've run the [Bedrock boto3 setup notebook](../00_Prerequisites/bedrock_basics.ipynb).
-
-## Helper
-To facilitate image generation, there is a utility class `Bedrock` implementation in `./utils/bedrock.py`. This helps you to generate images easily.
-
-You can also explore different `style_preset`  options [here](https://platform.stability.ai/docs/features/animation/parameters#available-styles).

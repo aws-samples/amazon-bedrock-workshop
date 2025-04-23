@@ -1,3 +1,20 @@
+### 4/15/2025
+- remove module 0 (prerequisites)
+- full refactor of module 1
+  - update to newer models
+  - update markdown instructions and formatting
+  - update other module assets
+  - discuss new topics - Converse API, CRIS, function calling, etc.
+- full refactor of module 2
+  - update to newer models 
+  - update markdown instructions and formatting
+  - rename notebooks
+- refresh of module 4
+  - update markdown formatting
+- refresh of module 5
+  - notebook renaming / re-ordering 
+
+
 ### 1/5/2024
 - Added Nova canvas notebook
 - Added Nova Reel notebook

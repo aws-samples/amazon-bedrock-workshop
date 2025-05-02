@@ -3,7 +3,7 @@ langchain_aws
 langchain_core
 langchain
 ragas
-transformers==4.49.0
+transformers==4.50.0
 pandas
 langgraph
 langchain_community

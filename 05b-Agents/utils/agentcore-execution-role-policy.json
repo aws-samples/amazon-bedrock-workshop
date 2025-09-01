@@ -1,0 +1,159 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "bedrock-agentcore:CreateCodeInterpreter",
+                "bedrock-agentcore:StartCodeInterpreterSession",
+                "bedrock-agentcore:InvokeCodeInterpreter",
+                "bedrock-agentcore:StopCodeInterpreterSession",
+                "bedrock-agentcore:DeleteCodeInterpreter",
+                "bedrock-agentcore:ListCodeInterpreters",
+                "bedrock-agentcore:GetCodeInterpreter"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            "Resource": "arn:aws:logs:*:*:log-group:/aws/bedrock-agentcore/code-interpreter*"
+        },
+        {
+            "Sid": "ECRImageAccess",
+            "Effect": "Allow",
+            "Action": [
+                "ecr:BatchGetImage",
+                "ecr:GetDownloadUrlForLayer"
+            ],
+            "Resource": [
+                "arn:aws:ecr:*:*:repository/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:DescribeLogStreams",
+                "logs:CreateLogGroup"
+            ],
+            "Resource": [
+                "arn:aws:logs:*:*:log-group:/aws/bedrock-agentcore/runtimes/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:DescribeLogGroups"
+            ],
+            "Resource": [
+                "arn:aws:logs:*:*:log-group:*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            "Resource": [
+                "arn:aws:logs:*:*:log-group:/aws/bedrock-agentcore/runtimes/*:log-stream:*"
+            ]
+        },
+        {
+            "Sid": "ECRTokenAccess",
+            "Effect": "Allow",
+            "Action": [
+                "ecr:GetAuthorizationToken"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords",
+                "xray:GetSamplingRules",
+                "xray:GetSamplingTargets"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": "*",
+            "Action": "cloudwatch:PutMetricData",
+            "Condition": {
+                "StringEquals": {
+                    "cloudwatch:namespace": "bedrock-agentcore"
+                }
+            }
+        },
+        {
+            "Sid": "GetAgentAccessToken",
+            "Effect": "Allow",
+            "Action": [
+                "bedrock-agentcore:GetWorkloadAccessToken",
+                "bedrock-agentcore:GetWorkloadAccessTokenForJWT",
+                "bedrock-agentcore:GetWorkloadAccessTokenForUserId"
+            ],
+            "Resource": [
+                "arn:aws:bedrock-agentcore:*:*:workload-identity-directory/default",
+                "arn:aws:bedrock-agentcore:*:*:workload-identity-directory/default/workload-identity/*"
+            ]
+        },
+        {
+            "Sid": "BedrockModelInvocation",
+            "Effect": "Allow",
+            "Action": [
+                "bedrock:InvokeModel",
+                "bedrock:InvokeModelWithResponseStream"
+            ],
+            "Resource": [
+                "arn:aws:bedrock:*::foundation-model/*",
+                "arn:aws:bedrock:*:*:*"
+            ]
+        },
+        {
+            "Sid": "BedrockKnowledgeBaseAccess",
+            "Effect": "Allow",
+            "Action": [
+                "bedrock:Retrieve",
+                "bedrock:RetrieveAndGenerate"
+            ],
+            "Resource": [
+                "arn:aws:bedrock:*:*:knowledge-base/*"
+            ]
+        },
+        {
+            "Sid": "DynamoDBAccess",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:Query",
+                "dynamodb:Scan"
+            ],
+            "Resource": [
+                "arn:aws:dynamodb:*:*:table/*"
+            ]
+        },
+        {
+            "Sid": "SSMParameterAccess",
+            "Effect": "Allow",
+            "Action": [
+                "ssm:GetParameter",
+                "ssm:GetParameters"
+            ],
+            "Resource": [
+                "arn:aws:ssm:*:*:parameter/*"
+            ]
+        }
+    ]
+}

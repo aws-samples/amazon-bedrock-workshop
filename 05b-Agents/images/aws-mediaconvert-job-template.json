@@ -1,0 +1,210 @@
+{
+  "Settings": {
+    "TimecodeConfig": {
+      "Source": "ZEROBASED"
+    },
+    "OutputGroups": [
+      {
+        "Name": "Apple HLS",
+        "Outputs": [
+          {
+            "ContainerSettings": {
+              "Container": "M3U8",
+              "M3u8Settings": {
+                "Scte35Source": "PASSTHROUGH"
+              }
+            },
+            "VideoDescription": {
+              "Width": 1280,
+              "Height": 720,
+              "CodecSettings": {
+                "Codec": "H_264",
+                "H264Settings": {
+                  "MaxBitrate": 1500000,
+                  "RateControlMode": "QVBR",
+                  "SceneChangeDetect": "TRANSITION_DETECTION",
+                  "FramerateControl": "SPECIFIED",
+                  "FramerateNumerator": 30,
+                  "FramerateDenominator": 1
+                }
+              }
+            },
+            "AudioDescriptions": [
+              {
+                "AudioSourceName": "Audio Selector 1",
+                "CodecSettings": {
+                  "Codec": "AAC",
+                  "AacSettings": {
+                    "Bitrate": 128000,
+                    "CodingMode": "CODING_MODE_2_0",
+                    "SampleRate": 48000
+                  }
+                }
+              }
+            ],
+            "OutputSettings": {
+              "HlsSettings": {}
+            },
+            "NameModifier": "_720p1500k"
+          },
+          {
+            "ContainerSettings": {
+              "Container": "M3U8",
+              "M3u8Settings": {
+                "Scte35Source": "PASSTHROUGH"
+              }
+            },
+            "VideoDescription": {
+              "Width": 960,
+              "Height": 540,
+              "CodecSettings": {
+                "Codec": "H_264",
+                "H264Settings": {
+                  "MaxBitrate": 1000000,
+                  "RateControlMode": "QVBR",
+                  "SceneChangeDetect": "TRANSITION_DETECTION",
+                  "FramerateControl": "SPECIFIED",
+                  "FramerateNumerator": 30,
+                  "FramerateDenominator": 1
+                }
+              }
+            },
+            "AudioDescriptions": [
+              {
+                "AudioSourceName": "Audio Selector 1",
+                "CodecSettings": {
+                  "Codec": "AAC",
+                  "AacSettings": {
+                    "Bitrate": 128000,
+                    "CodingMode": "CODING_MODE_2_0",
+                    "SampleRate": 48000
+                  }
+                }
+              }
+            ],
+            "OutputSettings": {
+              "HlsSettings": {}
+            },
+            "NameModifier": "_540p1000k"
+          },
+          {
+            "ContainerSettings": {
+              "Container": "M3U8",
+              "M3u8Settings": {
+                "Scte35Source": "PASSTHROUGH"
+              }
+            },
+            "VideoDescription": {
+              "Width": 640,
+              "Height": 360,
+              "CodecSettings": {
+                "Codec": "H_264",
+                "H264Settings": {
+                  "MaxBitrate": 800000,
+                  "RateControlMode": "QVBR",
+                  "SceneChangeDetect": "TRANSITION_DETECTION",
+                  "FramerateControl": "SPECIFIED",
+                  "FramerateNumerator": 30,
+                  "FramerateDenominator": 1
+                }
+              }
+            },
+            "AudioDescriptions": [
+              {
+                "AudioSourceName": "Audio Selector 1",
+                "CodecSettings": {
+                  "Codec": "AAC",
+                  "AacSettings": {
+                    "Bitrate": 128000,
+                    "CodingMode": "CODING_MODE_2_0",
+                    "SampleRate": 48000
+                  }
+                }
+              }
+            ],
+            "OutputSettings": {
+              "HlsSettings": {}
+            },
+            "NameModifier": "_360p800k"
+          },
+          {
+            "ContainerSettings": {
+              "Container": "M3U8",
+              "M3u8Settings": {
+                "Scte35Source": "PASSTHROUGH"
+              }
+            },
+            "VideoDescription": {
+              "Width": 480,
+              "Height": 270,
+              "CodecSettings": {
+                "Codec": "H_264",
+                "H264Settings": {
+                  "MaxBitrate": 500000,
+                  "RateControlMode": "QVBR",
+                  "SceneChangeDetect": "TRANSITION_DETECTION",
+                  "FramerateControl": "SPECIFIED",
+                  "FramerateNumerator": 30,
+                  "FramerateDenominator": 1
+                }
+              }
+            },
+            "AudioDescriptions": [
+              {
+                "AudioSourceName": "Audio Selector 1",
+                "CodecSettings": {
+                  "Codec": "AAC",
+                  "AacSettings": {
+                    "Bitrate": 128000,
+                    "CodingMode": "CODING_MODE_2_0",
+                    "SampleRate": 48000
+                  }
+                }
+              }
+            ],
+            "OutputSettings": {
+              "HlsSettings": {}
+            },
+            "NameModifier": "_270p500k"
+          }
+        ],
+        "OutputGroupSettings": {
+          "Type": "HLS_GROUP_SETTINGS",
+          "HlsGroupSettings": {
+            "SegmentLength": 6,
+            "Destination": "s3://your-amazon-s3-bucket/channelassembly/30sec_slate_ad/",
+            "MinSegmentLength": 1,
+            "MinFinalSegmentLength": 1,
+            "AdMarkers": [
+              "ELEMENTAL"
+            ],
+            "SegmentControl": "SEGMENTED_FILES"
+          }
+        }
+      }
+    ],
+    "Esam": {
+      "SignalProcessingNotification": {
+        "SccXml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SignalProcessingNotification xmlns=\"urn:cablelabs:iptvservices:esam:xsd:signal:1\" xmlns:sig=\"urn:cablelabs:md:xsd:signaling:3.0\" xmlns:common=\"urn:cablelabs:iptvservices:esam:xsd:common:1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" acquisitionPointIdentity=\"Elemental\">\n\n    <common:BatchInfo batchId=\"1\">\n      <common:Source xsi:type=\"content:MovieType\" />\n    </common:BatchInfo>\n\n\n    <!-- Break 1 -->\n    <ResponseSignal acquisitionPointIdentity=\"Elemental\" acquisitionSignalID=\"1\" signalPointID=\"0.01\" action=\"create\">\n      <sig:NPTPoint nptPoint=\"0.01\"/>\n      <sig:SCTE35PointDescriptor spliceCommandType=\"06\">\n        <sig:SegmentationDescriptorInfo segmentEventId=\"1\" segmentTypeId=\"52\" upidType=\"9\" upid=\"1\" duration=\"PT0S\" segmentNumber=\"1\" segmentsExpected=\"1\"/>\n      </sig:SCTE35PointDescriptor>\n    </ResponseSignal>\n\n    <ResponseSignal acquisitionPointIdentity=\"Elemental\" acquisitionSignalID=\"2\" signalPointID=\"0.01\" action=\"create\">\n      <sig:NPTPoint nptPoint=\"0.01\" />\n      <sig:SCTE35PointDescriptor spliceCommandType=\"06\">\n        <sig:SegmentationDescriptorInfo segmentEventId=\"1\" segmentTypeId=\"53\" upidType=\"9\" upid=\"2\"/>\n      </sig:SCTE35PointDescriptor>\n    </ResponseSignal>\n\n    <!-- Break 2 -->\n    <ResponseSignal acquisitionPointIdentity=\"Elemental\" acquisitionSignalID=\"5\" signalPointID=\"96.00\" action=\"create\">\n      <sig:NPTPoint nptPoint=\"96.00\"/>\n      <sig:SCTE35PointDescriptor spliceCommandType=\"06\">\n        <sig:SegmentationDescriptorInfo segmentEventId=\"3\" segmentTypeId=\"52\" upidType=\"9\" upid=\"5\" duration=\"PT0S\" segmentNumber=\"1\" segmentsExpected=\"1\"/>\n      </sig:SCTE35PointDescriptor>\n    </ResponseSignal>\n\n    <ResponseSignal acquisitionPointIdentity=\"Elemental\" acquisitionSignalID=\"6\" signalPointID=\"96.00\" action=\"create\">\n      <sig:NPTPoint nptPoint=\"96.00\" />\n      <sig:SCTE35PointDescriptor spliceCommandType=\"06\">\n        <sig:SegmentationDescriptorInfo segmentEventId=\"3\" segmentTypeId=\"53\" upidType=\"9\" upid=\"6\"/>\n      </sig:SCTE35PointDescriptor>\n    </ResponseSignal>\n\n\n</SignalProcessingNotification>"
+      },
+      "ResponseSignalPreroll": 4000
+    },
+    "Inputs": [
+      {
+        "AudioSelectors": {
+          "Audio Selector 1": {
+            "DefaultSelection": "DEFAULT"
+          }
+        },
+        "VideoSelector": {},
+        "TimecodeSource": "ZEROBASED",
+        "FileInput": "https://d1u9kopp5ecv41.cloudfront.net/channelassembly/30sec_slate_ad.mp4"
+      }
+    ]
+  },
+  "AccelerationSettings": {
+    "Mode": "DISABLED"
+  },
+  "StatusUpdateInterval": "SECONDS_15",
+  "Priority": 0
+}

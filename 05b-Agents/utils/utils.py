@@ -1,14 +1,34 @@
-import boto3
-import botocore
-from botocore.exceptions import ClientError
-from boto3.session import Session
-import requests
-import json
 import time
-import os
+import json
+import requests
+from boto3.session import Session
+from botocore.exceptions import ClientError
+import botocore
+import boto3
 import zipfile
 import subprocess
 import shutil
+
+import os
+
+
+def get_kb_id(kb_name):
+    smm_client = boto3.client("ssm")
+    kb_id = smm_client.get_parameter(
+        Name=f"{kb_name}-kb-id", WithDecryption=False)
+    print("Knowledge Base Id:", kb_id["Parameter"]["Value"])
+    return kb_id
+
+
+def get_db_table(kb_name):
+    smm_client = boto3.client("ssm")
+    dynamodb = boto3.resource("dynamodb")
+    table_name = smm_client.get_parameter(
+        Name=f"{kb_name}-table-name", WithDecryption=False
+    )
+    table = dynamodb.Table(table_name["Parameter"]["Value"])
+    print("DynamoDB table:", table_name["Parameter"]["Value"])
+    return table
 
 
 def create_agentcore_execution_role(role_name="agentcore-execution-role", aws_region="us-east-1"):

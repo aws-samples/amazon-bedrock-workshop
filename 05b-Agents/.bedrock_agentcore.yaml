@@ -1,0 +1,30 @@
+default_agent: nutri_dine
+agents:
+  nutri_dine:
+    name: nutri_dine
+    entrypoint: /Users/moellero/git_projects/amazon-bedrock-workshop/05b-Agents/strands_claude.py
+    platform: linux/arm64
+    container_runtime: docker
+    aws:
+      execution_role: arn:aws:iam::767397903002:role/agentcore-execution-role
+      execution_role_auto_create: false
+      account: '767397903002'
+      region: us-east-1
+      ecr_repository: 767397903002.dkr.ecr.us-east-1.amazonaws.com/bedrock-agentcore-nutri_dine
+      ecr_auto_create: false
+      network_configuration:
+        network_mode: PUBLIC
+      protocol_configuration:
+        server_protocol: HTTP
+      observability:
+        enabled: true
+    bedrock_agentcore:
+      agent_id: nutri_dine-Sn4g1L4F6q
+      agent_arn: arn:aws:bedrock-agentcore:us-east-1:767397903002:runtime/nutri_dine-Sn4g1L4F6q
+      agent_session_id: 706ed603-3f02-499f-b723-29b7b05bd59f
+    codebuild:
+      project_name: bedrock-agentcore-nutri_dine-builder
+      execution_role: arn:aws:iam::767397903002:role/AmazonBedrockAgentCoreSDKCodeBuild-us-east-1-d8ee975875
+      source_bucket: bedrock-agentcore-codebuild-sources-767397903002-us-east-1
+    authorizer_configuration: null
+    oauth_configuration: null

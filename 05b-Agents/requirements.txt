@@ -4,11 +4,4 @@ bedrock-agentcore
 bedrock-agentcore-starter-toolkit>=0.1.1
 boto3
 botocore
-awscli
-opensearch-py
-requests-aws4auth
-pyyaml
-retrying
-pandas
 uv
-openpyxl

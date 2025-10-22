@@ -83,23 +83,17 @@ class KnowledgeBasesForAmazonBedrock:
             .get_caller_identity()
             .get("Account")
         )
+        
         if suffix is not None:
             self.suffix = suffix
         else:
             self.suffix = str(uuid.uuid4())[:4]
-        self.identity = boto3.client(
-            "sts", region_name=self.region_name
-        ).get_caller_identity()["Arn"]
-        self.aoss_client = boto3_session.client(
-            "opensearchserverless", region_name=self.region_name
-        )
+            
+        self.identity = boto3.client("sts", region_name=self.region_name).get_caller_identity()["Arn"]
+        self.aoss_client = boto3_session.client("opensearchserverless", region_name=self.region_name)
         self.s3_client = boto3.client("s3", region_name=self.region_name)
-        self.bedrock_agent_client = boto3.client(
-            "bedrock-agent", region_name=self.region_name
-        )
-        self.bedrock_agent_client = boto3.client(
-            "bedrock-agent", region_name=self.region_name
-        )
+        self.bedrock_agent_client = boto3.client("bedrock-agent", region_name=self.region_name)
+
         credentials = boto3.Session().get_credentials()
         self.awsauth = AWSV4SignerAuth(credentials, self.region_name, "aoss")
         self.oss_client = None

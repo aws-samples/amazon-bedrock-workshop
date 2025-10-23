@@ -22,11 +22,9 @@ def get_kb_id(kb_name):
 
 def get_db_table_name(kb_name):
     smm_client = boto3.client("ssm")
-    dynamodb = boto3.resource("dynamodb")
     table_name = smm_client.get_parameter(
         Name=f"{kb_name}-table-name", WithDecryption=False
     )
-    table = dynamodb.Table(table_name["Parameter"]["Value"])
     print("DynamoDB table:", table_name["Parameter"]["Value"])
     return table_name["Parameter"]["Value"]
 

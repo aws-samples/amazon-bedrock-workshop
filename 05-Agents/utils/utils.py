@@ -1,15 +1,5 @@
-import time
 import json
-import requests
-from boto3.session import Session
-from botocore.exceptions import ClientError
-import botocore
 import boto3
-import zipfile
-import subprocess
-import shutil
-
-import os
 
 
 def get_kb_id(kb_name):
@@ -27,6 +17,7 @@ def get_db_table_name(kb_name):
     )
     print("DynamoDB table:", table_name["Parameter"]["Value"])
     return table_name["Parameter"]["Value"]
+
 
 def attach_inline_policy(role_arn, policy_file, policy_name: str = "InlinePolicy") -> None:
     """

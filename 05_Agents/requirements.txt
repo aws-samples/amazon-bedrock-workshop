@@ -1,5 +1,0 @@
-boto3
-opensearch-py
-botocore
-awscli
-retrying

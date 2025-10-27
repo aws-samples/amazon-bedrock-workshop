@@ -1,0 +1,8 @@
+strands-agents
+strands-agents-tools
+bedrock-agentcore
+bedrock-agentcore-starter-toolkit>=0.1.1
+boto3
+botocore
+opensearch-py
+uv

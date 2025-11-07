@@ -1,52 +1,120 @@
-# Module 4 - Image Generation and Multimodal Embeddings
+# Module 4 - Visual Content Generation
 
 ## Overview
 
-Image generation can be a tedious task for artists, designers and content creators who illustrate their thoughts with the help of images. With the help of Foundation Models (FMs) this tedious task can be streamlined to just a single line of text that expresses the thoughts of the artist, FMs can be used for creating realistic and artistic images of various subjects, environments, and scenes from language prompts.
+This module provides a comprehensive introduction to visual content generation using Amazon Bedrock's multimodal foundation models. You'll learn how to generate images, create videos, and build intelligent search applications using embeddings that understand both text and images.
 
-Image indexing and searching is another tedious enterprise task. With the help of FMs, enterprise can build multimodal image indexing, searching and recommendation applications quickly. 
+## What You'll Learn
 
-In this lab, we will explore how to use FMs available in Amazon Bedrock to generate images as well as modify existing images, and how to use FMs to do multimodal image indexing and searching.
+In this module, you will:
 
+- Generate multimodal embeddings for images and text
+- Build semantic search applications with visual content
+- Create high-quality images with Amazon Nova Canvas
+- Generate studio-grade videos with Amazon Nova Reel
+- Implement text-to-image and image-to-image generation
+- Use inpainting, outpainting, and image variation techniques
+- Create text-to-video and image-to-video content
+- Apply visual AI to real-world marketing scenarios
 
-## Prompt Engineering for Images
+## Notebooks
 
-Writing a good prompt can sometimes be an art. It is often difficult to predict whether a certain prompt will yield a satisfactory image with a given model. However, there are certain templates that have been observed to work. Broadly speaking, a prompt can be roughly broken down into three pieces: 
+### 01-multimodal-embeddings.ipynb
 
-* type of image (photograph/sketch/painting etc.), and
-* description (subject/object/environment/scene etc.), and
-* the style of the image (realistic/artistic/type of art etc.). 
-   
-You can change each of the three parts individually, to generate variations of an image. Adjectives have been known to play a significant role in the image generation process. Also, adding more details help in the generation process.To generate a realistic image, you can use phrases such as "a photo of", "a photograph of", "realistic" or "hyper realistic". 
+Learn to work with multimodal embeddings:
 
-To generate images by artists you can use phrases like "by Pablo Picasso" or "oil painting by Rembrandt" or "landscape art by Frederic Edwin Church" or "pencil drawing by Albrecht Dürer". You can also combine different artists as well. To generate artistic image by category, you can add the art category in the prompt such as "lion on a beach, abstract". Some other categories include "oil painting", "pencil drawing", "pop art", "digital art", "anime", "cartoon", "futurism", "watercolor", "manga" etc. You can also include details such as lighting or camera lens, such as 35mm wide lens or 85mm wide lens and details about the framing (portrait/landscape/close up etc.).
+1. **Setup** - Configure Bedrock client and dependencies
+2. **Generate Embeddings** - Create embeddings for images and text
+3. **Build Index** - Store embeddings for efficient retrieval
+4. **Semantic Search** - Query images using text or images
+5. **Similarity Scoring** - Calculate and rank search results
+6. **Applications** - Build recommendation and search systems
 
-Note that the model generates different images even if same prompt is given multiple times. So, you can generate multiple images and select the image that suits your application best.
+### 02-nova-canvas.ipynb
 
-## Foundation Models
+Master image generation with Amazon Nova Canvas:
 
-To provide these capabilities, Amazon Bedrock supports [Stable Diffusion XL](https://stability.ai/stablediffusion) from Stability AI and [Titan Image Generator](https://aws.amazon.com/bedrock/titan/) from Amazon for image generation, and [Titan Multimodal Embeddings](https://aws.amazon.com/bedrock/titan/) for multimodal image indexing and searching.
+1. **Text-to-Image** - Generate images from text prompts
+2. **Image Variations** - Create different versions of images
+3. **Inpainting** - Edit specific parts of images with masks
+4. **Outpainting** - Extend image boundaries
+5. **Subject Consistency** - Maintain consistent subjects across images
+6. **Brand Integration** - Apply specific colors and styles
+7. **Product Visualization** - Create marketing materials
 
-### Stable Diffusion
+**Use Case**: Generate visual assets for Octank dog food company, including package designs, promotional materials, and professional ads.
 
-Stable Diffusion works on the principle of diffusion and is composed of multiple models each having different purpose:
+### 03-nova-reel.ipynb
 
-1. The CLIP text encoder;
-2. The VAE decoder;
-3. The UNet, and
-4. The VAE_post_quant_conv
+Create videos with Amazon Nova Reel:
 
-The workings can be explained with this architecture:
-![Stable Diffusion Architecture](./images/sd.png)
+1. **Setup** - Configure S3 and async invocation
+2. **Text-to-Video** - Generate videos from text descriptions
+3. **Image-to-Video** - Animate static images with text guidance
+4. **Job Management** - Track and retrieve async video generation
+5. **Video Processing** - Download and display generated videos
+6. **Marketing Content** - Create dynamic product showcases
 
-### Titan Image Generator
+**Use Case**: Produce short video ads for Octank dog food using both text prompts and product images.
 
-Titan Image Generator G1 is an image generation model. It generates images from text, and allows users to upload and edit an existing image. Users can edit an image with a text prompt (without a mask) or parts of an image with an image mask, or extend the boundaries of an image with outpainting. It can also generate variations of an image.
+## Prerequisites
 
-### Titan Multimodal Embeddings
+To run the notebooks in this module, you will need:
 
-Titan Multimodal Embeddings Generation 1 (G1) is a multimodal embeddings model for use cases like searching images by text, image, or a combination of text and image. Designed for high accuracy and fast responses, this model is an ideal choice for search and recommendations use cases.
+- Python 3.10+
+- AWS credentials with permissions to:
+  - Access Amazon Bedrock
+  - Read/write to Amazon S3 (for video generation)
+  - Invoke async operations (for video generation)
+- The following models enabled in your Amazon Bedrock Console:
+  - Amazon Titan Multimodal Embeddings G1
+  - Amazon Titan Image Generator G1 (V2)
+  - Amazon Nova Canvas
+  - Amazon Nova Reel
 
-## Target Audience
+### Additional Permissions for Video Generation
 
-Marketing companies, agencies, web-designers, and general companies can take advantage of this feature to generate brand new images, from scratch.
+For Nova Reel (03-nova-reel.ipynb), ensure your execution role has:
+- `bedrock:InvokeModel`
+- `bedrock:GetAsyncInvoke`
+- `bedrock:ListAsyncInvokes`
+- `s3:PutObject`
+- `s3:GetObject`
+
+## Key Capabilities
+
+### Multimodal Embeddings
+- Encode text, images, or both into the same semantic space
+- Build intelligent search and recommendation systems
+- Support for multiple embedding dimensions
+- Enterprise-ready with bias mitigation
+
+### Image Generation (Nova Canvas)
+- Text-to-image generation
+- Image variations and style transfer
+- Inpainting with masks
+- Outpainting for boundary extension
+- Subject consistency across generations
+- High-quality, photorealistic outputs
+
+### Video Generation (Nova Reel)
+- Text-to-video creation
+- Image-and-text to video
+- Up to 2-minute videos in 6-second segments
+- 1280x720 resolution at 24 FPS
+- Studio-grade quality
+- Async generation for longer content
+
+## Use Cases
+
+This module demonstrates practical applications for:
+- **Marketing & Advertising** - Create product visuals and video ads
+- **E-commerce** - Generate product images and demonstrations
+- **Content Creation** - Produce visual assets at scale
+- **Search & Discovery** - Build intelligent image search systems
+- **Brand Management** - Maintain consistent visual identity
+- **Product Visualization** - Showcase products in various contexts
+
+## Contributing
+
+We welcome community contributions! Please ensure your sample aligns with [AWS best practices](https://aws.amazon.com/architecture/well-architected/), and please update the **Contents** section of this README file with a link to your sample, along with a description.

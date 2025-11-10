@@ -1,108 +1,103 @@
 # Amazon Bedrock Workshop [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 
-This hands-on workshop, aimed at developers and solution builders, introduces how to leverage foundation models (FMs) through [Amazon Bedrock](https://aws.amazon.com/bedrock/). This code goes alongside the self-paced or instructor lead workshop here - https://catalog.us-east-1.prod.workshops.aws/amazon-bedrock/en-US
+This hands-on workshop introduces how to leverage foundation models through [Amazon Bedrock](https://aws.amazon.com/bedrock/). Learn to build production-ready generative AI applications using text generation, RAG, agents, and visual content creation.
 
-**Please follow the prerequisites listed in the link above or ask your AWS workshop instructor how to get started.**
+**Workshop Website:** https://catalog.us-east-1.prod.workshops.aws/amazon-bedrock/en-US
 
-Amazon Bedrock is a fully managed service that provides access to FMs from third-party providers and Amazon; available via an API. With Bedrock, you can choose from a variety of models to find the one that’s best suited for your use case.
+## What You'll Build
 
-Within this series of labs, you'll explore some of the most common usage patterns we are seeing with our customers for Generative AI. We will show techniques for generating text and images, creating value for organizations by improving productivity. This is achieved by leveraging foundation models to help in composing emails, summarizing text, answering questions, building chatbots, and creating images. While the focus of this workshop is for you to gain hands-on experience implementing these patterns via Bedrock APIs and SDKs, you will also have the option of exploring integrations with open-source packages like [LangChain](https://python.langchain.com/docs/get_started/introduction) and [FAISS](https://faiss.ai/index.html).
+This workshop covers the most common generative AI patterns through hands-on labs:
 
-Labs include:
+- **Text Generation** - Master the Converse API, streaming, function calling, and multi-turn conversations
+- **RAG Applications** - Build intelligent Q&A systems with Amazon Bedrock Knowledge Bases
+- **AI Agents** - Create autonomous agents that use tools and external data sources
+- **Visual Content** - Generate images and videos with multimodal models
+- **Responsible AI** - Implement guardrails and safety measures
 
-- **01 - Text Generation** \[Estimated time to complete - 25 mins\] [![Test - pass](https://img.shields.io/badge/Test-pass-2ea44f)](https://)
-    - Text, code generation with Bedrock
-- **02 - Knowledge bases and RAG** \[Estimated time to complete - 35 mins\] [![Test - pass](https://img.shields.io/badge/Test-pass-2ea44f)](https://)
-    - Managed RAG retrieve and generate example
-    - Langchain RAG retrieve and generate example
-- **03 - Model customization** \[Estimated time to complete - 30 mins\] [![Test - pass](https://img.shields.io/badge/Test-pass-2ea44f)](https://)
-    - Fine tuning Titan lite, Llama2
-    - **Note** - _You must run this on your own AWS account, and this will not work on AWS Workshop Studio!_
-- **04 - Image and Multimodal** \[Estimated time to complete - 30 mins\] [![Test - pass](https://img.shields.io/badge/Test-pass-2ea44f)](https://)
-    - Bedrock Titan image generator
-    - Bedrock Stable Diffusion XL
-    - Bedrock Titan Multimodal embeddings
-    - Nova Reel and Canvas notebooks
-- **05 - Agents** \[Estimated time to complete - 30 mins\] [![Test - pass](https://img.shields.io/badge/Test-pass-2ea44f)](https://)
-    - Customer service agent
-    - Insurance claims agent
-- **06 - Open source examples (optional)** \[Estimated time to complete - 30 mins\] [![Test - fail](https://img.shields.io/badge/Test-fail-red)](https://)
-    - Langchain Text Generation examples
-    - Langchain KB RAG examples
-    - Langchain Chatbot examples
-    - NVIDIA NeMo Guardrails examples
-    - NodeJS Bedrock examples
+## Modules
 
-<div align="center">
+### [01 - Text Generation](./01-text-generation/) 
+*Estimated time: 25 mins*
 
-![imgs/11-overview](imgs/11-overview.png "Overview of the different labs in the workshop")
+Learn Amazon Bedrock's Converse API for text generation, code generation, streaming responses, and function calling. Compare multiple foundation models and implement Cross-Regional Inference.
 
-</div>
+### [02 - Knowledge Bases and RAG](./02-rag/)
+*Estimated time: 35 mins*
 
-You can also refer to these [Step-by-step guided instructions on the workshop website](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/en-US).
+Build retrieval-augmented generation applications using Amazon Bedrock Knowledge Bases. Implement both managed and customized RAG workflows with OpenSearch Serverless.
 
+### [03 - Agents](./03-agents/)
+*Estimated time: 30 mins*
 
-## Getting started
+Create enterprise-ready AI agents using Strands Agents SDK and Amazon Bedrock AgentCore Runtime. Build a restaurant assistant that integrates with Knowledge Bases and DynamoDB.
 
-### Choose a notebook environment
+### [04 - Visual Content Generation](./04-visual-content-generation/)
+*Estimated time: 30 mins*
 
-This workshop is presented as a series of **Python notebooks**, which you can run from the environment of your choice:
+Generate images with Amazon Nova Canvas and videos with Amazon Nova Reel. Build semantic search with multimodal embeddings using Titan models.
 
-- For a fully-managed environment with rich AI/ML features, we'd recommend using [SageMaker Studio](https://aws.amazon.com/sagemaker/studio/). To get started quickly, you can refer to the [instructions for domain quick setup](https://docs.aws.amazon.com/sagemaker/latest/dg/onboard-quick-start.html).
-- For a fully-managed but more basic experience, you could instead [create a SageMaker Notebook Instance](https://docs.aws.amazon.com/sagemaker/latest/dg/howitworks-create-ws.html).
-- If you prefer to use your existing (local or other) notebook environment, make sure it has [credentials for calling AWS](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
+### [05 - Responsible AI](./05-responsible-ai/)
+*Estimated time: 20 mins*
 
+Implement Amazon Bedrock Guardrails to ensure safe, responsible AI applications with content filtering and topic controls.
 
-### Enable AWS IAM permissions for Bedrock
+### [06 - What's Next](./06-whats-next/)
+*Estimated time: 20 mins*
 
-The AWS identity you assume from your notebook environment (which is the [*Studio/notebook Execution Role*](https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html) from SageMaker, or could be a role or IAM User for self-managed notebooks), must have sufficient [AWS IAM permissions](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html) to call the Amazon Bedrock service.
+Explore advanced topics and find references for further reading.
 
-To grant Bedrock access to your identity, you can:
+## Getting Started
 
-- Open the [AWS IAM Console](https://us-east-1.console.aws.amazon.com/iam/home?#)
-- Find your [Role](https://us-east-1.console.aws.amazon.com/iamv2/home?#/roles) (if using SageMaker or otherwise assuming an IAM Role), or else [User](https://us-east-1.console.aws.amazon.com/iamv2/home?#/users)
-- Select *Add Permissions > Create Inline Policy* to attach new inline permissions, open the *JSON* editor and paste in the below example policy:
+### Prerequisites
 
-```
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "BedrockFullAccess",
-            "Effect": "Allow",
-            "Action": ["bedrock:*"],
-            "Resource": "*"
-        }
-    ]
-}
-```
+- AWS Account with Amazon Bedrock access
+- Python 3.10+
+- Notebook environment (SageMaker Studio recommended)
 
-> ⚠️ **Note:** With Amazon SageMaker, your notebook execution role will typically be *separate* from the user or role that you log in to the AWS Console with. If you'd like to explore the AWS Console for Amazon Bedrock, you'll need to grant permissions to your Console user/role too. You can run the notebooks anywhere as long as you have access to the AWS Bedrock service and have appropriate credentials
+### Setup
 
-For more information on the fine-grained action and resource permissions in Bedrock, check out the Bedrock Developer Guide.
+1. **Clone the Repository**:
 
-
-### Clone and use the notebooks
-
-> ℹ️ **Note:** In SageMaker Studio, you can open a "System Terminal" to run these commands by clicking *File > New > Terminal*
-
-Once your notebook environment is set up, clone this workshop repository into it.
-
-```sh
-sudo yum install -y unzip
+```bash
 git clone https://github.com/aws-samples/amazon-bedrock-workshop.git
 cd amazon-bedrock-workshop
 ```
 
-[![HitCount](https://hits.dwyl.com/aws-samples/amazon-bedrock-workshop.svg?style=flat-square&show=unique)](http://hits.dwyl.com/aws-samples/amazon-bedrock-workshop)
+2. **Review Module Prerequisites** - Each notebook includes a prerequisites section with specific requirements and IAM permissions needed for that module.
 
+3. **Start with Module 01** and progress sequentially through the modules.
+
+## Recommended Environment
+
+For the best experience, use [Amazon SageMaker Studio](https://aws.amazon.com/sagemaker/studio/):
+- Fully managed Jupyter environment
+- Pre-configured with AWS credentials
+- Rich AI/ML features and integrations
+- [Quick setup guide](https://docs.aws.amazon.com/sagemaker/latest/dg/onboard-quick-start.html)
+
+Alternatively, you can use SageMaker Notebook Instances or your local environment with AWS credentials configured.
+
+## Additional Resources
+
+- [Amazon Bedrock Documentation](https://docs.aws.amazon.com/bedrock/)
+- [Amazon Bedrock User Guide](https://docs.aws.amazon.com/bedrock/latest/userguide/)
+- [Bedrock API Reference](https://docs.aws.amazon.com/bedrock/latest/APIReference/)
+- [Workshop Website](https://catalog.us-east-1.prod.workshops.aws/amazon-bedrock/en-US)
+
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aws-samples/amazon-bedrock-workshop&type=Date)](https://star-history.com/#aws-samples/amazon-bedrock-workshop&Date)
 
-# 👥 Contributors
+## Contributors
 
-Thanks to our awesome contributors! 🚀🚀🚀
+Thanks to our awesome contributors! 🚀
 
 [![contributors](https://contrib.rocks/image?repo=aws-samples/amazon-bedrock-workshop&max=2000)](https://github.com/aws-samples/amazon-bedrock-workshop/graphs/contributors)
+
+---
+
+[![HitCount](https://hits.dwyl.com/aws-samples/amazon-bedrock-workshop.svg?style=flat-square&show=unique)](http://hits.dwyl.com/aws-samples/amazon-bedrock-workshop)

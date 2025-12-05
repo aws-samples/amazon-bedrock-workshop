@@ -21,14 +21,15 @@ In this module, you will:
 
 ### 01-multimodal-embeddings.ipynb
 
-Learn to work with multimodal embeddings:
+Learn to work with Amazon Nova Multimodal Embeddings:
 
 1. **Setup** - Configure Bedrock client and dependencies
-2. **Generate Embeddings** - Create embeddings for images and text
-3. **Build Index** - Store embeddings for efficient retrieval
-4. **Semantic Search** - Query images using text or images
-5. **Similarity Scoring** - Calculate and rank search results
-6. **Applications** - Build recommendation and search systems
+2. **Generate Synthetic Dataset** - Create product images with Nova Canvas
+3. **Generate Embeddings** - Create embeddings for images and text
+4. **Build Index** - Store embeddings for efficient retrieval
+5. **Semantic Search** - Query images using text descriptions
+6. **Similarity Analysis** - Visualize embedding relationships with heatmaps
+7. **Applications** - Build recommendation and search systems
 
 ### 02-nova-canvas.ipynb
 
@@ -66,11 +67,6 @@ To run the notebooks in this module, you will need:
   - Access Amazon Bedrock
   - Read/write to Amazon S3 (for video generation)
   - Invoke async operations (for video generation)
-- The following models enabled in your Amazon Bedrock Console:
-  - Amazon Titan Multimodal Embeddings G1
-  - Amazon Titan Image Generator G1 (V2)
-  - Amazon Nova Canvas
-  - Amazon Nova Reel
 
 ### Additional Permissions for Video Generation
 
@@ -83,11 +79,13 @@ For Nova Reel (03-nova-reel.ipynb), ensure your execution role has:
 
 ## Key Capabilities
 
-### Multimodal Embeddings
-- Encode text, images, or both into the same semantic space
+### Multimodal Embeddings (Amazon Nova Multimodal Embeddings)
+- First unified model supporting text, documents, images, video, and audio
+- Enable cross-modal retrieval with leading accuracy
 - Build intelligent search and recommendation systems
-- Support for multiple embedding dimensions
-- Enterprise-ready with bias mitigation
+- Support for multiple embedding dimensions (256, 384, 1024, 3072)
+- Supports 200+ languages
+- Enterprise-ready with easy integration with Amazon OpenSearch and S3 Vectors 
 
 ### Image Generation (Nova Canvas)
 - Text-to-image generation

@@ -34,7 +34,7 @@ Create enterprise-ready AI agents using Strands Agents SDK and Amazon Bedrock Ag
 ### [04 - Visual Content Generation](./04-visual-content-generation/)
 *Estimated time: 30 mins*
 
-Generate images with Amazon Nova Canvas and videos with Amazon Nova Reel. Build semantic search with multimodal embeddings using Titan models.
+Generate images with Amazon Nova Canvas and videos with Amazon Nova Reel. Build semantic search with multimodal embeddings using Amazon Nova Multimodal Embeddings.
 
 ### [05 - Responsible AI](./05-responsible-ai/)
 *Estimated time: 20 mins*

@@ -6,3 +6,4 @@ boto3
 botocore
 opensearch-py
 uv
+langchain-aws

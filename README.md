@@ -1,6 +1,6 @@
 # Amazon Bedrock Workshop [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 
-This hands-on workshop, aimed at developers and solution builders, introduces how to leverage foundation models (FMs) through [Amazon Bedrock](https://aws.amazon.com/bedrock/). This code goes alongside the self-paced or instructor lead workshop here - https://catalog.us-east-1.prod.workshops.aws/amazon-bedrock/en-US
+This hands-on workshop, aimed at developers and solution builders, introduces how to leverage foundation models (FMs) through [Amazon Bedrock](https://aws.amazon.com/bedrock/). This code goes alongside the self-paced or instructor lead workshop here - https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization.html
 
 **Please follow the prerequisites listed in the link above or ask your AWS workshop instructor how to get started.**
 
@@ -39,7 +39,7 @@ Labs include:
 
 </div>
 
-You can also refer to these [Step-by-step guided instructions on the workshop website](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/en-US).
+You can also refer to these [Step-by-step guided instructions on the workshop website] https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization.html
 
 
 ## Getting started

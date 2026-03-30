@@ -15,7 +15,7 @@ Model customization is the process of providing training data to a model in orde
 
 - Continued Pre-training 
 
-    Provide unlabeled data to pre-train a foundation model by familiarizing it with certain types of inputs. You can provide data from specific topics in order to expose a model to those areas. The Continued Pre-training process will tweak the model parameters to accommodate the input data and improve its domain knowledge. For example, you can train a model with private data, such as business documents, that are not publically available for training large language models. Additionally, you can continue to improve the model by retraining the model with more unlabeled data as it becomes available.
+    Provide unlabeled data to pre-train a foundation model by familiarizing it with certain types of inputs. You can provide data from specific topics in order to expose a model to those areas. The Continued Pre-training process will tweak the model parameters to accommodate the input data and improve its domain knowledge. For example, you can train a model with private data, such as business documents, that are not publicly available for training large language models. Additionally, you can continue to improve the model by retraining the model with more unlabeled data as it becomes available.
 
 ## Relevance
 Using your own data, you can privately and securely customize foundation models (FMs) in Amazon Bedrock to build applications that are specific to your domain, organization, and use case. Custom models enable you to create unique user experiences that reflect your company’s style, voice, and services.

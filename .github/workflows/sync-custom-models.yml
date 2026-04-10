@@ -1,0 +1,44 @@
+name: Sync custom-models from amazon-bedrock-samples
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 06:00 UTC
+  workflow_dispatch:       # Also allows manual trigger from GitHub UI
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout amazon-bedrock-workshop
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sparse-checkout custom-models from amazon-bedrock-samples
+        run: |
+          git clone --filter=blob:none --sparse \
+            https://github.com/aws-samples/amazon-bedrock-samples.git \
+            /tmp/bedrock-samples
+          cd /tmp/bedrock-samples
+          git sparse-checkout set custom-models
+
+      - name: Sync into 03_Model_customization
+        run: |
+          rsync -av --delete \
+            /tmp/bedrock-samples/custom-models/ \
+            03_Model_customization/
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add 03_Model_customization/
+          if git diff --cached --quiet; then
+            echo "No changes to sync."
+          else
+            git commit -m "Sync 03_Model_customization from amazon-bedrock-samples/custom-models"
+            git push
+          fi

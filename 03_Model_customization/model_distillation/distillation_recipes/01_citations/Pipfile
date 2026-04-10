@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+boto3 = "*"
+datasets = "*"
+pandas = "*"
+llama-index = "*"
+
+[dev-packages]
+ipykernel = "*"
+bandit = "*"
+
+[requires]
+python_version = "3.13"

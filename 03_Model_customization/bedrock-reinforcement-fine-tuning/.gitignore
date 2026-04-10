@@ -1,0 +1,11 @@
+# Data directories
+tmp-data/
+data/
+rm-example-data/
+
+# Python
+__pycache__/
+*.pyc
+
+# Lambda deployment artifacts
+lambda_deployment.zip

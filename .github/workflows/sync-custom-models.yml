@@ -36,7 +36,7 @@ jobs:
           cat > 03_Model_customization/README.md << 'EOF'
           # Model Customization
 
-          > ⚠️ **AWS event participants:** Model customization jobs (fine-tuning, continued pre-training, distillation) cannot be run in AWS-managed event accounts due to service quota restrictions. If you are at an AWS-run workshop, use this module as a reference only and run the labs in your own AWS account.
+          > ⚠️ **AWS event participants:** Model customization jobs (fine-tuning, continued pre-training, distillation) **cannot be run in AWS-managed event accounts** due to service quota restrictions. If you are at an AWS-run workshop, skip the hands-on portion of this module and use it as a reference. To run these labs, use your own AWS account.
 
           > **Note:** The contents of this folder are automatically synced from the canonical source:
           > [aws-samples/amazon-bedrock-samples/custom-models](https://github.com/aws-samples/amazon-bedrock-samples/tree/main/custom-models)

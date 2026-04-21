@@ -1,0 +1,419 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Bedrock Workshop Interactive Tutor - deploys a CopilotKit/Strands agent tutor
+  behind an ALB with Cognito auth. Builds the container image via CodeBuild on
+  stack create. One stack per workshop participant account.
+
+Parameters:
+  ParticipantEmail:
+    Type: String
+    Default: ''
+    Description: Optional - for tagging/identification only. No Cognito login required.
+  BedrockRegion:
+    Type: String
+    Default: us-west-2
+    AllowedValues: [us-east-1, us-west-2]
+    Description: AWS region for Bedrock API calls
+  BedrockModelId:
+    Type: String
+    Default: us.anthropic.claude-sonnet-4-5-20250929-v1:0
+    Description: Bedrock model ID for the tutor agent
+  GitHubRepo:
+    Type: String
+    Default: https://github.com/aws-samples/amazon-bedrock-workshop-tutor
+    Description: Source repo containing the tutor Dockerfile at root
+
+Mappings:
+  RegionMap:
+    us-east-1:
+      AmiId: ami-0c02fb55956c7d316
+    us-west-2:
+      AmiId: ami-0ceecbb0f30a902a6
+
+Resources:
+
+  # --- VPC --------------------------------------------------------------------
+
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: true
+
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: !Select [1, !GetAZs '']
+      MapPublicIpOnLaunch: true
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  IGWAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: IGWAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  Subnet1RouteTableAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet1
+      RouteTableId: !Ref PublicRouteTable
+
+  Subnet2RouteTableAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet2
+      RouteTableId: !Ref PublicRouteTable
+
+  # --- ECR --------------------------------------------------------------------
+
+  TutorRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub bedrock-workshop-tutor-${AWS::StackName}
+      LifecyclePolicy:
+        LifecyclePolicyText: |
+          {"rules":[{"rulePriority":1,"selection":{"tagStatus":"untagged","countType":"sinceImagePushed","countUnit":"days","countNumber":1},"action":{"type":"expire"}}]}
+
+  # --- COGNITO ----------------------------------------------------------------
+
+  # No Cognito needed - participants are already federated via AWS IAM Identity Center.
+  # The ALB URL is surfaced as a stack output on the Workshop Studio dashboard.
+  # Network-level isolation: the ALB security group only allows HTTPS from the internet,
+  # and the ECS task security group only allows traffic from the ALB.
+  # For stricter access control, add an IP allowlist to ALBSecurityGroup.
+
+  # --- IAM --------------------------------------------------------------------
+
+  CodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: {Service: codebuild.amazonaws.com}
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser
+      Policies:
+        - PolicyName: codebuild-logs
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: [logs:CreateLogGroup, logs:CreateLogStream, logs:PutLogEvents]
+                Resource: '*'
+
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: {Service: ecs-tasks.amazonaws.com}
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: bedrock-access
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: [bedrock:*, bedrock-agentcore:*, bedrock-mantle:*]
+                Resource: '*'
+
+  TaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: {Service: ecs-tasks.amazonaws.com}
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+
+  LambdaTriggerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: {Service: lambda.amazonaws.com}
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: codebuild-start
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: [codebuild:StartBuild, codebuild:BatchGetBuilds]
+                Resource: !GetAtt TutorBuildProject.Arn
+
+  # --- CODEBUILD --------------------------------------------------------------
+
+  TutorBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Sub bedrock-tutor-build-${AWS::StackName}
+      ServiceRole: !GetAtt CodeBuildRole.Arn
+      Artifacts:
+        Type: NO_ARTIFACTS
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_LARGE
+        Image: aws/codebuild/standard:7.0
+        PrivilegedMode: true
+        EnvironmentVariables:
+          - Name: ECR_URI
+            Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${TutorRepository}
+          - Name: AWS_DEFAULT_REGION
+            Value: !Ref AWS::Region
+          - Name: BEDROCK_REGION
+            Value: !Ref BedrockRegion
+          - Name: BEDROCK_MODEL_ID
+            Value: !Ref BedrockModelId
+      Source:
+        Type: NO_SOURCE
+        BuildSpec: |
+          version: 0.2
+          phases:
+            pre_build:
+              commands:
+                - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_URI
+                - git clone https://github.com/aws-samples/amazon-bedrock-workshop.git repo
+                - ls repo/tutor/
+            build:
+              commands:
+                - docker build -t tutor:latest -f repo/tutor/Dockerfile repo/tutor/
+                - docker tag tutor:latest $ECR_URI:latest
+            post_build:
+              commands:
+                - docker push $ECR_URI:latest
+                - echo "Build complete"
+
+  # Lambda to trigger CodeBuild on stack create
+  BuildTriggerFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: python3.12
+      Handler: index.handler
+      Role: !GetAtt LambdaTriggerRole.Arn
+      Timeout: 600
+      Code:
+        ZipFile: |
+          import boto3, time, json
+          from urllib.request import urlopen, Request
+          from urllib.error import URLError, HTTPError
+
+          SUCCESS = "SUCCESS"
+          FAILED = "FAILED"
+
+          def send(event, context, status, data={}):
+              body = json.dumps({
+                  "Status": status, "Reason": str(data),
+                  "PhysicalResourceId": context.log_stream_name,
+                  "StackId": event["StackId"], "RequestId": event["RequestId"],
+                  "LogicalResourceId": event["LogicalResourceId"], "Data": data
+              }).encode()
+              req = Request(event["ResponseURL"], data=body,
+                            headers={"Content-Type": "", "Content-Length": len(body)},
+                            method="PUT")
+              try:
+                  urlopen(req, timeout=10)
+              except Exception as e:
+                  print(f"send failed: {e}")
+
+          def handler(event, context):
+              cb = boto3.client('codebuild')
+              try:
+                  if event['RequestType'] in ['Create', 'Update']:
+                      build = cb.start_build(projectName=event['ResourceProperties']['ProjectName'])
+                      build_id = build['build']['id']
+                      for _ in range(54):
+                          time.sleep(10)
+                          status = cb.batch_get_builds(ids=[build_id])['builds'][0]['buildStatus']
+                          if status == 'SUCCEEDED':
+                              send(event, context, SUCCESS, {'BuildId': build_id})
+                              return
+                          elif status in ['FAILED','FAULT','STOPPED','TIMED_OUT']:
+                              send(event, context, FAILED, {'BuildStatus': status})
+                              return
+                      send(event, context, FAILED, {'Error': 'Build timed out'})
+                  else:
+                      send(event, context, SUCCESS, {})
+              except Exception as e:
+                  send(event, context, FAILED, {'Error': str(e)})
+
+  TriggerBuild:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken: !GetAtt BuildTriggerFunction.Arn
+      ProjectName: !Ref TutorBuildProject
+
+  # --- ECS --------------------------------------------------------------------
+
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Sub bedrock-tutor-${AWS::StackName}
+
+  TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    DependsOn: TriggerBuild
+    Properties:
+      Family: bedrock-tutor
+      Cpu: '1024'
+      Memory: '2048'
+      NetworkMode: awsvpc
+      RequiresCompatibilities: [FARGATE]
+      TaskRoleArn: !GetAtt TaskRole.Arn
+      ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
+      ContainerDefinitions:
+        - Name: tutor
+          Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${TutorRepository}:latest
+          PortMappings:
+            - ContainerPort: 3000
+              Protocol: tcp
+          Environment:
+            - Name: AWS_REGION
+              Value: !Ref BedrockRegion
+            - Name: BEDROCK_MODEL_ID
+              Value: !Ref BedrockModelId
+            - Name: AGENT_URL
+              Value: http://localhost:8000
+            - Name: NEXT_PUBLIC_AGENT_URL
+              Value: http://localhost:8000
+            - Name: NODE_ENV
+              Value: production
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref TutorLogGroup
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: tutor
+
+  TutorLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /ecs/bedrock-tutor-${AWS::StackName}
+      RetentionInDays: 3
+
+  # --- ALB --------------------------------------------------------------------
+
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: ALB inbound HTTPS
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+  ECSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: ECS task - allow from ALB
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3000
+          ToPort: 3000
+          SourceSecurityGroupId: !Ref ALBSecurityGroup
+
+  ALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    DependsOn: IGWAttachment
+    Properties:
+      Scheme: internet-facing
+      SecurityGroups: [!Ref ALBSecurityGroup]
+      Subnets: [!Ref PublicSubnet1, !Ref PublicSubnet2]
+
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      VpcId: !Ref VPC
+      Protocol: HTTP
+      Port: 3000
+      TargetType: ip
+      HealthCheckPath: /
+      HealthCheckIntervalSeconds: 30
+      HealthyThresholdCount: 2
+
+  HTTPListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref ALB
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroup
+
+  # --- ECS SERVICE ------------------------------------------------------------
+
+  ECSService:
+    Type: AWS::ECS::Service
+    DependsOn: [HTTPListener, TriggerBuild]
+    Properties:
+      Cluster: !Ref ECSCluster
+      TaskDefinition: !Ref TaskDefinition
+      DesiredCount: 1
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          Subnets: [!Ref PublicSubnet1, !Ref PublicSubnet2]
+          SecurityGroups: [!Ref ECSSecurityGroup]
+          AssignPublicIp: ENABLED
+      LoadBalancers:
+        - ContainerName: tutor
+          ContainerPort: 3000
+          TargetGroupArn: !Ref TargetGroup
+
+# --- OUTPUTS ------------------------------------------------------------------
+
+Outputs:
+  TutorURL:
+    Description: Open this URL to access your Bedrock Workshop Tutor (no login required - you're already authenticated via AWS)
+    Value: !Sub http://${ALB.DNSName}
+
+  ECRRepository:
+    Description: ECR repository URI
+    Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${TutorRepository}

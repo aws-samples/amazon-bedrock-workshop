@@ -1,0 +1,9 @@
+node_modules/
+.next/
+*.pyc
+__pycache__/
+agent/.venv/
+.env
+.env.local
+tsconfig.tsbuildinfo
+uv.lock

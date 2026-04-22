@@ -152,13 +152,10 @@ try a variation, run it. Make learning feel like pair programming with an expert
 - When asked how something works, use run_bedrock_code to show it live.
 - When code fails, explain why and fix it. Errors are learning moments.
 - Suggest interesting next steps or variations after each demo.
-- When showing code, follow this exact sequence:
-  1. Call update_scratchpad — code streams into the editor in real time as you write it
-  2. Call run_bedrock_code with the same code to silently test it
-  3. If it errors: fix the code, call update_scratchpad again with the fix, then run_bedrock_code again
-  4. Repeat until the code runs cleanly — only then tell the participant it's ready
+- When showing NEW code examples: call update_scratchpad to stream code into the editor, then run_bedrock_code to test it silently. Fix errors and repeat up to 3 times before giving up.
+- ONLY call update_scratchpad when introducing new code. NEVER call it during follow-up explanations, answers to questions, or when the user is editing existing code.
+- If the user says they edited the code or asks about their own version, do NOT overwrite it.
 - Never tell the participant to run broken code. You are the tester, not them.
-- You may iterate up to 3 times to fix errors before explaining why something can't run (e.g. missing credentials, resources that need to be created first).
 - If a participant wants to go off-script and try something creative, encourage it.
 - When explaining any API or feature, use search_documentation or read_documentation to get current info. Always end your explanation with a "📖 Read more:" line containing the direct AWS docs URL.
 - The AWS region is us-west-2. All model IDs should use the us. inference profile prefix for Nova and Claude.
@@ -316,7 +313,23 @@ async def health():
 async def execute(request: Request):
     body = await request.json()
     code = body.get("code", "")
-    output = run_bedrock_code(code)
+    stdout_capture = io.StringIO()
+    stderr_capture = io.StringIO()
+    exec_globals = {"__builtins__": __builtins__, "__name__": "__main__"}
+    old_stdout, old_stderr = sys.stdout, sys.stderr
+    sys.stdout = stdout_capture
+    sys.stderr = stderr_capture
+    try:
+        exec(code, exec_globals)  # noqa: S102
+        out = stdout_capture.getvalue()
+        err = stderr_capture.getvalue()
+        output = out + ("\nstderr:\n" + err if err else "")
+        output = output if output.strip() else "(code ran successfully, no output)"
+    except Exception:
+        output = f"Error:\n{traceback.format_exc()}"
+    finally:
+        sys.stdout = old_stdout
+        sys.stderr = old_stderr
     return {"output": output}
 
 

@@ -173,7 +173,7 @@ export default function BedrockTutorPage() {
               running
             </div>
           )}
-          <span className="text-xs text-white/20 font-mono">Claude Sonnet · us-west-2</span>
+          <span className="text-xs text-white/20 font-mono">{process.env.NEXT_PUBLIC_MODEL_LABEL ?? "Claude Sonnet"} · us-west-2</span>
         </div>
       </header>
 
@@ -309,7 +309,7 @@ export default function BedrockTutorPage() {
                   className="text-[14px] font-mono leading-relaxed whitespace-pre-wrap break-words"
                   style={{
                     fontFamily: "'JetBrains Mono', monospace",
-                    color: output.startsWith("Error") ? "#f87171" : "#86efac",
+                    color: (output.startsWith("Error") || output.includes("Traceback") || output.includes("Exception")) ? "#f87171" : "#86efac",
                   }}
                 >
                   {output}

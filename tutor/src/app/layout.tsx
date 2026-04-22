@@ -7,13 +7,15 @@ export const metadata: Metadata = {
   description: "Interactive AI Tutor powered by Amazon Bedrock",
 };
 
+const basePath = process.env.NEXT_BASE_PATH || "";
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body>
-        <CopilotKit runtimeUrl="/api/copilotkit" agent="strands_agent">
+        <CopilotKit runtimeUrl={`${basePath}/api/copilotkit`} agent="strands_agent">
           {children}
         </CopilotKit>
       </body>

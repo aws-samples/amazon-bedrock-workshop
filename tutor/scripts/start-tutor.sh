@@ -56,8 +56,8 @@ echo "Building UI..."
 cd "$TUTOR_DIR"
 npm install --quiet 2>/dev/null
 
+export NEXT_BASE_PATH="/jupyterlab/default/proxy/3000"
 export NEXT_PUBLIC_COPILOTKIT_URL="${PROXY_BASE}/api/copilotkit"
-export NEXT_ASSET_PREFIX="/jupyterlab/default/proxy/3000"
 export NEXT_PUBLIC_AGENT_URL="http://localhost:8000"
 
 npm run build > "$LOG_DIR/build.log" 2>&1

@@ -1,5 +1,5 @@
 # Stage 1: Build Next.js frontend
-FROM node:20-slim AS frontend
+FROM public.ecr.aws/docker/library/node:20-slim AS frontend
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ RUN node -e "const fs=require('fs'); const f='next.config.ts'; let c=fs.readFile
 RUN npm run build
 
 # Stage 2: Production image with Python + Node
-FROM python:3.12-slim AS runner
+FROM public.ecr.aws/docker/library/python:3.12-slim AS runner
 
 # Install Node.js 20 + uv
 RUN apt-get update && \

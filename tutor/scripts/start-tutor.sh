@@ -15,25 +15,21 @@ METADATA="/opt/ml/metadata/resource-metadata.json"
 REGION=$(python3 -c "import json; d=json.load(open('$METADATA')); print(d['ResourceArn'].split(':')[3])" 2>/dev/null || echo "us-west-2")
 DOMAIN_ID=$(python3 -c "import json; d=json.load(open('$METADATA')); print(d['DomainId'])" 2>/dev/null || echo "")
 
-# Get the studio subdomain from the presigned URL (host = <subdomain>.studio.<region>.sagemaker.aws)
-STUDIO_HOST=$(python3 - <<'PYEOF' 2>/dev/null
-import json, boto3, re
+# Get the space URL from describe_space — returns the exact JupyterLab URL
+SPACE_BASE=$(python3 - <<'PYEOF' 2>/dev/null
+import json, boto3
 meta = json.load(open('/opt/ml/metadata/resource-metadata.json'))
 sm = boto3.client('sagemaker', region_name=meta['ResourceArn'].split(':')[3])
-url = sm.create_presigned_domain_url(
-    DomainId=meta['DomainId'],
-    UserProfileName=meta['UserProfileName'],
-    ExpiresInSeconds=60
-)['AuthorizedUrl']
-host = re.search(r'https://([^/]+)', url).group(1)
-print(host)
+space = sm.describe_space(DomainId=meta['DomainId'], SpaceName=meta['SpaceName'])
+# Url is like https://8nerfhf9nzasewu.studio.us-west-2.sagemaker.aws/jupyterlab/default
+print(space['Url'])
 PYEOF
 )
 
-if [ -n "$STUDIO_HOST" ]; then
-    PROXY_BASE="https://${STUDIO_HOST}/jupyterlab/default/proxy/3000"
+if [ -n "$SPACE_BASE" ]; then
+    PROXY_BASE="${SPACE_BASE}/proxy/3000"
 else
-    echo "WARNING: Could not detect Studio host, using domain ID fallback"
+    echo "WARNING: Could not detect space URL, using domain ID fallback"
     PROXY_BASE="https://studio-${DOMAIN_ID}.studio.${REGION}.sagemaker.aws/jupyterlab/default/proxy/3000"
 fi
 

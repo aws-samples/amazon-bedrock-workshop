@@ -335,17 +335,13 @@ Resources:
   ALBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: ALB inbound HTTPS
+      GroupDescription: ALB inbound HTTP from VPC only
       VpcId: !Ref VPC
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: 443
-          ToPort: 443
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
-          CidrIp: 0.0.0.0/0
+          CidrIp: 10.0.0.0/16
 
   ECSSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -360,9 +356,8 @@ Resources:
 
   ALB:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-    DependsOn: IGWAttachment
     Properties:
-      Scheme: internet-facing
+      Scheme: internal
       SecurityGroups: [!Ref ALBSecurityGroup]
       Subnets: [!Ref PublicSubnet1, !Ref PublicSubnet2]
 
@@ -411,7 +406,7 @@ Resources:
 
 Outputs:
   TutorURL:
-    Description: Open this URL to access your Bedrock Workshop Tutor (no login required - you're already authenticated via AWS)
+    Description: Open this URL from within your workshop VPC (SageMaker Studio) to access the Bedrock Workshop Tutor
     Value: !Sub http://${ALB.DNSName}
 
   ECRRepository:

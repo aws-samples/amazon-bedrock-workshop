@@ -96,19 +96,26 @@ class Handler(http.server.BaseHTTPRequestHandler):
         try:
             req = urllib.request.Request(url, data=body, headers=headers,
                                          method="POST" if body is not None else "GET")
-            r = urllib.request.urlopen(req)
+            opener = urllib.request.build_opener(urllib.request.HTTPRedirectHandler())
+            r = opener.open(req)
             raw = r.read()
             ct = r.headers.get("Content-Type", "")
             if "text/html" in ct:
                 raw = raw.replace(b'"/_next/', f'"{PREFIX}/_next/'.encode())
                 raw = raw.replace(b"'/_next/", f"'{PREFIX}/_next/".encode())
-            self.send_response(r.status)
+            self.send_response(200)
             for k, v in r.headers.items():
-                if k.lower() not in ('transfer-encoding', 'content-length'):
+                if k.lower() not in ('transfer-encoding', 'content-length', 'content-encoding'):
                     self.send_header(k, v)
             self.send_header("Content-Length", len(raw))
             self.end_headers()
             self.wfile.write(raw)
+        except urllib.error.HTTPError as e:
+            if e.code == 304:
+                self.send_response(304)
+                self.end_headers()
+            else:
+                self.send_error(e.code, str(e))
         except Exception as e:
             self.send_error(502, str(e))
 

@@ -31,7 +31,10 @@ else
 fi
 
 echo "Proxy base: $PROXY_BASE"
-PREFIX="/jupyterlab/default/proxy/3000"
+# Extract the path prefix from the space base URL (everything after the hostname)
+# e.g. https://8nerfhf9.studio.us-west-2.sagemaker.aws/jupyterlab/default -> /jupyterlab/default
+SPACE_PATH=$(echo "$SPACE_BASE" | sed 's|https://[^/]*||')
+PREFIX="${SPACE_PATH}/proxy/3000"
 
 # 2. Start the agent
 echo "Starting agent on port 8000..."

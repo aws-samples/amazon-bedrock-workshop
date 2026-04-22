@@ -70,7 +70,7 @@ sleep 3
 
 # 4. Start a tiny proxy on port 3000 that rewrites /_next/ -> PREFIX/_next/ in HTML
 python3 - <<PYEOF &
-import http.server, urllib.request, re
+import http.server, urllib.request, re, gzip, zlib
 
 PREFIX = "$PREFIX"
 
@@ -100,13 +100,22 @@ class Handler(http.server.BaseHTTPRequestHandler):
             r = opener.open(req)
             raw = r.read()
             ct = r.headers.get("Content-Type", "")
+            enc = r.headers.get("Content-Encoding", "")
             if "text/html" in ct:
+                # Decompress if needed
+                if enc == "gzip":
+                    raw = gzip.decompress(raw)
+                elif enc == "deflate":
+                    raw = zlib.decompress(raw)
                 raw = raw.replace(b'"/_next/', f'"{PREFIX}/_next/'.encode())
                 raw = raw.replace(b"'/_next/", f"'{PREFIX}/_next/".encode())
+                enc = ""  # content is now uncompressed
             self.send_response(200)
             for k, v in r.headers.items():
                 if k.lower() not in ('transfer-encoding', 'content-length', 'content-encoding'):
                     self.send_header(k, v)
+            if enc:
+                self.send_header("Content-Encoding", enc)
             self.send_header("Content-Length", len(raw))
             self.end_headers()
             self.wfile.write(raw)

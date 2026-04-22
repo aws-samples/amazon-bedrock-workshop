@@ -10,18 +10,16 @@ mkdir -p "$LOG_DIR"
 
 echo "=== Starting Bedrock Workshop Tutor ==="
 
-# 1. Discover Studio proxy base URL from metadata + SageMaker API
+# 1. Discover Studio proxy base URL from describe_space
 METADATA="/opt/ml/metadata/resource-metadata.json"
 REGION=$(python3 -c "import json; d=json.load(open('$METADATA')); print(d['ResourceArn'].split(':')[3])" 2>/dev/null || echo "us-west-2")
 DOMAIN_ID=$(python3 -c "import json; d=json.load(open('$METADATA')); print(d['DomainId'])" 2>/dev/null || echo "")
 
-# Get the space URL from describe_space — returns the exact JupyterLab URL
 SPACE_BASE=$(python3 - <<'PYEOF' 2>/dev/null
 import json, boto3
 meta = json.load(open('/opt/ml/metadata/resource-metadata.json'))
 sm = boto3.client('sagemaker', region_name=meta['ResourceArn'].split(':')[3])
 space = sm.describe_space(DomainId=meta['DomainId'], SpaceName=meta['SpaceName'])
-# Url is like https://8nerfhf9nzasewu.studio.us-west-2.sagemaker.aws/jupyterlab/default
 print(space['Url'])
 PYEOF
 )
@@ -29,13 +27,13 @@ PYEOF
 if [ -n "$SPACE_BASE" ]; then
     PROXY_BASE="${SPACE_BASE}/proxy/3000"
 else
-    echo "WARNING: Could not detect space URL, using domain ID fallback"
     PROXY_BASE="https://studio-${DOMAIN_ID}.studio.${REGION}.sagemaker.aws/jupyterlab/default/proxy/3000"
 fi
 
 echo "Proxy base: $PROXY_BASE"
+PREFIX="/jupyterlab/default/proxy/3000"
 
-# 2. Start the agent (uses instance role credentials automatically)
+# 2. Start the agent
 echo "Starting agent on port 8000..."
 if curl -s http://localhost:8000/health > /dev/null 2>&1; then
     echo "Agent already running"
@@ -51,20 +49,72 @@ else
     done
 fi
 
-# 3. Build and start the UI
+# 3. Build Next.js (plain, no basePath)
 echo "Building UI..."
 cd "$TUTOR_DIR"
 npm install --quiet 2>/dev/null
 
-export NEXT_BASE_PATH="/jupyterlab/default/proxy/3000"
 export NEXT_PUBLIC_COPILOTKIT_URL="${PROXY_BASE}/api/copilotkit"
 export NEXT_PUBLIC_AGENT_URL="http://localhost:8000"
 
 npm run build > "$LOG_DIR/build.log" 2>&1
 echo "Build complete"
 
-AGENT_URL=http://localhost:8000 nohup npx next start --port 3000 > "$LOG_DIR/ui.log" 2>&1 &
+# Start Next.js on port 3001
+AGENT_URL=http://localhost:8000 nohup npx next start --port 3001 > "$LOG_DIR/ui.log" 2>&1 &
 echo $! > /tmp/tutor-ui.pid
+sleep 3
+
+# 4. Start a tiny proxy on port 3000 that rewrites /_next/ -> PREFIX/_next/ in HTML
+python3 - <<PYEOF &
+import http.server, urllib.request, re
+
+PREFIX = "$PREFIX"
+
+class Handler(http.server.BaseHTTPRequestHandler):
+    def do_GET(self):
+        path = self.path
+        if path.startswith(PREFIX):
+            path = path[len(PREFIX):] or "/"
+        self._proxy(path)
+
+    def do_POST(self):
+        length = int(self.headers.get("Content-Length", 0))
+        body = self.rfile.read(length) if length else None
+        path = self.path
+        if path.startswith(PREFIX):
+            path = path[len(PREFIX):] or "/"
+        self._proxy(path, body)
+
+    def _proxy(self, path, body=None):
+        url = f"http://localhost:3001{path}"
+        headers = {k: v for k, v in self.headers.items()
+                   if k.lower() not in ('host', 'content-length')}
+        try:
+            req = urllib.request.Request(url, data=body, headers=headers,
+                                         method="POST" if body is not None else "GET")
+            r = urllib.request.urlopen(req)
+            raw = r.read()
+            ct = r.headers.get("Content-Type", "")
+            if "text/html" in ct:
+                raw = raw.replace(b'"/_next/', f'"{PREFIX}/_next/'.encode())
+                raw = raw.replace(b"'/_next/", f"'{PREFIX}/_next/".encode())
+            self.send_response(r.status)
+            for k, v in r.headers.items():
+                if k.lower() not in ('transfer-encoding', 'content-length'):
+                    self.send_header(k, v)
+            self.send_header("Content-Length", len(raw))
+            self.end_headers()
+            self.wfile.write(raw)
+        except Exception as e:
+            self.send_error(502, str(e))
+
+    def log_message(self, *a): pass
+
+http.server.HTTPServer(("0.0.0.0", 3000), Handler).serve_forever()
+PYEOF
+echo $! > /tmp/tutor-proxy.pid
+sleep 1
 
 echo ""
 echo "=== Tutor ready ==="

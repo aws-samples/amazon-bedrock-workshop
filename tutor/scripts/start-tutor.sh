@@ -10,11 +10,35 @@ mkdir -p "$LOG_DIR"
 
 echo "=== Starting Bedrock Workshop Tutor ==="
 
-# 1. Discover Studio domain and region from metadata
+# 1. Discover Studio proxy base URL
+# The space subdomain is in the browser URL but not available inside the container.
+# We derive it from the Jupyter server token URL or accept it as an argument.
 METADATA="/opt/ml/metadata/resource-metadata.json"
-DOMAIN_ID=$(python3 -c "import json; d=json.load(open('$METADATA')); print(d['DomainId'])")
-REGION=$(python3 -c "import json; d=json.load(open('$METADATA')); print(d['ResourceArn'].split(':')[3])")
-PROXY_BASE="https://${DOMAIN_ID}.studio.${REGION}.sagemaker.aws/jupyterlab/default/proxy/3000"
+REGION=$(python3 -c "import json; d=json.load(open('$METADATA')); print(d['ResourceArn'].split(':')[3])" 2>/dev/null || echo "us-west-2")
+
+if [ -n "$1" ]; then
+    # Subdomain passed as argument: bash start-tutor.sh <subdomain>
+    SPACE_SUBDOMAIN="$1"
+else
+    # Try to extract from the Jupyter token URL (contains the full proxy path)
+    SPACE_SUBDOMAIN=$(jupyter server list 2>/dev/null | grep -oP '[a-z0-9]+(?=\.studio)' | head -1 || echo "")
+fi
+
+if [ -z "$SPACE_SUBDOMAIN" ]; then
+    # Fallback: use domain ID (wrong subdomain but prints instructions)
+    DOMAIN_ID=$(python3 -c "import json; d=json.load(open('$METADATA')); print(d['DomainId'])" 2>/dev/null || echo "unknown")
+    PROXY_BASE="https://${DOMAIN_ID}.studio.${REGION}.sagemaker.aws/jupyterlab/default/proxy/3000"
+    echo ""
+    echo "NOTE: Could not auto-detect your Studio subdomain."
+    echo "Run with your subdomain from the browser URL:"
+    echo "  bash start-tutor.sh <subdomain>"
+    echo "e.g. if your URL is https://abc123.studio.us-west-2.sagemaker.aws/..."
+    echo "  bash start-tutor.sh abc123"
+    echo ""
+else
+    PROXY_BASE="https://${SPACE_SUBDOMAIN}.studio.${REGION}.sagemaker.aws/jupyterlab/default/proxy/3000"
+fi
+
 echo "Proxy base: $PROXY_BASE"
 
 # 2. Start the agent

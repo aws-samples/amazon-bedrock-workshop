@@ -36,7 +36,7 @@ WORKDIR /app
 
 # Install Python dependencies from lockfile
 COPY agent/ ./agent/
-RUN cd agent && uv sync --frozen
+RUN cd agent && uv sync
 
 # Copy Next.js build output and production node_modules
 COPY --from=frontend /app/.next ./.next

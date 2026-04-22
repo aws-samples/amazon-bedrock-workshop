@@ -6,4 +6,3 @@ agent/.venv/
 .env
 .env.local
 tsconfig.tsbuildinfo
-uv.lock

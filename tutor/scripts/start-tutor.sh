@@ -70,61 +70,55 @@ sleep 3
 
 # 4. Start a tiny proxy on port 3000 that rewrites /_next/ -> PREFIX/_next/ in HTML
 python3 - <<PYEOF &
-import http.server, urllib.request, re, gzip, zlib
+import http.server, http.client, gzip, zlib
 
 PREFIX = "$PREFIX"
 
 class Handler(http.server.BaseHTTPRequestHandler):
-    def do_GET(self):
+    def do_GET(self):  self._proxy("GET")
+    def do_POST(self): self._proxy("POST")
+    def do_PUT(self):  self._proxy("PUT")
+
+    def _proxy(self, method):
         path = self.path
         if path.startswith(PREFIX):
             path = path[len(PREFIX):] or "/"
-        self._proxy(path)
 
-    def do_POST(self):
         length = int(self.headers.get("Content-Length", 0))
-        body = self.rfile.read(length) if length else None
-        path = self.path
-        if path.startswith(PREFIX):
-            path = path[len(PREFIX):] or "/"
-        self._proxy(path, body)
+        body = self.rfile.read(length) if length > 0 else None
 
-    def _proxy(self, path, body=None):
-        url = f"http://localhost:3001{path}"
         headers = {k: v for k, v in self.headers.items()
-                   if k.lower() not in ('host', 'content-length')}
+                   if k.lower() not in ("host", "content-length", "transfer-encoding")}
+        if body:
+            headers["Content-Length"] = str(len(body))
+
         try:
-            req = urllib.request.Request(url, data=body, headers=headers,
-                                         method="POST" if body is not None else "GET")
-            opener = urllib.request.build_opener(urllib.request.HTTPRedirectHandler())
-            r = opener.open(req)
+            conn = http.client.HTTPConnection("localhost", 3001, timeout=120)
+            conn.request(method, path, body=body, headers=headers)
+            r = conn.getresponse()
             raw = r.read()
-            ct = r.headers.get("Content-Type", "")
-            enc = r.headers.get("Content-Encoding", "")
+            ct = r.getheader("Content-Type", "")
+            enc = r.getheader("Content-Encoding", "")
+
             if "text/html" in ct:
-                # Decompress if needed
                 if enc == "gzip":
                     raw = gzip.decompress(raw)
                 elif enc == "deflate":
                     raw = zlib.decompress(raw)
                 raw = raw.replace(b'"/_next/', f'"{PREFIX}/_next/'.encode())
                 raw = raw.replace(b"'/_next/", f"'{PREFIX}/_next/".encode())
-                enc = ""  # content is now uncompressed
-            self.send_response(200)
-            for k, v in r.headers.items():
-                if k.lower() not in ('transfer-encoding', 'content-length', 'content-encoding'):
+                enc = ""
+
+            self.send_response(r.status)
+            for k, v in r.getheaders():
+                if k.lower() not in ("transfer-encoding", "content-length", "content-encoding"):
                     self.send_header(k, v)
             if enc:
                 self.send_header("Content-Encoding", enc)
             self.send_header("Content-Length", len(raw))
             self.end_headers()
             self.wfile.write(raw)
-        except urllib.error.HTTPError as e:
-            if e.code == 304:
-                self.send_response(304)
-                self.end_headers()
-            else:
-                self.send_error(e.code, str(e))
+            conn.close()
         except Exception as e:
             self.send_error(502, str(e))
 

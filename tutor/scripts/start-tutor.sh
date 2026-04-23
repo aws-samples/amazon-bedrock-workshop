@@ -57,10 +57,13 @@ echo "Building UI..."
 cd "$TUTOR_DIR"
 npm install --quiet 2>/dev/null
 
-export NEXT_PUBLIC_COPILOTKIT_URL="${PROXY_BASE}/api/copilotkit"
-export NEXT_PUBLIC_AGENT_URL="http://localhost:8000"
+# Write to .env.local so Next.js bakes NEXT_PUBLIC_* vars into the build
+cat > .env.local << EOF
+NEXT_PUBLIC_COPILOTKIT_URL=${PROXY_BASE}/api/copilotkit
+NEXT_PUBLIC_AGENT_URL=http://localhost:8000
+EOF
 
-npm run build > "$LOG_DIR/build.log" 2>&1
+AGENT_URL=http://localhost:8000 npm run build > "$LOG_DIR/build.log" 2>&1
 echo "Build complete"
 
 # Start Next.js on port 3001

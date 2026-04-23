@@ -269,6 +269,39 @@ def run_bedrock_code(code: str) -> str:
 from mcp import StdioServerParameters
 from mcp.client.stdio import stdio_client
 
+# Dynamically detect AWS region from SageMaker metadata or boto3 session
+def get_region():
+    """Detect AWS region from environment or SageMaker metadata."""
+    # First check environment variable
+    if os.getenv("AWS_REGION"):
+        return os.getenv("AWS_REGION")
+
+    # Try to get from SageMaker metadata
+    try:
+        import json
+        meta_path = "/opt/ml/metadata/resource-metadata.json"
+        if os.path.exists(meta_path):
+            with open(meta_path) as f:
+                meta = json.load(f)
+                arn = meta.get("ResourceArn", "")
+                region = arn.split(":")[3] if ":" in arn else None
+                if region:
+                    return region
+    except Exception:
+        pass
+
+    # Fall back to boto3 session default
+    try:
+        import boto3
+        session = boto3.Session()
+        return session.region_name or "us-west-2"
+    except Exception:
+        pass
+
+    return "us-west-2"
+
+REGION = get_region()
+
 docs_mcp_client = MCPClient(lambda: stdio_client(
     StdioServerParameters(
         command="uvx",
@@ -279,7 +312,7 @@ docs_mcp_client = MCPClient(lambda: stdio_client(
 
 model = BedrockModel(
     model_id=os.getenv("BEDROCK_MODEL_ID", "us.anthropic.claude-sonnet-4-5-20250929-v1:0"),
-    region_name=os.getenv("AWS_REGION", "us-west-2"),
+    region_name=REGION,
 )
 
 agent_path = os.getenv("AGENT_PATH", "/")

@@ -10,10 +10,12 @@ mkdir -p "$LOG_DIR"
 
 echo "=== Starting Bedrock Workshop Tutor ==="
 
-# 1. Discover Studio proxy base URL from describe_space
+# 1. Discover Studio proxy base URL and region from describe_space
 METADATA="/opt/ml/metadata/resource-metadata.json"
 REGION=$(python3 -c "import json; d=json.load(open('$METADATA')); print(d['ResourceArn'].split(':')[3])" 2>/dev/null || echo "us-west-2")
 DOMAIN_ID=$(python3 -c "import json; d=json.load(open('$METADATA')); print(d['DomainId'])" 2>/dev/null || echo "")
+
+echo "Detected region: $REGION"
 
 SPACE_BASE=$(python3 - <<'PYEOF' 2>/dev/null
 import json, boto3
@@ -44,7 +46,7 @@ else
     cd "$TUTOR_DIR/agent"
     pip install uv -q 2>/dev/null
     uv sync --quiet
-    nohup uv run python main.py > "$LOG_DIR/agent.log" 2>&1 &
+    AWS_REGION=$REGION nohup uv run python main.py > "$LOG_DIR/agent.log" 2>&1 &
     echo $! > /tmp/tutor-agent.pid
     for i in $(seq 1 30); do
         curl -s http://localhost:8000/health > /dev/null 2>&1 && echo "Agent ready (${i}s)" && break
@@ -81,6 +83,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):  self._proxy("GET")
     def do_POST(self): self._proxy("POST")
     def do_PUT(self):  self._proxy("PUT")
+    def do_HEAD(self): self._proxy("HEAD")
+    def do_OPTIONS(self): self._proxy("OPTIONS")
 
     def _proxy(self, method):
         path = self.path
@@ -91,7 +95,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         body = self.rfile.read(length) if length > 0 else None
 
         headers = {k: v for k, v in self.headers.items()
-                   if k.lower() not in ("host", "content-length", "transfer-encoding")}
+                   if k.lower() not in ("host", "content-length", "transfer-encoding", "connection")}
         if body:
             headers["Content-Length"] = str(len(body))
 
@@ -99,9 +103,31 @@ class Handler(http.server.BaseHTTPRequestHandler):
             conn = http.client.HTTPConnection("localhost", 3001, timeout=120)
             conn.request(method, path, body=body, headers=headers)
             r = conn.getresponse()
-            raw = r.read()
+
             ct = r.getheader("Content-Type", "")
             enc = r.getheader("Content-Encoding", "")
+
+            # For streaming responses (SSE/event-stream), stream through
+            if "text/event-stream" in ct or "stream" in ct:
+                self.send_response(r.status)
+                for k, v in r.getheaders():
+                    if k.lower() not in ("transfer-encoding", "content-length", "content-encoding", "connection"):
+                        self.send_header(k, v)
+                self.send_header("Connection", "keep-alive")
+                self.end_headers()
+
+                # Stream chunks
+                while True:
+                    chunk = r.read(1024)
+                    if not chunk:
+                        break
+                    self.wfile.write(chunk)
+                    self.wfile.flush()
+                conn.close()
+                return
+
+            # For regular responses, read fully and optionally rewrite
+            raw = r.read()
 
             if "text/html" in ct:
                 if enc == "gzip":
@@ -114,13 +140,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
             self.send_response(r.status)
             for k, v in r.getheaders():
-                if k.lower() not in ("transfer-encoding", "content-length", "content-encoding"):
+                if k.lower() not in ("transfer-encoding", "content-length", "content-encoding", "connection"):
                     self.send_header(k, v)
             if enc:
                 self.send_header("Content-Encoding", enc)
             self.send_header("Content-Length", len(raw))
             self.end_headers()
-            self.wfile.write(raw)
+            if method != "HEAD":
+                self.wfile.write(raw)
             conn.close()
         except Exception as e:
             self.send_error(502, str(e))

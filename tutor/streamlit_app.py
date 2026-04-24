@@ -13,6 +13,7 @@ import traceback
 from pathlib import Path
 from code_editor import code_editor
 import boto3
+import yaml
 
 # Detect AWS region
 def get_region():
@@ -42,6 +43,33 @@ def get_region():
 
 REGION = get_region()
 
+# Load learning paths
+def load_learning_paths():
+    """Load all learning path markdown files."""
+    paths = {}
+    learning_paths_dir = Path(__file__).parent / "learning_paths"
+
+    if learning_paths_dir.exists():
+        for md_file in learning_paths_dir.glob("*.md"):
+            try:
+                content = md_file.read_text()
+                # Extract frontmatter
+                if content.startswith("---"):
+                    parts = content.split("---", 2)
+                    if len(parts) >= 3:
+                        frontmatter = yaml.safe_load(parts[1])
+                        body = parts[2].strip()
+                        paths[frontmatter['id']] = {
+                            **frontmatter,
+                            'content': body
+                        }
+            except Exception as e:
+                print(f"Error loading {md_file}: {e}")
+
+    return paths
+
+LEARNING_PATHS = load_learning_paths()
+
 # Tool definition for updating scratchpad
 TOOLS = [{
     "toolSpec": {
@@ -63,7 +91,7 @@ TOOLS = [{
 }]
 
 # Simple agent that calls Bedrock directly with tool support
-def call_bedrock_agent(prompt: str, conversation_history: list, stream_placeholder=None):
+def call_bedrock_agent(prompt: str, conversation_history: list, stream_placeholder=None, learning_path_id=None):
     """Call Bedrock Claude model directly with tool calling and streaming."""
     client = boto3.client('bedrock-runtime', region_name=REGION)
 
@@ -82,7 +110,7 @@ def call_bedrock_agent(prompt: str, conversation_history: list, stream_placehold
         "content": [{"text": prompt}]
     })
 
-    # System prompt from the agent
+    # Base system prompt
     system_prompt = """You are an expert Amazon Bedrock tutor in an interactive workshop with a live code scratchpad.
 
 The interface has two panels:
@@ -108,6 +136,15 @@ Available models:
 - Nova Lite: us.amazon.nova-lite-v1:0
 - Nova Pro: us.amazon.nova-pro-v1:0
 """
+
+    # Add learning path context if provided
+    if learning_path_id and learning_path_id in LEARNING_PATHS:
+        path = LEARNING_PATHS[learning_path_id]
+        system_prompt += f"\n\n# LEARNING PATH: {path['title']}\n\n"
+        system_prompt += f"You are guiding the user through the '{path['title']}' learning path.\n\n"
+        system_prompt += f"{path['content']}\n\n"
+        system_prompt += "Follow the teaching flow in the learning path. Present each step progressively, "
+        system_prompt += "write the code examples to the scratchpad, and guide the user through the concepts."
 
     try:
         response = client.converse_stream(
@@ -273,6 +310,9 @@ if "total_input_tokens" not in st.session_state:
     st.session_state.code_generated_count = 0
     st.session_state.code_run_count = 0
 
+if "current_learning_path" not in st.session_state:
+    st.session_state.current_learning_path = None
+
 
 # Two column layout with no gap - left for chat, right for code+output
 col1, col2 = st.columns([1, 1], gap="small")
@@ -281,18 +321,19 @@ with col1:
     # Learning Paths at top (buttons are self-explanatory)
     cols = st.columns(3, gap="small")
     learning_paths = [
-        ("Text Generation", "Show me how to call Claude using the Converse API"),
-        ("RAG", "Show me the RetrieveAndGenerate API with an example"),
-        ("Image Generation", "Show me how to generate an image with Nova Canvas"),
-        ("Streaming", "Show me how to stream responses token-by-token"),
-        ("Tool Use", "Demonstrate function calling in Bedrock"),
-        ("Model Comparison", "Compare Claude Haiku and Sonnet side-by-side")
+        ("Text Generation", "text-generation", "Guide me through text generation with Claude"),
+        ("Embeddings", "embeddings", "Guide me through embeddings with Titan"),
+        ("RAG", "rag", "Guide me through RAG with Knowledge Bases"),
+        ("Responses API", "distributed-inference", "Guide me through the Responses API with Mantle"),
+        ("Tool Use", None, "Demonstrate function calling in Bedrock"),
+        ("Model Comparison", None, "Compare Claude Haiku and Sonnet side-by-side")
     ]
 
-    for idx, (title, message) in enumerate(learning_paths):
+    for idx, (title, path_id, message) in enumerate(learning_paths):
         with cols[idx % 3]:
             if st.button(title, key=f"path_{idx}", use_container_width=True):
                 st.session_state.pending_message = message
+                st.session_state.current_learning_path = path_id
 
 
     # Chat messages container - calculated to match right side
@@ -325,7 +366,8 @@ with col1:
                 response = call_bedrock_agent(
                     st.session_state.messages[-1]["content"],
                     st.session_state.messages[:-1],
-                    stream_placeholder=stream_placeholder
+                    stream_placeholder=stream_placeholder,
+                    learning_path_id=st.session_state.current_learning_path
                 )
 
                 # Build response message with content blocks

@@ -1,8 +1,23 @@
-node_modules/
-.next/
-*.pyc
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# Python
 __pycache__/
-agent/.venv/
-.env
-.env.local
-tsconfig.tsbuildinfo
+*.py[cod]
+*$py.class
+*.so
+
+# Streamlit
+.streamlit/secrets.toml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

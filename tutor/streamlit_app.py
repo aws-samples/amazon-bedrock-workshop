@@ -310,6 +310,107 @@ Available models:
             "usage": usage
         }
 
+        # If stop reason is end_turn, we need to send tool results back
+        if stop_reason == "end_turn":
+            # Build tool result content
+            tool_results = []
+            for block in content_blocks:
+                if block['type'] == 'tool':
+                    tool_results.append({
+                        "toolUseId": block["tool_use_id"],
+                        "content": [{"json": block.get("result", {})}]
+                    })
+
+            if tool_results:
+                # Add assistant's tool use to messages
+                assistant_content = []
+                for block in content_blocks:
+                    if block['type'] == 'text':
+                        assistant_content.append({"text": block['content']})
+                    elif block['type'] == 'tool':
+                        assistant_content.append({
+                            "toolUse": {
+                                "toolUseId": block["tool_use_id"],
+                                "name": block["name"],
+                                "input": block["input"]
+                            }
+                        })
+
+                messages.append({
+                    "role": "assistant",
+                    "content": assistant_content
+                })
+
+                # Add tool results
+                messages.append({
+                    "role": "user",
+                    "content": tool_results
+                })
+
+                # Make another call with tool results
+                response = client.converse_stream(
+                    modelId='us.anthropic.claude-sonnet-4-5-20250929-v1:0',
+                    messages=messages,
+                    system=[{"text": system_prompt}],
+                    inferenceConfig={
+                        'temperature': 0.7,
+                        'maxTokens': 2000
+                    },
+                    toolConfig={"tools": TOOLS}
+                )
+
+                # Process second response
+                content_blocks = []
+                current_block = None
+                current_text = ""
+
+                for event in response['stream']:
+                    if 'contentBlockStart' in event:
+                        start = event['contentBlockStart']
+
+                        if current_text:
+                            content_blocks.append({"type": "text", "content": current_text})
+                            current_text = ""
+
+                        if 'toolUse' in start.get('start', {}):
+                            current_block = {
+                                "type": "tool",
+                                "name": start['start']['toolUse']['name'],
+                                "tool_use_id": start['start']['toolUse']['toolUseId'],
+                                "input": ""
+                            }
+
+                    elif 'contentBlockDelta' in event:
+                        delta = event['contentBlockDelta']['delta']
+                        if 'text' in delta:
+                            text_chunk = delta['text']
+                            current_text += text_chunk
+                            if stream_placeholder:
+                                stream_placeholder.markdown(current_text)
+                        elif 'toolUse' in delta:
+                            if current_block and current_block['type'] == 'tool':
+                                current_block["input"] += delta['toolUse']['input']
+
+                    elif 'contentBlockStop' in event:
+                        if current_block and current_block['type'] == 'tool':
+                            try:
+                                tool_input = json.loads(current_block["input"])
+                                current_block["input"] = tool_input
+
+                                if current_block['name'] == 'update_scratchpad':
+                                    code = tool_input.get('code', '')
+                                    st.session_state.code = code
+                                    st.session_state.code_generated_count += 1
+
+                                content_blocks.append(current_block)
+                            except json.JSONDecodeError:
+                                pass
+                            current_block = None
+
+                    elif 'messageStop' in event:
+                        if current_text:
+                            content_blocks.append({"type": "text", "content": current_text})
+
         # Return just text for backwards compat
         text_parts = [b['content'] for b in content_blocks if b['type'] == 'text']
         return ''.join(text_parts) if text_parts else "Code updated!"
@@ -364,7 +465,7 @@ CHAT_HEIGHT = AVAILABLE_HEIGHT - BUTTON_HEIGHT - INPUT_HEIGHT
 # Initialize session state
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "assistant", "content": "👋 Welcome! I'm your Amazon Bedrock tutor.\n\nAsk me anything — I'll explain concepts and write runnable code. Edit it, run it, break it, learn from it.\n\nNo labs, no steps. Just explore."}
+        {"role": "assistant", "content": "👋 Welcome! I'm your Amazon Bedrock tutor.\n\nAsk me anything — I'll explain concepts and write runnable code. Edit it, run it, break it, learn from it.\n\n**Want guided learning?** Click a topic above or just ask in chat! I have structured learning paths on:\n- Text Generation with Claude\n- Embeddings & Semantic Search\n- RAG with Knowledge Bases\n- Responses API (OpenAI-compatible)\n\nNo labs, no steps. Just explore."}
     ]
 
 if "code" not in st.session_state:

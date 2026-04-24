@@ -128,8 +128,7 @@ Available models:
         # Create strands agent with tools
         agent = Agent(
             model=BedrockModel(
-                model_id='us.anthropic.claude-sonnet-4-5-20250929-v1:0',
-                region=REGION
+                model_id='us.anthropic.claude-sonnet-4-5-20250929-v1:0'
             ),
             messages=messages,
             tools=[
@@ -141,11 +140,28 @@ Available models:
             callback_handler=None  # Disable default printing
         )
 
-        # Invoke agent with prompt
-        response = agent.invoke(prompt)
+        # Invoke agent with prompt (async)
+        import asyncio
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
 
-        # Extract text response
-        response_text = response.content if hasattr(response, 'content') else str(response)
+        response = loop.run_until_complete(agent.invoke_async(prompt))
+
+        # Extract text response from AgentResult
+        # response.message is a dict with 'content' key containing list of content blocks
+        if hasattr(response, 'message') and isinstance(response.message, dict):
+            content_blocks = response.message.get('content', [])
+            # Extract text from content blocks
+            text_parts = []
+            for block in content_blocks:
+                if isinstance(block, dict) and 'text' in block:
+                    text_parts.append(block['text'])
+            response_text = '\n'.join(text_parts) if text_parts else str(response.message)
+        else:
+            response_text = str(response)
 
         # Store minimal metadata
         st.session_state.last_response_metadata = {

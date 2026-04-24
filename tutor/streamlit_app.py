@@ -78,7 +78,7 @@ def call_bedrock_agent(prompt: str, conversation_history: list, stream_placehold
     """Call Bedrock agent using strands framework with automatic tool calling."""
 
     # Build message history for strands
-    from strands.types import Message
+    from strands.types.content import Message
     messages = []
     for msg in conversation_history:
         if msg["role"] in ["user", "assistant"]:

@@ -2,6 +2,15 @@
 id: distributed-inference
 title: "Distributed Inference with Mantle (Responses API)"
 description: "Use OpenAI-compatible APIs with Bedrock for stateful conversations"
+keywords:
+  - responses api
+  - mantle
+  - openai
+  - stateful
+  - conversation
+  - chat completions
+  - distributed inference
+  - project mantle
 difficulty: intermediate
 duration: "25 minutes"
 prerequisites:

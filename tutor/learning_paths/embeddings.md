@@ -2,6 +2,16 @@
 id: embeddings
 title: "Text and Image Embeddings with Titan"
 description: "Generate embeddings for semantic search, RAG, and similarity matching"
+keywords:
+  - embeddings
+  - vectors
+  - titan
+  - semantic search
+  - similarity
+  - multimodal
+  - image embeddings
+  - text embeddings
+  - cosine similarity
 difficulty: intermediate
 duration: "15 minutes"
 prerequisites:

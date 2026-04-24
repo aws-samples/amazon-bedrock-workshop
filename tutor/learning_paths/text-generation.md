@@ -2,6 +2,15 @@
 id: text-generation
 title: "Text Generation with Claude"
 description: "Learn to call Claude models using the Converse API"
+keywords:
+  - text generation
+  - claude
+  - converse api
+  - llm
+  - prompts
+  - chat
+  - messages
+  - inference
 difficulty: beginner
 duration: "10 minutes"
 prerequisites:

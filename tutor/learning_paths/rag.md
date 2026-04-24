@@ -2,6 +2,16 @@
 id: rag
 title: "RAG with Bedrock Knowledge Bases"
 description: "Build retrieval-augmented generation systems using Bedrock APIs"
+keywords:
+  - rag
+  - retrieval augmented generation
+  - knowledge bases
+  - retrieve
+  - retrieve and generate
+  - semantic search
+  - documents
+  - citations
+  - grounding
 difficulty: intermediate
 duration: "20 minutes"
 prerequisites:

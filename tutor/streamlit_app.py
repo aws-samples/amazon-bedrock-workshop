@@ -70,25 +70,63 @@ def load_learning_paths():
 
 LEARNING_PATHS = load_learning_paths()
 
-# Tool definition for updating scratchpad
-TOOLS = [{
-    "toolSpec": {
-        "name": "update_scratchpad",
-        "description": "Updates the code scratchpad with new Python code. Use this whenever you write code examples for the user.",
-        "inputSchema": {
-            "json": {
-                "type": "object",
-                "properties": {
-                    "code": {
-                        "type": "string",
-                        "description": "Complete Python code to display in the scratchpad"
-                    }
-                },
-                "required": ["code"]
+# Tool definitions
+TOOLS = [
+    {
+        "toolSpec": {
+            "name": "update_scratchpad",
+            "description": "Updates the code scratchpad with new Python code. Use this whenever you write code examples for the user.",
+            "inputSchema": {
+                "json": {
+                    "type": "object",
+                    "properties": {
+                        "code": {
+                            "type": "string",
+                            "description": "Complete Python code to display in the scratchpad"
+                        }
+                    },
+                    "required": ["code"]
+                }
+            }
+        }
+    },
+    {
+        "toolSpec": {
+            "name": "find_learning_paths",
+            "description": "Search for relevant learning paths based on keywords or topics. Use this when the user asks about a specific topic (e.g., 'responses API', 'embeddings', 'RAG').",
+            "inputSchema": {
+                "json": {
+                    "type": "object",
+                    "properties": {
+                        "query": {
+                            "type": "string",
+                            "description": "Search query (keywords or topic to find)"
+                        }
+                    },
+                    "required": ["query"]
+                }
+            }
+        }
+    },
+    {
+        "toolSpec": {
+            "name": "load_learning_path",
+            "description": "Load a specific learning path by ID to get the full teaching content. Use this after finding a relevant path with find_learning_paths.",
+            "inputSchema": {
+                "json": {
+                    "type": "object",
+                    "properties": {
+                        "path_id": {
+                            "type": "string",
+                            "description": "The ID of the learning path to load (e.g., 'text-generation', 'embeddings', 'rag', 'distributed-inference')"
+                        }
+                    },
+                    "required": ["path_id"]
+                }
             }
         }
     }
-}]
+]
 
 # Simple agent that calls Bedrock directly with tool support
 def call_bedrock_agent(prompt: str, conversation_history: list, stream_placeholder=None, learning_path_id=None):
@@ -118,10 +156,18 @@ The interface has two panels:
 - RIGHT: A code scratchpad where users can edit and run Python code
 
 When users ask questions:
-1. Explain the concept conversationally in the chat
-2. Use the update_scratchpad tool to write example code to the scratchpad
-3. Point them to the scratchpad: "**Check the code in the scratchpad → and hit ▶ Run to try it!**"
-4. Be encouraging and hands-on
+1. First check if the question is about a specific topic that might have a learning path (e.g., "responses API", "embeddings", "RAG", "text generation")
+   - Use find_learning_paths tool to search for relevant learning paths
+   - If a relevant learning path is found, use load_learning_path to load it and follow that curriculum
+2. Explain the concept conversationally in the chat
+3. Use the update_scratchpad tool to write example code to the scratchpad
+4. Point them to the scratchpad: "**Check the code in the scratchpad → and hit ▶ Run to try it!**"
+5. Be encouraging and hands-on
+
+Tools available:
+- find_learning_paths: Search for learning paths by keywords/topics
+- load_learning_path: Load a specific learning path curriculum
+- update_scratchpad: Write code examples to the scratchpad
 
 Code guidelines:
 - Write complete, runnable Python using boto3
@@ -201,11 +247,45 @@ Available models:
                         tool_input = json.loads(current_block["input"])
                         current_block["input"] = tool_input
 
-                        # Update scratchpad if needed
+                        # Handle different tool types
                         if current_block['name'] == 'update_scratchpad':
                             code = tool_input.get('code', '')
                             st.session_state.code = code
                             st.session_state.code_generated_count += 1
+
+                        elif current_block['name'] == 'find_learning_paths':
+                            # Search learning paths by keywords
+                            query = tool_input.get('query', '').lower()
+                            matches = []
+                            for path_id, path_data in LEARNING_PATHS.items():
+                                keywords = [k.lower() for k in path_data.get('keywords', [])]
+                                title = path_data.get('title', '').lower()
+                                description = path_data.get('description', '').lower()
+
+                                if (query in title or query in description or
+                                    any(query in kw or kw in query for kw in keywords)):
+                                    matches.append({
+                                        'id': path_id,
+                                        'title': path_data['title'],
+                                        'description': path_data['description']
+                                    })
+
+                            current_block["result"] = matches
+
+                        elif current_block['name'] == 'load_learning_path':
+                            # Load full learning path content
+                            path_id = tool_input.get('path_id', '')
+                            if path_id in LEARNING_PATHS:
+                                path_data = LEARNING_PATHS[path_id]
+                                current_block["result"] = {
+                                    'id': path_id,
+                                    'title': path_data['title'],
+                                    'content': path_data['content'][:5000]  # Limit content size
+                                }
+                                # Set as current learning path
+                                st.session_state.current_learning_path = path_id
+                            else:
+                                current_block["result"] = {"error": f"Learning path '{path_id}' not found"}
 
                         content_blocks.append(current_block)
                     except json.JSONDecodeError:

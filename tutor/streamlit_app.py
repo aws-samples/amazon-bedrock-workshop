@@ -14,6 +14,9 @@ from pathlib import Path
 from code_editor import code_editor
 import boto3
 import yaml
+from strands import Agent
+from strands.models import BedrockModel
+import tutor_tools
 
 # Detect AWS region
 def get_region():
@@ -70,108 +73,37 @@ def load_learning_paths():
 
 LEARNING_PATHS = load_learning_paths()
 
-# Tool definitions
-TOOLS = [
-    {
-        "toolSpec": {
-            "name": "update_scratchpad",
-            "description": "Updates the code scratchpad with new Python code. Use this whenever you write code examples for the user.",
-            "inputSchema": {
-                "json": {
-                    "type": "object",
-                    "properties": {
-                        "code": {
-                            "type": "string",
-                            "description": "Complete Python code to display in the scratchpad"
-                        }
-                    },
-                    "required": ["code"]
-                }
-            }
-        }
-    },
-    {
-        "toolSpec": {
-            "name": "find_learning_paths",
-            "description": "Search for relevant learning paths based on keywords or topics. Use this when the user asks about a specific topic (e.g., 'responses API', 'embeddings', 'RAG').",
-            "inputSchema": {
-                "json": {
-                    "type": "object",
-                    "properties": {
-                        "query": {
-                            "type": "string",
-                            "description": "Search query (keywords or topic to find)"
-                        }
-                    },
-                    "required": ["query"]
-                }
-            }
-        }
-    },
-    {
-        "toolSpec": {
-            "name": "load_learning_path",
-            "description": "Load a specific learning path by ID to get the full teaching content. Use this after finding a relevant path with find_learning_paths.",
-            "inputSchema": {
-                "json": {
-                    "type": "object",
-                    "properties": {
-                        "path_id": {
-                            "type": "string",
-                            "description": "The ID of the learning path to load (e.g., 'text-generation', 'embeddings', 'rag', 'distributed-inference')"
-                        }
-                    },
-                    "required": ["path_id"]
-                }
-            }
-        }
-    }
-]
-
-# Simple agent that calls Bedrock directly with tool support
+# Agent using strands framework
 def call_bedrock_agent(prompt: str, conversation_history: list, stream_placeholder=None, learning_path_id=None):
-    """Call Bedrock Claude model directly with tool calling and streaming."""
-    client = boto3.client('bedrock-runtime', region_name=REGION)
+    """Call Bedrock agent using strands framework with automatic tool calling."""
 
-    # Build message history
+    # Build message history for strands
+    from strands.types import Message
     messages = []
     for msg in conversation_history:
         if msg["role"] in ["user", "assistant"]:
-            messages.append({
-                "role": msg["role"],
-                "content": [{"text": msg["content"]}]
-            })
-
-    # Add current prompt
-    messages.append({
-        "role": "user",
-        "content": [{"text": prompt}]
-    })
+            messages.append(Message(role=msg["role"], content=msg["content"]))
 
     # Base system prompt
-    system_prompt = """You are an expert Amazon Bedrock tutor in an interactive workshop with a live code scratchpad.
+    system_prompt = f"""You are an expert Amazon Bedrock tutor in an interactive workshop with a live code scratchpad.
 
 The interface has two panels:
 - LEFT: This chat where you explain concepts
 - RIGHT: A code scratchpad where users can edit and run Python code
 
-When users ask questions:
-1. First check if the question is about a specific topic that might have a learning path (e.g., "responses API", "embeddings", "RAG", "text generation")
-   - Use find_learning_paths tool to search for relevant learning paths
-   - If a relevant learning path is found, use load_learning_path to load it and follow that curriculum
-2. Explain the concept conversationally in the chat
-3. Use the update_scratchpad tool to write example code to the scratchpad
-4. Point them to the scratchpad: "**Check the code in the scratchpad → and hit ▶ Run to try it!**"
-5. Be encouraging and hands-on
+CRITICAL WORKFLOW - When users ask about topics:
+1. ALWAYS search first: Use find_learning_paths tool for ANY topic question (e.g., "responses API", "embeddings", "RAG", "text generation", "converse")
+2. If matches found: Use load_learning_path with the path_id, then FOLLOW THAT CURRICULUM EXACTLY step-by-step
+3. If no matches: Explain the concept conversationally and write example code
 
-Tools available:
-- find_learning_paths: Search for learning paths by keywords/topics
-- load_learning_path: Load a specific learning path curriculum
-- update_scratchpad: Write code examples to the scratchpad
+When explaining:
+- Use the update_scratchpad tool to write example code to the scratchpad
+- Point them to the scratchpad: "**Check the code in the scratchpad → and hit ▶ Run to try it!**"
+- Be encouraging and hands-on
 
 Code guidelines:
 - Write complete, runnable Python using boto3
-- Always set region_name='""" + REGION + """'
+- Always set region_name='{REGION}'
 - Use inference profile IDs (e.g., 'us.anthropic.claude-sonnet-4-5-20250929-v1:0')
 - Be concise and practical
 - Users can edit your code, so make it a good starting point
@@ -193,229 +125,38 @@ Available models:
         system_prompt += "write the code examples to the scratchpad, and guide the user through the concepts."
 
     try:
-        response = client.converse_stream(
-            modelId='us.anthropic.claude-sonnet-4-5-20250929-v1:0',
+        # Create strands agent with tools
+        agent = Agent(
+            model=BedrockModel(
+                model_id='us.anthropic.claude-sonnet-4-5-20250929-v1:0',
+                region=REGION
+            ),
             messages=messages,
-            system=[{"text": system_prompt}],
-            inferenceConfig={
-                'temperature': 0.7,
-                'maxTokens': 2000
-            },
-            toolConfig={"tools": TOOLS}
+            tools=[
+                tutor_tools.update_scratchpad,
+                tutor_tools.find_learning_paths,
+                tutor_tools.load_learning_path
+            ],
+            system_prompt=system_prompt,
+            callback_handler=None  # Disable default printing
         )
 
-        # Process streaming response - track content blocks in order
-        content_blocks = []  # List of {type: 'text'|'tool', content: ...}
-        current_block = None
-        current_text = ""
-        stop_reason = None
-        usage = None
+        # Invoke agent with prompt
+        response = agent.invoke(prompt)
 
-        for event in response['stream']:
-            if 'contentBlockStart' in event:
-                start = event['contentBlockStart']
-                block_index = start.get('contentBlockIndex', 0)
+        # Extract text response
+        response_text = response.content if hasattr(response, 'content') else str(response)
 
-                # Save previous text block if any
-                if current_text:
-                    content_blocks.append({"type": "text", "content": current_text})
-                    current_text = ""
-
-                if 'toolUse' in start.get('start', {}):
-                    current_block = {
-                        "type": "tool",
-                        "name": start['start']['toolUse']['name'],
-                        "tool_use_id": start['start']['toolUse']['toolUseId'],
-                        "input": ""
-                    }
-
-            elif 'contentBlockDelta' in event:
-                delta = event['contentBlockDelta']['delta']
-                if 'text' in delta:
-                    text_chunk = delta['text']
-                    current_text += text_chunk
-                    if stream_placeholder:
-                        stream_placeholder.markdown(current_text)
-                elif 'toolUse' in delta:
-                    if current_block and current_block['type'] == 'tool':
-                        current_block["input"] += delta['toolUse']['input']
-
-            elif 'contentBlockStop' in event:
-                # Finalize current block
-                if current_block and current_block['type'] == 'tool':
-                    try:
-                        tool_input = json.loads(current_block["input"])
-                        current_block["input"] = tool_input
-
-                        # Handle different tool types
-                        if current_block['name'] == 'update_scratchpad':
-                            code = tool_input.get('code', '')
-                            st.session_state.code = code
-                            st.session_state.code_generated_count += 1
-
-                        elif current_block['name'] == 'find_learning_paths':
-                            # Search learning paths by keywords
-                            query = tool_input.get('query', '').lower()
-                            matches = []
-                            for path_id, path_data in LEARNING_PATHS.items():
-                                keywords = [k.lower() for k in path_data.get('keywords', [])]
-                                title = path_data.get('title', '').lower()
-                                description = path_data.get('description', '').lower()
-
-                                if (query in title or query in description or
-                                    any(query in kw or kw in query for kw in keywords)):
-                                    matches.append({
-                                        'id': path_id,
-                                        'title': path_data['title'],
-                                        'description': path_data['description']
-                                    })
-
-                            current_block["result"] = matches
-
-                        elif current_block['name'] == 'load_learning_path':
-                            # Load full learning path content
-                            path_id = tool_input.get('path_id', '')
-                            if path_id in LEARNING_PATHS:
-                                path_data = LEARNING_PATHS[path_id]
-                                current_block["result"] = {
-                                    'id': path_id,
-                                    'title': path_data['title'],
-                                    'content': path_data['content'][:5000]  # Limit content size
-                                }
-                                # Set as current learning path
-                                st.session_state.current_learning_path = path_id
-                            else:
-                                current_block["result"] = {"error": f"Learning path '{path_id}' not found"}
-
-                        content_blocks.append(current_block)
-                    except json.JSONDecodeError:
-                        pass
-                    current_block = None
-
-            elif 'messageStop' in event:
-                stop_reason = event['messageStop'].get('stopReason')
-                # Save any remaining text
-                if current_text:
-                    content_blocks.append({"type": "text", "content": current_text})
-
-            elif 'metadata' in event:
-                usage = event['metadata'].get('usage')
-
-        # Store content blocks in order
-        st.session_state.last_content_blocks = content_blocks
-
-        # Store metadata
+        # Store minimal metadata
         st.session_state.last_response_metadata = {
-            "stopReason": stop_reason,
-            "usage": usage
+            "stopReason": "complete",
+            "usage": None
         }
 
-        # If stop reason is end_turn, we need to send tool results back
-        if stop_reason == "end_turn":
-            # Build tool result content
-            tool_results = []
-            for block in content_blocks:
-                if block['type'] == 'tool':
-                    tool_results.append({
-                        "toolUseId": block["tool_use_id"],
-                        "content": [{"json": block.get("result", {})}]
-                    })
-
-            if tool_results:
-                # Add assistant's tool use to messages
-                assistant_content = []
-                for block in content_blocks:
-                    if block['type'] == 'text':
-                        assistant_content.append({"text": block['content']})
-                    elif block['type'] == 'tool':
-                        assistant_content.append({
-                            "toolUse": {
-                                "toolUseId": block["tool_use_id"],
-                                "name": block["name"],
-                                "input": block["input"]
-                            }
-                        })
-
-                messages.append({
-                    "role": "assistant",
-                    "content": assistant_content
-                })
-
-                # Add tool results
-                messages.append({
-                    "role": "user",
-                    "content": tool_results
-                })
-
-                # Make another call with tool results
-                response = client.converse_stream(
-                    modelId='us.anthropic.claude-sonnet-4-5-20250929-v1:0',
-                    messages=messages,
-                    system=[{"text": system_prompt}],
-                    inferenceConfig={
-                        'temperature': 0.7,
-                        'maxTokens': 2000
-                    },
-                    toolConfig={"tools": TOOLS}
-                )
-
-                # Process second response
-                content_blocks = []
-                current_block = None
-                current_text = ""
-
-                for event in response['stream']:
-                    if 'contentBlockStart' in event:
-                        start = event['contentBlockStart']
-
-                        if current_text:
-                            content_blocks.append({"type": "text", "content": current_text})
-                            current_text = ""
-
-                        if 'toolUse' in start.get('start', {}):
-                            current_block = {
-                                "type": "tool",
-                                "name": start['start']['toolUse']['name'],
-                                "tool_use_id": start['start']['toolUse']['toolUseId'],
-                                "input": ""
-                            }
-
-                    elif 'contentBlockDelta' in event:
-                        delta = event['contentBlockDelta']['delta']
-                        if 'text' in delta:
-                            text_chunk = delta['text']
-                            current_text += text_chunk
-                            if stream_placeholder:
-                                stream_placeholder.markdown(current_text)
-                        elif 'toolUse' in delta:
-                            if current_block and current_block['type'] == 'tool':
-                                current_block["input"] += delta['toolUse']['input']
-
-                    elif 'contentBlockStop' in event:
-                        if current_block and current_block['type'] == 'tool':
-                            try:
-                                tool_input = json.loads(current_block["input"])
-                                current_block["input"] = tool_input
-
-                                if current_block['name'] == 'update_scratchpad':
-                                    code = tool_input.get('code', '')
-                                    st.session_state.code = code
-                                    st.session_state.code_generated_count += 1
-
-                                content_blocks.append(current_block)
-                            except json.JSONDecodeError:
-                                pass
-                            current_block = None
-
-                    elif 'messageStop' in event:
-                        if current_text:
-                            content_blocks.append({"type": "text", "content": current_text})
-
-        # Return just text for backwards compat
-        text_parts = [b['content'] for b in content_blocks if b['type'] == 'text']
-        return ''.join(text_parts) if text_parts else "Code updated!"
+        return response_text
 
     except Exception as e:
+        return f"Error calling agent: {str(e)}\n\n{traceback.format_exc()}"
         return f"Error calling Bedrock: {str(e)}\n\n{traceback.format_exc()}"
 
 st.set_page_config(

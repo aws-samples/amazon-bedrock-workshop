@@ -205,16 +205,35 @@ if "messages" not in st.session_state:
     ]
 
 if "code" not in st.session_state:
-    st.session_state.code = """import boto3
+    st.session_state.code = """# Amazon Bedrock Responses API Example
+# Stateful conversations with server-managed context
 
-client = boto3.client('bedrock-runtime', region_name='us-east-1')
+import os
+from openai import OpenAI
 
-response = client.converse(
-    modelId='us.anthropic.claude-haiku-4-5-20251001-v1:0',
-    messages=[{'role': 'user', 'content': [{'text': 'Say hello!'}]}],
-    inferenceConfig={'temperature': 0.0, 'maxTokens': 200}
+# Setup (get your API key from Bedrock console)
+os.environ["OPENAI_BASE_URL"] = "https://bedrock-mantle.us-east-1.api.aws/v1"
+os.environ["OPENAI_API_KEY"] = "your-bedrock-api-key-here"
+
+client = OpenAI()
+
+# Turn 1: Start a conversation
+response = client.responses.create(
+    model="openai.gpt-oss-120b",
+    input=[{"role": "user", "content": "What is Amazon Bedrock?"}]
 )
-print(response['output']['message']['content'][0]['text'])
+
+print(f"Turn 1: {response.output_text}")
+print(f"Response ID: {response.id}")
+
+# Turn 2: Continue with context (server remembers!)
+response = client.responses.create(
+    model="openai.gpt-oss-120b",
+    input=[{"role": "user", "content": "What models does it support?"}],
+    previous_response_id=response.id  # <-- Links to previous turn
+)
+
+print(f"\\nTurn 2: {response.output_text}")
 """
 
 if "output" not in st.session_state:

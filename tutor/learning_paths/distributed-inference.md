@@ -82,15 +82,7 @@ for model in models.data[:5]:
 4. Choose "Short-term key" (expires in hours/days)
 5. Copy the key and paste in code above
 
-**Alternative: AWS Credentials (Advanced)**
-If user asks, you can mention they can also use IAM credentials with a token generator:
-```python
-# Advanced: Use AWS credentials instead of API key
-%pip install aws-bedrock-token-generator
-from aws_bedrock_token_generator import provide_token
-os.environ["OPENAI_API_KEY"] = provide_token(region="us-east-1")
-```
-But DEFAULT to API keys unless specifically requested.
+**Note:** AWS IAM credentials are also supported but more complex. Only mention if user specifically asks about alternatives to API keys.
 
 **Common pitfalls:**
 - Using boto3/bedrock-runtime instead of OpenAI SDK ❌

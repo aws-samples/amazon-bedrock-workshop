@@ -14,9 +14,7 @@ from pathlib import Path
 from code_editor import code_editor
 import boto3
 import yaml
-from strands import Agent
-from strands.models import BedrockModel
-import tutor_tools
+import tutor_agent
 
 # Detect AWS region
 def get_region():
@@ -73,107 +71,32 @@ def load_learning_paths():
 
 LEARNING_PATHS = load_learning_paths()
 
-# Agent using strands framework
+# Agent wrapper using tutor_agent module
 def call_bedrock_agent(prompt: str, conversation_history: list, stream_placeholder=None, learning_path_id=None):
-    """Call Bedrock agent using strands framework with automatic tool calling."""
+    """Call Bedrock agent using tutor_agent module."""
 
-    # Build message history for strands
-    from strands.types.content import Message
-    messages = []
-    for msg in conversation_history:
-        if msg["role"] in ["user", "assistant"]:
-            # Content must be a list of content blocks like [{'text': '...'}]
-            content = msg["content"]
-            if isinstance(content, str):
-                content = [{'text': content}]
-            messages.append(Message(role=msg["role"], content=content))
-
-    # Base system prompt
-    system_prompt = f"""You are an expert Amazon Bedrock tutor in an interactive workshop with a live code scratchpad.
-
-The interface has two panels:
-- LEFT: This chat where you explain concepts
-- RIGHT: A code scratchpad where users can edit and run Python code
-
-🚨 CRITICAL: YOU DO NOT HAVE DIRECT KNOWLEDGE 🚨
-
-You do NOT have detailed information about specific Bedrock topics memorized. Instead, you have access to curated learning paths through tools.
-
-MANDATORY WORKFLOW for ANY user question:
-
-1. FIRST: Call find_learning_paths(query="<user's topic>")
-   - User asks about "responses API" → find_learning_paths(query="responses API")
-   - User asks about "embeddings" → find_learning_paths(query="embeddings")
-   - DO NOT answer without searching first - you don't have this information
-
-2. IF learning path found: Call load_learning_path(path_id="<id>")
-   - This gives you the structured curriculum to follow
-   - Follow it EXACTLY step-by-step, presenting each concept progressively
-   - Use ONLY the code patterns shown in the learning path (do NOT substitute with your own examples)
-   - Use update_scratchpad tool to write the exact code examples from the learning path
-
-3. IF NO learning path found: Then answer from general knowledge
-   - Only after searching confirms no curated content exists
-
-You cannot answer questions about Bedrock topics without first using find_learning_paths. You must search the learning path database first.
-
-When explaining:
-- Use the update_scratchpad tool to write example code to the scratchpad
-- Point them to the scratchpad: "**Check the code in the scratchpad → and hit ▶ Run to try it!**"
-- Be encouraging and hands-on
-
-Code guidelines:
-- Write complete, runnable Python using boto3
-- Always set region_name='{REGION}'
-- Use inference profile IDs (e.g., 'us.anthropic.claude-sonnet-4-5-20250929-v1:0')
-- Be concise and practical
-- Users can edit your code, so make it a good starting point
-
-Available models:
-- Claude Sonnet 4.5: us.anthropic.claude-sonnet-4-5-20250929-v1:0
-- Claude Haiku 4.5: us.anthropic.claude-haiku-4-5-20251001-v1:0
-- Nova Lite: us.amazon.nova-lite-v1:0
-- Nova Pro: us.amazon.nova-pro-v1:0
-"""
-
-    # Add learning path context if provided
+    # Get learning path content if provided
+    learning_path_content = None
     if learning_path_id and learning_path_id in LEARNING_PATHS:
         path = LEARNING_PATHS[learning_path_id]
-        system_prompt += f"\n\n# LEARNING PATH: {path['title']}\n\n"
-        system_prompt += f"You are guiding the user through the '{path['title']}' learning path.\n\n"
-        system_prompt += f"{path['content']}\n\n"
-        system_prompt += "Follow the teaching flow in the learning path. Present each step progressively, "
-        system_prompt += "write the code examples to the scratchpad, and guide the user through the concepts."
+        learning_path_content = f"# LEARNING PATH: {path['title']}\n\n{path['content']}"
 
     try:
-        # Create strands agent with tools
-        agent = Agent(
-            model=BedrockModel(
-                model_id='us.anthropic.claude-sonnet-4-5-20250929-v1:0'
-            ),
-            messages=messages,
-            tools=[
-                tutor_tools.update_scratchpad,
-                tutor_tools.find_learning_paths,
-                tutor_tools.load_learning_path
-            ],
-            system_prompt=system_prompt,
-            callback_handler=None  # Disable default printing
-        )
-
-        # Stream agent response (async)
+        # Stream agent response
         import asyncio
 
         async def stream_agent():
             """Stream agent events and collect response text."""
             response_text = ""
-            async for event in agent.stream_async(prompt):
-                # Stream text chunks to placeholder
-                if isinstance(event, dict) and 'data' in event:
-                    text_chunk = event['data']
-                    response_text += text_chunk
-                    if stream_placeholder:
-                        stream_placeholder.markdown(response_text)
+            async for text_chunk in tutor_agent.invoke_agent(
+                prompt=prompt,
+                conversation_history=conversation_history,
+                region=REGION,
+                learning_path_content=learning_path_content
+            ):
+                response_text += text_chunk
+                if stream_placeholder:
+                    stream_placeholder.markdown(response_text)
             return response_text
 
         try:

@@ -72,7 +72,7 @@ def load_learning_paths():
 LEARNING_PATHS = load_learning_paths()
 
 # Agent wrapper using tutor_agent module
-def call_bedrock_agent(prompt: str, conversation_history: list, stream_placeholder=None, learning_path_id=None):
+def call_bedrock_agent(prompt: str, conversation_history: list, response_container=None, learning_path_id=None):
     """Call Bedrock agent using tutor_agent module."""
 
     # Get learning path content if provided
@@ -86,9 +86,15 @@ def call_bedrock_agent(prompt: str, conversation_history: list, stream_placehold
         import asyncio
 
         async def stream_agent():
-            """Stream agent events and collect response."""
+            """Stream agent events and show inline."""
             response_text = ""
             tool_calls = []
+
+            # Create placeholders in container for inline display
+            tool_placeholders = {}
+            text_placeholder = None
+            if response_container:
+                text_placeholder = response_container.empty()
 
             async for event in tutor_agent.invoke_agent(
                 prompt=prompt,
@@ -98,8 +104,8 @@ def call_bedrock_agent(prompt: str, conversation_history: list, stream_placehold
             ):
                 if event['type'] == 'text':
                     response_text += event['content']
-                    if stream_placeholder:
-                        stream_placeholder.markdown(response_text)
+                    if text_placeholder:
+                        text_placeholder.markdown(response_text)
 
                 elif event['type'] == 'tool_use':
                     tool_calls.append({
@@ -108,13 +114,27 @@ def call_bedrock_agent(prompt: str, conversation_history: list, stream_placehold
                         'tool_use_id': event.get('tool_use_id')
                     })
 
+                    # Show tool inline immediately
+                    if response_container:
+                        with response_container.expander(f"🔧 {event['name']}", expanded=False):
+                            st.json(event['input'])
+
                     # Handle update_scratchpad specially - update session state immediately
                     if event['name'] == 'update_scratchpad':
                         code = event['input'].get('code', '')
+                        print(f"[STREAMLIT] update_scratchpad event received, code length: {len(code)}")
                         if code:
+                            print(f"[STREAMLIT] Updating session_state.code (was {len(st.session_state.code)} chars)")
                             st.session_state.code = code
                             st.session_state.code_generated_count = st.session_state.get('code_generated_count', 0) + 1
-                            print(f"[STREAMLIT] Scratchpad updated with {len(code)} chars")
+                            st.session_state.code_was_updated = True
+                            print(f"[STREAMLIT] Now {len(st.session_state.code)} chars, hash: {hash(code)}")
+
+                    # Recreate text placeholder after tool so text continues below
+                    if response_container and text_placeholder:
+                        text_placeholder = response_container.empty()
+                        if response_text:
+                            text_placeholder.markdown(response_text)
 
             return response_text, tool_calls
 
@@ -295,14 +315,14 @@ with col1:
         # Show thinking indicator if processing
         if st.session_state.get("is_thinking", False):
             with st.chat_message("assistant", avatar="public/bedrock-color.svg"):
-                # Create placeholder for streaming text
-                stream_placeholder = st.empty()
+                # Create container for inline display of tools and text
+                response_container = st.container()
 
                 # Call Bedrock with streaming
                 response = call_bedrock_agent(
                     st.session_state.messages[-1]["content"],
                     st.session_state.messages[:-1],
-                    stream_placeholder=stream_placeholder,
+                    response_container=response_container,
                     learning_path_id=st.session_state.current_learning_path
                 )
 
@@ -330,6 +350,12 @@ with col1:
 
                 st.session_state.messages.append(assistant_message)
                 st.session_state.is_thinking = False
+
+                # Debug: Check if code was actually updated
+                if st.session_state.get('code_was_updated'):
+                    print(f"[RERUN] Code was updated during this turn, current length: {len(st.session_state.code)}")
+                    del st.session_state.code_was_updated
+
                 st.rerun()
 
     # Chat input at bottom

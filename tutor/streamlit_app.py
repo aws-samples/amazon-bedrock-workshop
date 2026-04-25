@@ -82,7 +82,11 @@ def call_bedrock_agent(prompt: str, conversation_history: list, stream_placehold
     messages = []
     for msg in conversation_history:
         if msg["role"] in ["user", "assistant"]:
-            messages.append(Message(role=msg["role"], content=msg["content"]))
+            # Content must be a list of content blocks like [{'text': '...'}]
+            content = msg["content"]
+            if isinstance(content, str):
+                content = [{'text': content}]
+            messages.append(Message(role=msg["role"], content=content))
 
     # Base system prompt
     system_prompt = f"""You are an expert Amazon Bedrock tutor in an interactive workshop with a live code scratchpad.

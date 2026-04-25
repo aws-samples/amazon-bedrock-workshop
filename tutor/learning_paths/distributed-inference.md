@@ -31,13 +31,18 @@ This learning path teaches how to use Amazon Bedrock's OpenAI-compatible APIs (P
 
 ## Teaching Flow
 
+⚠️ **CRITICAL INSTRUCTION FOR THIS LEARNING PATH:**
+- **USE OPENAI SDK ONLY** - Do NOT use boto3 or bedrock-runtime client
+- **DEFAULT TO API KEYS** - Show short-term API key authentication first
+- **ONLY MENTION IAM IF ASKED** - AWS credentials (SigV4) are an advanced option
+
 ### Step 1: Setup with OpenAI SDK
 **Goal:** Configure the OpenAI SDK to connect to Bedrock's Mantle endpoint
 
 **What to show:**
-- Install OpenAI SDK
+- Install OpenAI SDK (`pip install openai`)
 - Configure endpoint URL for Bedrock Mantle
-- Authenticate with Bedrock API key
+- Authenticate with short-term API key (DEFAULT)
 - Test connection by listing models
 
 **Code pattern:**
@@ -70,13 +75,26 @@ for model in models.data[:5]:
 - Region must match your Bedrock resources (us-east-1, us-west-2, etc.)
 - Same models as standard Bedrock, different access pattern
 
-**Prerequisites:**
-- Create API key in Bedrock console: Navigation → API keys → Generate key
-- Note: API keys are different from AWS access keys
+**How to get API key:**
+1. Open Bedrock console
+2. Navigate to: Left sidebar → API keys
+3. Click "Generate key"
+4. Choose "Short-term key" (expires in hours/days)
+5. Copy the key and paste in code above
+
+**Alternative: AWS Credentials (Advanced)**
+If user asks, you can mention they can also use IAM credentials with a token generator:
+```python
+# Advanced: Use AWS credentials instead of API key
+%pip install aws-bedrock-token-generator
+from aws_bedrock_token_generator import provide_token
+os.environ["OPENAI_API_KEY"] = provide_token(region="us-east-1")
+```
+But DEFAULT to API keys unless specifically requested.
 
 **Common pitfalls:**
-- Using wrong endpoint URL (must include region and /v1)
-- Trying to use AWS IAM credentials instead of Bedrock API key
+- Using boto3/bedrock-runtime instead of OpenAI SDK ❌
+- Wrong endpoint URL format (must include region and /v1)
 - Not setting OPENAI_BASE_URL before creating client
 
 ---

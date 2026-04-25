@@ -108,8 +108,9 @@ MANDATORY WORKFLOW for ANY user question:
 
 2. IF learning path found: Call load_learning_path(path_id="<id>")
    - This gives you the structured curriculum to follow
-   - Follow it step-by-step, presenting each concept progressively
-   - Use update_scratchpad tool for code examples
+   - Follow it EXACTLY step-by-step, presenting each concept progressively
+   - Use ONLY the code patterns shown in the learning path (do NOT substitute with your own examples)
+   - Use update_scratchpad tool to write the exact code examples from the learning path
 
 3. IF NO learning path found: Then answer from general knowledge
    - Only after searching confirms no curated content exists

@@ -160,28 +160,28 @@ Available models:
             callback_handler=None  # Disable default printing
         )
 
-        # Invoke agent with prompt (async)
+        # Stream agent response (async)
         import asyncio
+
+        async def stream_agent():
+            """Stream agent events and collect response text."""
+            response_text = ""
+            async for event in agent.stream_async(prompt):
+                # Stream text chunks to placeholder
+                if isinstance(event, dict) and 'data' in event:
+                    text_chunk = event['data']
+                    response_text += text_chunk
+                    if stream_placeholder:
+                        stream_placeholder.markdown(response_text)
+            return response_text
+
         try:
             loop = asyncio.get_event_loop()
         except RuntimeError:
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
 
-        response = loop.run_until_complete(agent.invoke_async(prompt))
-
-        # Extract text response from AgentResult
-        # response.message is a dict with 'content' key containing list of content blocks
-        if hasattr(response, 'message') and isinstance(response.message, dict):
-            content_blocks = response.message.get('content', [])
-            # Extract text from content blocks
-            text_parts = []
-            for block in content_blocks:
-                if isinstance(block, dict) and 'text' in block:
-                    text_parts.append(block['text'])
-            response_text = '\n'.join(text_parts) if text_parts else str(response.message)
-        else:
-            response_text = str(response)
+        response_text = loop.run_until_complete(stream_agent())
 
         # Store minimal metadata
         st.session_state.last_response_metadata = {

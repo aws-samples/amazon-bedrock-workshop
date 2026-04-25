@@ -86,18 +86,29 @@ def call_bedrock_agent(prompt: str, conversation_history: list, stream_placehold
         import asyncio
 
         async def stream_agent():
-            """Stream agent events and collect response text."""
+            """Stream agent events and collect response."""
             response_text = ""
-            async for text_chunk in tutor_agent.invoke_agent(
+            tool_calls = []
+
+            async for event in tutor_agent.invoke_agent(
                 prompt=prompt,
                 conversation_history=conversation_history,
                 region=REGION,
                 learning_path_content=learning_path_content
             ):
-                response_text += text_chunk
-                if stream_placeholder:
-                    stream_placeholder.markdown(response_text)
-            return response_text
+                if event['type'] == 'text':
+                    response_text += event['content']
+                    if stream_placeholder:
+                        stream_placeholder.markdown(response_text)
+
+                elif event['type'] == 'tool_use':
+                    tool_calls.append({
+                        'name': event['name'],
+                        'input': event['input'],
+                        'tool_use_id': event.get('tool_use_id')
+                    })
+
+            return response_text, tool_calls
 
         try:
             loop = asyncio.get_event_loop()
@@ -105,7 +116,23 @@ def call_bedrock_agent(prompt: str, conversation_history: list, stream_placehold
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
 
-        response_text = loop.run_until_complete(stream_agent())
+        response_text, tool_calls = loop.run_until_complete(stream_agent())
+
+        # Store tool calls as content blocks for display
+        content_blocks = []
+        for tool in tool_calls:
+            content_blocks.append({
+                'type': 'tool',
+                'name': tool['name'],
+                'input': tool['input']
+            })
+        if response_text:
+            content_blocks.append({
+                'type': 'text',
+                'content': response_text
+            })
+
+        st.session_state.last_content_blocks = content_blocks
 
         # Store minimal metadata
         st.session_state.last_response_metadata = {

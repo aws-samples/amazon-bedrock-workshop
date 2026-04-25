@@ -111,9 +111,9 @@ async def invoke_agent(
     conversation_history: List[Dict[str, str]],
     region: str,
     learning_path_content: Optional[str] = None
-) -> AsyncIterator[str]:
+) -> AsyncIterator[Dict[str, Any]]:
     """
-    Invoke the agent and stream response text.
+    Invoke the agent and stream response events.
 
     Args:
         prompt: User's current message
@@ -122,13 +122,52 @@ async def invoke_agent(
         learning_path_content: Optional learning path to inject
 
     Yields:
-        Text chunks as they're generated
+        Dict events with 'type' key:
+        - {'type': 'text', 'content': str} - Text chunks
+        - {'type': 'tool_use', 'name': str, 'input': dict} - Tool calls
     """
     agent = create_tutor_agent(conversation_history, region, learning_path_content)
 
+    tool_uses = {}  # Track tool use by toolUseId
+
     async for event in agent.stream_async(prompt):
-        if isinstance(event, dict) and 'data' in event:
-            yield event['data']
+        if not isinstance(event, dict):
+            continue
+
+        # Text data
+        if 'data' in event:
+            yield {'type': 'text', 'content': event['data']}
+
+        # Tool use events
+        elif event.get('type') == 'tool_use_stream':
+            tool_use = event.get('current_tool_use', {})
+            tool_id = tool_use.get('toolUseId')
+            tool_name = tool_use.get('name')
+            tool_input = tool_use.get('input', '')
+
+            if tool_id:
+                # Track complete tool input
+                tool_uses[tool_id] = {
+                    'name': tool_name,
+                    'input': tool_input
+                }
+
+        # Tool use completed (contentBlockStop for tool)
+        elif 'event' in event and 'contentBlockStop' in event['event']:
+            # Emit completed tool uses
+            for tool_id, tool_data in tool_uses.items():
+                try:
+                    import json
+                    parsed_input = json.loads(tool_data['input'])
+                    yield {
+                        'type': 'tool_use',
+                        'name': tool_data['name'],
+                        'input': parsed_input,
+                        'tool_use_id': tool_id
+                    }
+                except (json.JSONDecodeError, KeyError):
+                    pass
+            tool_uses.clear()
 
 
 def invoke_agent_sync(

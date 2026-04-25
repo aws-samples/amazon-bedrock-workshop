@@ -16,8 +16,14 @@ def update_scratchpad(code: str) -> str:
     Returns:
         Confirmation message
     """
+    print(f"[DEBUG] update_scratchpad called with {len(code)} chars")
+    print(f"[DEBUG] First 100 chars: {code[:100]}")
+    print(f"[DEBUG] Current session_state.code: {len(st.session_state.code)} chars")
+
     st.session_state.code = code
     st.session_state.code_generated_count = st.session_state.get('code_generated_count', 0) + 1
+
+    print(f"[DEBUG] After update, session_state.code: {len(st.session_state.code)} chars")
     return "✓ Code updated in scratchpad"
 
 

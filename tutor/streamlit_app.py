@@ -108,6 +108,14 @@ def call_bedrock_agent(prompt: str, conversation_history: list, stream_placehold
                         'tool_use_id': event.get('tool_use_id')
                     })
 
+                    # Handle update_scratchpad specially - update session state immediately
+                    if event['name'] == 'update_scratchpad':
+                        code = event['input'].get('code', '')
+                        if code:
+                            st.session_state.code = code
+                            st.session_state.code_generated_count = st.session_state.get('code_generated_count', 0) + 1
+                            print(f"[STREAMLIT] Scratchpad updated with {len(code)} chars")
+
             return response_text, tool_calls
 
         try:

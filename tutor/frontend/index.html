@@ -528,14 +528,13 @@
         function renderToolBadges(toolIds) {
             if (!toolIds || toolIds.length === 0) return '';
 
-            let html = '<div style="margin-top: 8px;">';
+            let html = '';
             toolIds.forEach(toolId => {
                 const tool = toolDataStore.get(toolId);
                 if (tool) {
                     html += `<span class="tool-badge" onclick="toggleToolDetails('${toolId}')" title="Click to expand details">🔧 ${tool.name} ▼</span>`;
                 }
             });
-            html += '</div>';
 
             // Add details sections
             toolIds.forEach(toolId => {

@@ -524,43 +524,6 @@
         const toolDataStore = new Map();
         let toolCounter = 0;
 
-        // Render tool badges with click handlers
-        function renderToolBadges(toolIds) {
-            if (!toolIds || toolIds.length === 0) return '';
-
-            let html = '';
-            toolIds.forEach(toolId => {
-                const tool = toolDataStore.get(toolId);
-                if (tool) {
-                    html += `<span class="tool-badge" onclick="toggleToolDetails('${toolId}')" title="Click to expand details">🔧 ${tool.name} ▼</span>`;
-                }
-            });
-
-            // Add details sections
-            toolIds.forEach(toolId => {
-                const tool = toolDataStore.get(toolId);
-                if (tool) {
-                    html += `
-                        <div id="${toolId}-details" class="tool-details">
-                            <div class="tool-details-header">🔧 ${tool.name}</div>
-                            <div class="tool-details-section">
-                                <div class="tool-details-label">Input:</div>
-                                <div class="tool-details-content">${JSON.stringify(tool.input, null, 2)}</div>
-                            </div>
-                            ${tool.output ? `
-                            <div class="tool-details-section">
-                                <div class="tool-details-label">Output:</div>
-                                <div class="tool-details-content">${tool.output}</div>
-                            </div>
-                            ` : ''}
-                        </div>
-                    `;
-                }
-            });
-
-            return html;
-        }
-
         // Toggle tool details visibility
         function toggleToolDetails(toolId) {
             const detailsEl = document.getElementById(`${toolId}-details`);
@@ -607,7 +570,7 @@
 
                         if (data.type === 'text') {
                             responseText += data.content;
-                            contentDiv.innerHTML = formatMarkdown(responseText) + renderToolBadges(toolsInMessage) + '<span class="streaming-indicator">▊</span>';
+                            contentDiv.innerHTML = formatMarkdown(responseText) + '<span class="streaming-indicator">▊</span>';
                             chatContainer.scrollTop = chatContainer.scrollHeight;
                         }
 
@@ -622,8 +585,11 @@
                             });
                             toolsInMessage.push(toolId);
 
-                            // Update display with new badge
-                            contentDiv.innerHTML = formatMarkdown(responseText) + renderToolBadges(toolsInMessage) + '<span class="streaming-indicator">▊</span>';
+                            // Insert badge inline in responseText
+                            responseText += ` <span class="tool-badge" onclick="toggleToolDetails('${toolId}')" title="Click to expand details">🔧 ${data.name} ▼</span> `;
+
+                            // Update display
+                            contentDiv.innerHTML = formatMarkdown(responseText) + '<span class="streaming-indicator">▊</span>';
 
                             // Handle update_scratchpad - update code immediately
                             if (data.name === 'update_scratchpad') {
@@ -647,8 +613,32 @@
                         }
 
                         else if (data.type === 'done') {
-                            // Remove streaming indicator and finalize tool badges
-                            contentDiv.innerHTML = formatMarkdown(responseText) + renderToolBadges(toolsInMessage);
+                            // Remove streaming indicator and add tool details sections
+                            let finalHtml = formatMarkdown(responseText);
+
+                            // Add tool details sections at the end
+                            toolsInMessage.forEach(toolId => {
+                                const tool = toolDataStore.get(toolId);
+                                if (tool) {
+                                    finalHtml += `
+                                        <div id="${toolId}-details" class="tool-details">
+                                            <div class="tool-details-header">🔧 ${tool.name}</div>
+                                            <div class="tool-details-section">
+                                                <div class="tool-details-label">Input:</div>
+                                                <div class="tool-details-content">${JSON.stringify(tool.input, null, 2)}</div>
+                                            </div>
+                                            ${tool.output ? `
+                                            <div class="tool-details-section">
+                                                <div class="tool-details-label">Output:</div>
+                                                <div class="tool-details-content">${tool.output}</div>
+                                            </div>
+                                            ` : ''}
+                                        </div>
+                                    `;
+                                }
+                            });
+
+                            contentDiv.innerHTML = finalHtml;
 
                             // Save assistant message
                             state.messages.push({ role: 'assistant', content: responseText });

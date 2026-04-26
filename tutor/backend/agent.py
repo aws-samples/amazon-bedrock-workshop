@@ -1,11 +1,11 @@
-"""Bedrock tutor agent using strands framework."""
-
-import asyncio
+"""
+Bedrock tutor agent - FastAPI version
+"""
 from typing import AsyncIterator, Optional, List, Dict, Any
 from strands import Agent
 from strands.models import BedrockModel
 from strands.types.content import Message
-import tutor_tools
+import tools
 
 
 def create_tutor_agent(
@@ -13,22 +13,12 @@ def create_tutor_agent(
     region: str,
     learning_path_content: Optional[str] = None
 ) -> Agent:
-    """
-    Create a tutor agent with tools and system prompt.
+    """Create a tutor agent with tools and system prompt"""
 
-    Args:
-        conversation_history: List of messages with 'role' and 'content'
-        region: AWS region for Bedrock
-        learning_path_content: Optional learning path curriculum to inject
-
-    Returns:
-        Configured Agent instance
-    """
     # Convert conversation history to strands Message format
     messages = []
     for msg in conversation_history:
         if msg["role"] in ["user", "assistant"]:
-            # Content must be list of content blocks
             content = msg["content"]
             if isinstance(content, str):
                 content = [{'text': content}]
@@ -50,30 +40,26 @@ MANDATORY WORKFLOW for ANY user question:
 1. FIRST: Call find_learning_paths(query="<user's topic>")
    - User asks about "responses API" → find_learning_paths(query="responses API")
    - User asks about "embeddings" → find_learning_paths(query="embeddings")
-   - DO NOT answer without searching first - you don't have this information
+   - DO NOT answer without searching first
 
 2. IF learning path found: Call load_learning_path(path_id="<id>")
-   - This gives you the structured curriculum to follow
-   - Follow it EXACTLY step-by-step, presenting each concept progressively
-   - Use ONLY the code patterns shown in the learning path (do NOT substitute with your own examples)
-   - Use update_scratchpad tool to write the exact code examples from the learning path
+   - Follow it EXACTLY step-by-step
+   - Use update_scratchpad tool to write code examples
+   - Use ONLY the code patterns shown in the learning path
 
 3. IF NO learning path found: Then answer from general knowledge
-   - Only after searching confirms no curated content exists
-
-You cannot answer questions about Bedrock topics without first using find_learning_paths. You must search the learning path database first.
 
 When explaining:
-- Use the update_scratchpad tool to write example code to the scratchpad
-- Point them to the scratchpad: "**Check the code in the scratchpad → and hit ▶ Run to try it!**"
-- Be encouraging and hands-on
+- Be CONCISE - screen space is limited
+- Use update_scratchpad tool to write code examples
+- Point to scratchpad: "**Check the code in the scratchpad → and hit ▶ Run!**"
+- Focus on essentials, not lengthy explanations
 
 Code guidelines:
 - Write complete, runnable Python using boto3
 - Always set region_name='{region}'
 - Use inference profile IDs (e.g., 'us.anthropic.claude-sonnet-4-5-20250929-v1:0')
 - Be concise and practical
-- Users can edit your code, so make it a good starting point
 
 Available models:
 - Claude Sonnet 4.5: us.anthropic.claude-sonnet-4-5-20250929-v1:0
@@ -85,8 +71,7 @@ Available models:
     # Add learning path context if provided
     if learning_path_content:
         system_prompt += f"\n\n# ACTIVE LEARNING PATH\n\n{learning_path_content}\n\n"
-        system_prompt += "Follow the teaching flow in the learning path. Present each step progressively, "
-        system_prompt += "write the code examples to the scratchpad, and guide the user through the concepts."
+        system_prompt += "Follow the teaching flow in the learning path. Present each step progressively."
 
     # Create agent
     agent = Agent(
@@ -95,9 +80,9 @@ Available models:
         ),
         messages=messages,
         tools=[
-            tutor_tools.update_scratchpad,
-            tutor_tools.find_learning_paths,
-            tutor_tools.load_learning_path
+            tools.update_scratchpad,
+            tools.find_learning_paths,
+            tools.load_learning_path
         ],
         system_prompt=system_prompt,
         callback_handler=None
@@ -115,20 +100,14 @@ async def invoke_agent(
     """
     Invoke the agent and stream response events.
 
-    Args:
-        prompt: User's current message
-        conversation_history: Previous messages
-        region: AWS region
-        learning_path_content: Optional learning path to inject
-
     Yields:
         Dict events with 'type' key:
-        - {'type': 'text', 'content': str} - Text chunks
-        - {'type': 'tool_use', 'name': str, 'input': dict} - Tool calls
+        - {'type': 'text', 'content': str}
+        - {'type': 'tool_use', 'name': str, 'input': dict, 'tool_use_id': str}
+        - {'type': 'tool_result', 'tool_use_id': str, 'content': str, 'status': str}
     """
     agent = create_tutor_agent(conversation_history, region, learning_path_content)
-
-    tool_uses = {}  # Track tool use by toolUseId
+    tool_uses = {}
 
     async for event in agent.stream_async(prompt):
         if not isinstance(event, dict):
@@ -146,15 +125,13 @@ async def invoke_agent(
             tool_input = tool_use.get('input', '')
 
             if tool_id:
-                # Track complete tool input
                 tool_uses[tool_id] = {
                     'name': tool_name,
                     'input': tool_input
                 }
 
-        # Tool use completed (contentBlockStop for tool)
+        # Tool use completed
         elif 'event' in event and 'contentBlockStop' in event['event']:
-            # Emit completed tool uses
             for tool_id, tool_data in tool_uses.items():
                 try:
                     import json
@@ -169,29 +146,25 @@ async def invoke_agent(
                     pass
             tool_uses.clear()
 
+        # Tool result events
+        elif 'message' in event:
+            message = event['message']
+            if message.get('role') == 'user':
+                for content_block in message.get('content', []):
+                    if 'toolResult' in content_block:
+                        tool_result = content_block['toolResult']
+                        tool_id = tool_result.get('toolUseId')
+                        status = tool_result.get('status', 'success')
 
-def invoke_agent_sync(
-    prompt: str,
-    conversation_history: List[Dict[str, str]],
-    region: str,
-    learning_path_content: Optional[str] = None
-) -> str:
-    """
-    Synchronous wrapper for invoke_agent.
+                        result_content = tool_result.get('content', [])
+                        result_text = ''
+                        for result_block in result_content:
+                            if 'text' in result_block:
+                                result_text += result_block['text']
 
-    Returns:
-        Complete response text
-    """
-    async def collect():
-        text = ""
-        async for chunk in invoke_agent(prompt, conversation_history, region, learning_path_content):
-            text += chunk
-        return text
-
-    try:
-        loop = asyncio.get_event_loop()
-    except RuntimeError:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-
-    return loop.run_until_complete(collect())
+                        yield {
+                            'type': 'tool_result',
+                            'tool_use_id': tool_id,
+                            'content': result_text,
+                            'status': status
+                        }

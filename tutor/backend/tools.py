@@ -1,8 +1,10 @@
-"""Tools for the Bedrock tutor agent using strands framework."""
-
-import streamlit as st
+"""
+Bedrock tutor tools - FastAPI version (no Streamlit dependency)
+"""
 from strands import tool
 from typing import List, Dict, Any
+from pathlib import Path
+import yaml
 
 
 @tool
@@ -16,14 +18,6 @@ def update_scratchpad(code: str) -> str:
     Returns:
         Confirmation message
     """
-    print(f"[DEBUG] update_scratchpad called with {len(code)} chars")
-    print(f"[DEBUG] First 100 chars: {code[:100]}")
-    print(f"[DEBUG] Current session_state.code: {len(st.session_state.code)} chars")
-
-    st.session_state.code = code
-    st.session_state.code_generated_count = st.session_state.get('code_generated_count', 0) + 1
-
-    print(f"[DEBUG] After update, session_state.code: {len(st.session_state.code)} chars")
     return "✓ Code updated in scratchpad"
 
 
@@ -31,7 +25,6 @@ def update_scratchpad(code: str) -> str:
 def find_learning_paths(query: str) -> List[Dict[str, str]]:
     """
     Search for relevant learning paths based on keywords or topics.
-    Use this when the user asks about a specific topic (e.g., 'responses API', 'embeddings', 'RAG').
 
     Args:
         query: Search query (keywords or topic to find)
@@ -39,12 +32,11 @@ def find_learning_paths(query: str) -> List[Dict[str, str]]:
     Returns:
         List of matching learning paths with id, title, and description
     """
-    from streamlit_app import LEARNING_PATHS
-
+    learning_paths = _load_learning_paths()
     query_lower = query.lower()
     matches = []
 
-    for path_id, path_data in LEARNING_PATHS.items():
+    for path_id, path_data in learning_paths.items():
         keywords = [k.lower() for k in path_data.get('keywords', [])]
         title = path_data.get('title', '').lower()
         description = path_data.get('description', '').lower()
@@ -63,28 +55,46 @@ def find_learning_paths(query: str) -> List[Dict[str, str]]:
 @tool
 def load_learning_path(path_id: str) -> Dict[str, Any]:
     """
-    Load a specific learning path by ID to get the full teaching content.
-    Use this after finding a relevant path with find_learning_paths.
+    Load a specific learning path by ID.
 
     Args:
-        path_id: The ID of the learning path to load (e.g., 'text-generation', 'embeddings', 'rag', 'distributed-inference')
+        path_id: The ID of the learning path
 
     Returns:
-        Learning path content with id, title, and full teaching curriculum
+        Learning path content
     """
-    from streamlit_app import LEARNING_PATHS
+    learning_paths = _load_learning_paths()
 
-    if path_id in LEARNING_PATHS:
-        path_data = LEARNING_PATHS[path_id]
-
-        # Set as current learning path
-        st.session_state.current_learning_path = path_id
-
+    if path_id in learning_paths:
+        path_data = learning_paths[path_id]
         return {
             'id': path_id,
             'title': path_data['title'],
             'description': path_data['description'],
-            'content': path_data['content'][:5000]  # Limit content size
+            'content': path_data['content'][:5000]
         }
     else:
         return {"error": f"Learning path '{path_id}' not found"}
+
+
+def _load_learning_paths():
+    """Helper to load learning paths from markdown files"""
+    learning_paths = {}
+    learning_paths_dir = Path(__file__).parent.parent.parent / "tutor" / "learning_paths"
+
+    if learning_paths_dir.exists():
+        for md_file in learning_paths_dir.glob("*.md"):
+            try:
+                content = md_file.read_text()
+                if content.startswith("---"):
+                    parts = content.split("---", 2)
+                    if len(parts) >= 3:
+                        frontmatter = yaml.safe_load(parts[1])
+                        learning_paths[frontmatter['id']] = {
+                            **frontmatter,
+                            'content': parts[2].strip()
+                        }
+            except Exception:
+                pass
+
+    return learning_paths

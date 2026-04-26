@@ -1,38 +1,43 @@
 #!/bin/bash
 set -e
 
-echo "🚀 Starting Bedrock Workshop Tutor..."
+echo "🚀 Starting Bedrock Tutor v2 (FastAPI + React)"
 
-# Navigate to script directory
 cd "$(dirname "$0")"
 
-# Create virtual environment if it doesn't exist
-if [ ! -d ".venv" ]; then
+# Create venv if needed
+if [ ! -d "venv" ]; then
     echo "📦 Creating virtual environment..."
-    python3 -m venv .venv
+    python3 -m venv venv
     echo "📥 Installing dependencies..."
-    .venv/bin/pip install --quiet --upgrade pip
-    .venv/bin/pip install --quiet -r requirements.txt
+    venv/bin/pip install --quiet --upgrade pip
+    venv/bin/pip install --quiet -r requirements.txt
 else
     echo "📦 Using existing virtual environment"
 fi
 
-# Verify installations
-echo "🔍 Verifying dependencies..."
-.venv/bin/python << 'PYEOF'
-import sys
-try:
-    import streamlit, boto3, openai, yaml, numpy
-    from code_editor import code_editor
-    print("✓ All dependencies available")
-except ImportError as e:
-    print(f"✗ Missing dependency: {e}")
-    sys.exit(1)
-PYEOF
+# Get proxy URL
+echo ""
+echo "========================================="
+if [ -f "/opt/ml/metadata/resource-metadata.json" ]; then
+    DOMAIN_ID=$(python3 -c "import json; print(json.load(open('/opt/ml/metadata/resource-metadata.json'))['DomainId'])")
+    SPACE_NAME=$(python3 -c "import json; print(json.load(open('/opt/ml/metadata/resource-metadata.json'))['SpaceName'])")
+    REGION=$(python3 -c "import json; arn=json.load(open('/opt/ml/metadata/resource-metadata.json'))['ResourceArn']; print(arn.split(':')[3])")
+    SPACE_URL=$(aws sagemaker describe-space --domain-id "$DOMAIN_ID" --space-name "$SPACE_NAME" --region "$REGION" --query 'Url' --output text 2>/dev/null)
 
-echo "🔧 Starting Streamlit..."
-exec .venv/bin/streamlit run streamlit_app.py \
-    --server.port=8501 \
-    --server.address=0.0.0.0 \
-    --server.headless=true \
-    --browser.gatherUsageStats=false
+    if [ -n "$SPACE_URL" ]; then
+        echo "✓ Detected SageMaker Space"
+        echo ""
+        echo "📡 Access your tutor at:"
+        echo "${SPACE_URL}/proxy/8004/"
+        echo "========================================="
+    fi
+fi
+echo ""
+
+echo "🔧 Starting FastAPI server on port 8004..."
+cd backend
+exec ../venv/bin/uvicorn main:app \
+    --host 0.0.0.0 \
+    --port 8004 \
+    --log-level info

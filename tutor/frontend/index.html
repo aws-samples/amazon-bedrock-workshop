@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Bedrock Workshop Tutor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            height: 100vh;
+            width: 100vw;
+            gap: 0;
+            overflow: hidden;
+        }
+
+        /* Left Panel: Chat */
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .header {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .learning-paths {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .learning-paths button {
+            padding: 10px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .learning-paths button:hover {
+            background: #e0e0e0;
+            border-color: #2196f3;
+        }
+
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 100%;
+            min-width: 0;
+        }
+
+        .message.user .message-content {
+            background: #e3f2fd;
+            align-self: flex-end;
+            max-width: 80%;
+        }
+
+        .message.assistant {
+            max-width: 100%;
+            min-width: 0;
+        }
+
+        .message.assistant .message-content {
+            background: #f5f5f5;
+            align-self: flex-start;
+            max-width: 95%;
+        }
+
+        .message-content {
+            padding: 12px 16px;
+            border-radius: 8px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+
+        .tool-badge {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            border-radius: 3px;
+            padding: 2px 6px;
+            margin: 0 2px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .chat-input-container {
+            padding: 15px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .chat-input-container input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .chat-input-container button {
+            padding: 12px 24px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .chat-input-container button:hover {
+            background: #1976d2;
+        }
+
+        .chat-input-container button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Right Panel: Code & Output */
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            background: #f5f5f5;
+            position: relative;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .stats {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+        }
+
+        .stats-toggle {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .stats-popup {
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            min-width: 200px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .code-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            padding-top: 50px;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .section-header {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .code-editor {
+            flex: 1;
+            background: #282c34;
+            color: #abb2bf;
+            border: none;
+            border-radius: 6px;
+            padding: 15px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+        }
+
+        .run-button {
+            margin-top: 10px;
+            padding: 12px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .run-button:hover {
+            background: #45a049;
+        }
+
+        .output-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .output {
+            flex: 1;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 6px;
+            padding: 15px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            overflow-y: auto;
+        }
+
+        /* Scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Streaming indicator */
+        .streaming-indicator {
+            display: inline-block;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Left Panel: Chat -->
+        <div class="left-panel">
+            <div class="header">
+                <h1>🧠 Amazon Bedrock Tutor</h1>
+            </div>
+
+            <!-- Learning Path Buttons -->
+            <div class="learning-paths">
+                <button onclick="startPath('text-generation')">Text Generation</button>
+                <button onclick="startPath('embeddings')">Embeddings</button>
+                <button onclick="startPath('rag')">RAG</button>
+                <button onclick="startPath('distributed-inference')">Responses API</button>
+                <button onclick="startPath('tool-use')">Tool Use</button>
+                <button onclick="startPath('comparison')">Model Comparison</button>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="chat-container" id="chat-container">
+                <div class="message assistant">
+                    <div class="message-content">
+                        👋 Welcome! I'm your Amazon Bedrock tutor.<br><br>
+                        Ask me anything — I'll explain concepts and write runnable code. Edit it, run it, break it, learn from it.<br><br>
+                        <strong>Want guided learning?</strong> Click a topic above or just ask in chat! I have structured learning paths on:<br>
+                        • Text Generation with Claude<br>
+                        • Embeddings & Semantic Search<br>
+                        • RAG with Knowledge Bases<br>
+                        • Responses API (OpenAI-compatible)<br><br>
+                        No labs, no steps. Just explore.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="chat-input-container">
+                <input
+                    type="text"
+                    id="chat-input"
+                    placeholder="Ask me anything about Amazon Bedrock..."
+                    onkeypress="handleInputKeypress(event)"
+                />
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+
+        <!-- Right Panel: Code & Output -->
+        <div class="right-panel">
+            <!-- Session Stats -->
+            <div class="stats">
+                <button class="stats-toggle" onclick="toggleStats()">📊</button>
+                <div class="stats-popup" id="stats-popup" style="display: none;">
+                    <div><strong>Session Stats</strong></div>
+                    <div>Messages: <span id="stat-messages">0</span></div>
+                    <div>Code generated: <span id="stat-code">0</span></div>
+                    <div>Code runs: <span id="stat-runs">0</span></div>
+                </div>
+            </div>
+
+            <!-- Code Editor -->
+            <div class="code-section">
+                <div class="section-header">Code Scratchpad</div>
+                <textarea
+                    id="code-editor"
+                    class="code-editor"
+                    spellcheck="false"
+                ># Code scratchpad - ask me to write examples!</textarea>
+                <button class="run-button" onclick="runCode()">▶ Run Code</button>
+            </div>
+
+            <!-- Output -->
+            <div class="output-section">
+                <div class="section-header">Output</div>
+                <pre id="output" class="output">Hit Run to execute your code</pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // App State
+        const state = {
+            messages: [],
+            isStreaming: false,
+            currentLearningPath: null,
+            stats: {
+                messages: 0,
+                codeGenerated: 0,
+                codeRuns: 0
+            }
+        };
+
+        // DOM Elements
+        const chatContainer = document.getElementById('chat-container');
+        const chatInput = document.getElementById('chat-input');
+        const codeEditor = document.getElementById('code-editor');
+        const outputEl = document.getElementById('output');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            chatInput.focus();
+            updateStats();
+        });
+
+        // Learning Path Handlers
+        function startPath(pathId) {
+            const messages = {
+                'text-generation': 'Guide me through text generation with Claude',
+                'embeddings': 'Guide me through embeddings with Titan',
+                'rag': 'Guide me through RAG with Knowledge Bases',
+                'distributed-inference': 'Guide me through the Responses API with Mantle',
+                'tool-use': 'Demonstrate function calling in Bedrock',
+                'comparison': 'Compare Claude Haiku and Sonnet side-by-side'
+            };
+
+            state.currentLearningPath = pathId;
+            sendMessage(messages[pathId] || 'Tell me about ' + pathId);
+        }
+
+        // Input Handler
+        function handleInputKeypress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // Send Message
+        function sendMessage(messageText = null) {
+            const text = messageText || chatInput.value.trim();
+            if (!text || state.isStreaming) return;
+
+            // Add user message
+            addMessage('user', text);
+            state.messages.push({ role: 'user', content: text });
+
+            // Clear input
+            chatInput.value = '';
+
+            // Start streaming response
+            streamResponse(text);
+        }
+
+        // Add Message to UI
+        function addMessage(role, content, isStreaming = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+            messageDiv.dataset.role = role;
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+
+            if (isStreaming) {
+                contentDiv.innerHTML = content + '<span class="streaming-indicator">▊</span>';
+            } else {
+                contentDiv.innerHTML = formatMarkdown(content);
+            }
+
+            messageDiv.appendChild(contentDiv);
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            return messageDiv;
+        }
+
+        // Stream Response from Backend using WebSocket
+        async function streamResponse(userMessage) {
+            state.isStreaming = true;
+            chatInput.disabled = true;
+
+            // Create assistant message container
+            const assistantMessage = addMessage('assistant', '', true);
+            const contentDiv = assistantMessage.querySelector('.message-content');
+
+            let responseText = '';
+
+            try {
+                // WebSocket URL
+                const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+                const wsPath = window.location.pathname.replace(/\/$/, '') + '/ws/chat';
+                const wsUrl = protocol + '//' + window.location.host + wsPath;
+                console.log('Connecting to:', wsUrl);
+
+                const ws = new WebSocket(wsUrl);
+
+                ws.onopen = () => {
+                    console.log('WebSocket connected');
+                    // Send request
+                    ws.send(JSON.stringify({
+                        message: userMessage,
+                        history: state.messages.slice(0, -1),
+                        learning_path_id: state.currentLearningPath
+                    }));
+                };
+
+                ws.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        console.log('Event:', data.type);
+
+                        if (data.type === 'text') {
+                            responseText += data.content;
+                            contentDiv.innerHTML = formatMarkdown(responseText) + '<span class="streaming-indicator">▊</span>';
+                            chatContainer.scrollTop = chatContainer.scrollHeight;
+                        }
+
+                        else if (data.type === 'tool_use') {
+                            // Add inline badge
+                            responseText += ` <span class="tool-badge">🔧 ${data.name}</span> `;
+                            contentDiv.innerHTML = formatMarkdown(responseText) + '<span class="streaming-indicator">▊</span>';
+
+                            // Handle update_scratchpad - update code immediately
+                            if (data.name === 'update_scratchpad') {
+                                const code = data.input.code || '';
+                                codeEditor.value = code;
+                                state.stats.codeGenerated++;
+                                updateStats();
+                            }
+
+                            chatContainer.scrollTop = chatContainer.scrollHeight;
+                        }
+
+                        else if (data.type === 'tool_result') {
+                            // Just continue - tool badge already shown
+                        }
+
+                        else if (data.type === 'done') {
+                            // Remove streaming indicator
+                            contentDiv.innerHTML = formatMarkdown(responseText);
+
+                            // Save assistant message
+                            state.messages.push({ role: 'assistant', content: responseText });
+                            state.stats.messages++;
+                            updateStats();
+
+                            // Close WebSocket and cleanup
+                            ws.close();
+                            state.isStreaming = false;
+                            chatInput.disabled = false;
+                            chatInput.focus();
+                        }
+
+                        else if (data.type === 'error') {
+                            contentDiv.innerHTML = `<span style="color: red;">Error: ${data.message}</span>`;
+                            ws.close();
+                            state.isStreaming = false;
+                            chatInput.disabled = false;
+                            chatInput.focus();
+                        }
+
+                    } catch (parseError) {
+                        console.error('Failed to parse message:', parseError);
+                    }
+                };
+
+                ws.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                    contentDiv.innerHTML = `<span style="color: red;">Connection error. Check console for details.</span>`;
+                    state.isStreaming = false;
+                    chatInput.disabled = false;
+                    chatInput.focus();
+                };
+
+                ws.onclose = () => {
+                    console.log('WebSocket closed');
+                    if (state.isStreaming) {
+                        state.isStreaming = false;
+                        chatInput.disabled = false;
+                        chatInput.focus();
+                    }
+                };
+
+            } catch (error) {
+                console.error('Stream error:', error);
+                contentDiv.innerHTML = `<span style="color: red;">Connection error: ${error.message}</span>`;
+                state.isStreaming = false;
+                chatInput.disabled = false;
+                chatInput.focus();
+            }
+        }
+
+        // Run Code
+        async function runCode() {
+            const code = codeEditor.value;
+            outputEl.textContent = 'Running...';
+
+            try {
+                const apiPath = window.location.pathname.replace(/\/$/, '') + '/api/execute';
+                const response = await fetch(apiPath, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code })
+                });
+
+                const result = await response.json();
+                outputEl.textContent = result.output || '(no output)';
+
+                state.stats.codeRuns++;
+                updateStats();
+
+            } catch (error) {
+                outputEl.textContent = `Error: ${error.message}`;
+            }
+        }
+
+        // Stats
+        function toggleStats() {
+            const popup = document.getElementById('stats-popup');
+            popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function updateStats() {
+            document.getElementById('stat-messages').textContent = state.stats.messages;
+            document.getElementById('stat-code').textContent = state.stats.codeGenerated;
+            document.getElementById('stat-runs').textContent = state.stats.codeRuns;
+        }
+
+        // Simple Markdown Formatter
+        function formatMarkdown(text) {
+            return text
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                .replace(/`(.+?)`/g, '<code>$1</code>')
+                .replace(/\n/g, '<br>');
+        }
+    </script>
+</body>
+</html>

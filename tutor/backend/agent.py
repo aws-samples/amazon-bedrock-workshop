@@ -43,9 +43,10 @@ MANDATORY WORKFLOW for ANY user question:
    - DO NOT answer without searching first
 
 2. IF learning path found: Call load_learning_path(path_id="<id>")
-   - Follow it EXACTLY step-by-step
+   - Follow it EXACTLY step-by-step - do not skip steps
    - Use update_scratchpad tool to write code examples
    - Use ONLY the code patterns shown in the learning path
+   - Follow ALL instructions in the learning path (especially model discovery patterns)
 
 3. IF NO learning path found: Then answer from general knowledge
 

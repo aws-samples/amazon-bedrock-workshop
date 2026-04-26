@@ -143,17 +143,58 @@
 
         .tool-details {
             display: none;
-            margin-top: 8px;
-            padding: 10px;
-            background: #f9f9f9;
-            border-left: 3px solid #4caf50;
-            border-radius: 4px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 600px;
+            max-height: 80vh;
+            padding: 20px;
+            background: white;
+            border: 2px solid #4caf50;
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
             font-size: 12px;
             line-height: 1.5;
+            z-index: 1000;
+            overflow-y: auto;
         }
 
         .tool-details.show {
             display: block;
+        }
+
+        .tool-details-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        .tool-details-overlay.show {
+            display: block;
+        }
+
+        .tool-details-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .tool-details-close:hover {
+            background: #d32f2f;
         }
 
         .tool-details-header {
@@ -527,9 +568,28 @@
         // Toggle tool details visibility
         function toggleToolDetails(toolId) {
             const detailsEl = document.getElementById(`${toolId}-details`);
-            if (detailsEl) {
-                detailsEl.classList.toggle('show');
+            const overlay = document.getElementById('tool-overlay');
+
+            if (detailsEl && overlay) {
+                const isShowing = detailsEl.classList.contains('show');
+
+                // Close all other details
+                document.querySelectorAll('.tool-details.show').forEach(el => el.classList.remove('show'));
+
+                if (!isShowing) {
+                    detailsEl.classList.add('show');
+                    overlay.classList.add('show');
+                } else {
+                    overlay.classList.remove('show');
+                }
             }
+        }
+
+        // Close tool details when clicking overlay
+        function closeToolDetails() {
+            document.querySelectorAll('.tool-details.show').forEach(el => el.classList.remove('show'));
+            const overlay = document.getElementById('tool-overlay');
+            if (overlay) overlay.classList.remove('show');
         }
 
         // Stream Response from Backend using WebSocket
@@ -613,15 +673,20 @@
                         }
 
                         else if (data.type === 'done') {
-                            // Remove streaming indicator and add tool details sections
-                            let finalHtml = formatMarkdown(responseText);
+                            // Remove streaming indicator
+                            contentDiv.innerHTML = formatMarkdown(responseText);
 
-                            // Add tool details sections at the end
+                            // Add tool details popups to document body (outside message container)
                             toolsInMessage.forEach(toolId => {
                                 const tool = toolDataStore.get(toolId);
                                 if (tool) {
-                                    finalHtml += `
-                                        <div id="${toolId}-details" class="tool-details">
+                                    // Check if details already exist
+                                    if (!document.getElementById(`${toolId}-details`)) {
+                                        const detailsDiv = document.createElement('div');
+                                        detailsDiv.id = `${toolId}-details`;
+                                        detailsDiv.className = 'tool-details';
+                                        detailsDiv.innerHTML = `
+                                            <button class="tool-details-close" onclick="closeToolDetails()">✕</button>
                                             <div class="tool-details-header">🔧 ${tool.name}</div>
                                             <div class="tool-details-section">
                                                 <div class="tool-details-label">Input:</div>
@@ -633,12 +698,20 @@
                                                 <div class="tool-details-content">${tool.output}</div>
                                             </div>
                                             ` : ''}
-                                        </div>
-                                    `;
+                                        `;
+                                        document.body.appendChild(detailsDiv);
+                                    }
                                 }
                             });
 
-                            contentDiv.innerHTML = finalHtml;
+                            // Ensure overlay exists
+                            if (!document.getElementById('tool-overlay')) {
+                                const overlay = document.createElement('div');
+                                overlay.id = 'tool-overlay';
+                                overlay.className = 'tool-details-overlay';
+                                overlay.onclick = closeToolDetails;
+                                document.body.appendChild(overlay);
+                            }
 
                             // Save assistant message
                             state.messages.push({ role: 'assistant', content: responseText });

@@ -118,11 +118,63 @@
             display: inline-block;
             background: #4caf50;
             color: white;
-            border-radius: 3px;
-            padding: 2px 6px;
-            margin: 0 2px;
-            font-size: 11px;
+            border-radius: 4px;
+            padding: 4px 8px;
+            margin: 2px;
+            font-size: 12px;
             font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .tool-badge:hover {
+            background: #45a049;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .tool-details {
+            display: none;
+            margin-top: 8px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-left: 3px solid #4caf50;
+            border-radius: 4px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .tool-details.show {
+            display: block;
+        }
+
+        .tool-details-header {
+            font-weight: 600;
+            color: #4caf50;
+            margin-bottom: 6px;
+        }
+
+        .tool-details-section {
+            margin-bottom: 8px;
+        }
+
+        .tool-details-label {
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 2px;
+        }
+
+        .tool-details-content {
+            background: white;
+            padding: 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 11px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 300px;
+            overflow-y: auto;
         }
 
         .chat-input-container {
@@ -461,6 +513,56 @@
             return messageDiv;
         }
 
+        // Store tool data for expandable details
+        const toolDataStore = new Map();
+        let toolCounter = 0;
+
+        // Render tool badges with click handlers
+        function renderToolBadges(toolIds) {
+            if (!toolIds || toolIds.length === 0) return '';
+
+            let html = '<div style="margin-top: 8px;">';
+            toolIds.forEach(toolId => {
+                const tool = toolDataStore.get(toolId);
+                if (tool) {
+                    html += `<span class="tool-badge" onclick="toggleToolDetails('${toolId}')" title="Click for details">🔧 ${tool.name}</span>`;
+                }
+            });
+            html += '</div>';
+
+            // Add details sections
+            toolIds.forEach(toolId => {
+                const tool = toolDataStore.get(toolId);
+                if (tool) {
+                    html += `
+                        <div id="${toolId}-details" class="tool-details">
+                            <div class="tool-details-header">🔧 ${tool.name}</div>
+                            <div class="tool-details-section">
+                                <div class="tool-details-label">Input:</div>
+                                <div class="tool-details-content">${JSON.stringify(tool.input, null, 2)}</div>
+                            </div>
+                            ${tool.output ? `
+                            <div class="tool-details-section">
+                                <div class="tool-details-label">Output:</div>
+                                <div class="tool-details-content">${tool.output}</div>
+                            </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }
+            });
+
+            return html;
+        }
+
+        // Toggle tool details visibility
+        function toggleToolDetails(toolId) {
+            const detailsEl = document.getElementById(`${toolId}-details`);
+            if (detailsEl) {
+                detailsEl.classList.toggle('show');
+            }
+        }
+
         // Stream Response from Backend using WebSocket
         async function streamResponse(userMessage) {
             state.isStreaming = true;
@@ -471,6 +573,7 @@
             const contentDiv = assistantMessage.querySelector('.message-content');
 
             let responseText = '';
+            const toolsInMessage = [];
 
             try {
                 // WebSocket URL
@@ -498,14 +601,23 @@
 
                         if (data.type === 'text') {
                             responseText += data.content;
-                            contentDiv.innerHTML = formatMarkdown(responseText) + '<span class="streaming-indicator">▊</span>';
+                            contentDiv.innerHTML = formatMarkdown(responseText) + renderToolBadges(toolsInMessage) + '<span class="streaming-indicator">▊</span>';
                             chatContainer.scrollTop = chatContainer.scrollHeight;
                         }
 
                         else if (data.type === 'tool_use') {
-                            // Add inline badge
-                            responseText += ` <span class="tool-badge">🔧 ${data.name}</span> `;
-                            contentDiv.innerHTML = formatMarkdown(responseText) + '<span class="streaming-indicator">▊</span>';
+                            // Store tool data
+                            const toolId = `tool-${toolCounter++}`;
+                            toolDataStore.set(toolId, {
+                                name: data.name,
+                                input: data.input,
+                                output: null,
+                                tool_use_id: data.tool_use_id
+                            });
+                            toolsInMessage.push(toolId);
+
+                            // Update display with new badge
+                            contentDiv.innerHTML = formatMarkdown(responseText) + renderToolBadges(toolsInMessage) + '<span class="streaming-indicator">▊</span>';
 
                             // Handle update_scratchpad - update code immediately
                             if (data.name === 'update_scratchpad') {
@@ -519,12 +631,18 @@
                         }
 
                         else if (data.type === 'tool_result') {
-                            // Just continue - tool badge already shown
+                            // Update tool output
+                            const toolData = Array.from(toolDataStore.values()).find(
+                                t => t.tool_use_id === data.tool_use_id
+                            );
+                            if (toolData) {
+                                toolData.output = data.content || '(no output)';
+                            }
                         }
 
                         else if (data.type === 'done') {
-                            // Remove streaming indicator
-                            contentDiv.innerHTML = formatMarkdown(responseText);
+                            // Remove streaming indicator and finalize tool badges
+                            contentDiv.innerHTML = formatMarkdown(responseText) + renderToolBadges(toolsInMessage);
 
                             // Save assistant message
                             state.messages.push({ role: 'assistant', content: responseText });

@@ -42,8 +42,9 @@ This learning path teaches how to use Amazon Bedrock's OpenAI-compatible APIs (P
 **What to show:**
 - Install OpenAI SDK (`pip install openai`)
 - Configure endpoint URL for Bedrock Mantle
-- Authenticate with short-term API key (DEFAULT)
+- Authenticate with AWS credentials via provide_token() (DEFAULT)
 - Test connection by listing models
+- **IMPORTANT:** When user asks to use a specific model (e.g., "Claude", "Haiku"), ALWAYS list models first, filter by keyword, then use the correct model ID
 
 **Code pattern:**
 ```python
@@ -77,6 +78,7 @@ for model in models.data[:5]:
 - Works seamlessly in SageMaker, EC2, or local environments with AWS CLI configured
 - Region must match your Bedrock resources (us-east-1, us-west-2, etc.)
 - Same models as standard Bedrock, different access pattern
+- **CRITICAL:** Model IDs in Mantle are different from standard Bedrock (e.g., `anthropic.claude-3-5-sonnet-20241022-v2:0` vs model names in Mantle). Always list and filter models to find the correct ID.
 
 **Authentication options (in order of preference):**
 1. **provide_token()** - Uses AWS credentials automatically (recommended)
@@ -92,23 +94,70 @@ for model in models.data[:5]:
 
 ---
 
-### Step 2: Chat Completions API (Stateless)
+### Step 2: Finding the Right Model ID
+**Goal:** Discover and select the correct model ID for your use case
+
+**What to show:**
+- List available models
+- Filter by keyword (e.g., "claude", "haiku", "sonnet")
+- Select the appropriate model ID
+
+**Code pattern:**
+```python
+from openai import OpenAI
+from aws_bedrock_token_generator import provide_token
+import os
+
+os.environ["OPENAI_BASE_URL"] = "https://bedrock-mantle.us-east-1.api.aws/v1"
+client = OpenAI(api_key=provide_token())
+
+# List all models
+models = client.models.list()
+
+# Filter for Claude Sonnet
+claude_models = [m for m in models.data if 'claude' in m.id.lower() and 'sonnet' in m.id.lower()]
+
+print("Claude Sonnet models:")
+for model in claude_models:
+    print(f"  - {model.id}")
+
+# Use the found model ID
+model_id = claude_models[0].id if claude_models else "anthropic.claude-3-5-sonnet-20241022-v2:0"
+print(f"\nUsing model: {model_id}")
+```
+
+**Key points:**
+- **ALWAYS list and filter models** when user asks for a specific model by name
+- Model IDs are verbose (e.g., `anthropic.claude-3-5-sonnet-20241022-v2:0`)
+- Filter by keywords: "claude", "haiku", "sonnet", "opus", "titan", "llama", etc.
+- Use the filtered model ID in subsequent requests
+
+---
+
+### Step 3: Chat Completions API (Stateless)
 **Goal:** Use the familiar OpenAI Chat Completions pattern
 
 **What to show:**
 - Send messages with full conversation history
 - Stateless pattern - each request is independent
-- Streaming responses
+- Use correct model ID from discovery
 
 **Code pattern:**
 ```python
 from openai import OpenAI
+from aws_bedrock_token_generator import provide_token
+import os
 
-client = OpenAI()
+os.environ["OPENAI_BASE_URL"] = "https://bedrock-mantle.us-east-1.api.aws/v1"
+client = OpenAI(api_key=provide_token())
+
+# Find Claude model
+models = [m for m in client.models.list().data if 'claude' in m.id.lower() and 'sonnet' in m.id.lower()]
+model_id = models[0].id
 
 # Single request with full context
 response = client.chat.completions.create(
-    model="openai.gpt-oss-120b",  # Bedrock model ID
+    model=model_id,
     messages=[
         {"role": "system", "content": "You are a helpful AWS expert."},
         {"role": "user", "content": "What is Amazon Bedrock?"}
@@ -157,7 +206,7 @@ print(chat("How does it compare to EBS?"))
 
 ---
 
-### Step 3: Responses API (Stateful)
+### Step 4: Responses API (Stateful)
 **Goal:** Use server-managed conversation state instead of client history
 
 **What to show:**
@@ -224,7 +273,7 @@ print(f"Turn 3: {response.output_text}")
 
 ---
 
-### Step 4: Streaming with Responses API
+### Step 5: Streaming with Responses API
 **Goal:** Stream responses for progressive display
 
 **What to show:**
@@ -297,7 +346,7 @@ resp_id = stream_response("What models does it support?", previous_id=resp_id)
 
 ---
 
-### Step 5: Retrieving Previous Responses
+### Step 6: Retrieving Previous Responses
 **Goal:** Access conversation history via response IDs
 
 **What to show:**
@@ -345,7 +394,7 @@ print(f"Status: {retrieved.status}")
 
 ---
 
-### Step 6: Background Mode for Async Inference
+### Step 7: Background Mode for Async Inference
 **Goal:** Submit long-running requests asynchronously
 
 **What to show:**

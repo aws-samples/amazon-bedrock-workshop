@@ -33,8 +33,8 @@ This learning path teaches how to use Amazon Bedrock's OpenAI-compatible APIs (P
 
 ⚠️ **CRITICAL INSTRUCTION FOR THIS LEARNING PATH:**
 - **USE OPENAI SDK ONLY** - Do NOT use boto3 or bedrock-runtime client
-- **DEFAULT TO API KEYS** - Show short-term API key authentication first
-- **ONLY MENTION IAM IF ASKED** - AWS credentials (SigV4) are an advanced option
+- **DEFAULT TO provide_token()** - Use AWS credentials via token generator (works in SageMaker/notebooks)
+- **API KEYS ARE ALTERNATIVE** - Only mention short-term API keys if user asks or has issues with credentials
 
 ### Step 1: Setup with OpenAI SDK
 **Goal:** Configure the OpenAI SDK to connect to Bedrock's Mantle endpoint
@@ -47,18 +47,20 @@ This learning path teaches how to use Amazon Bedrock's OpenAI-compatible APIs (P
 
 **Code pattern:**
 ```python
-# Install the OpenAI SDK
-# !pip install openai
+# Install the OpenAI SDK and AWS token generator
+# !pip install openai aws-bedrock-token-generator
 
 import os
 from openai import OpenAI
+from aws_bedrock_token_generator import provide_token
 
 # Configure Bedrock Mantle endpoint
-os.environ["OPENAI_BASE_URL"] = "https://bedrock-mantle.REGION.api.aws/v1"
-os.environ["OPENAI_API_KEY"] = "your-bedrock-api-key-here"
+os.environ["OPENAI_BASE_URL"] = "https://bedrock-mantle.us-east-1.api.aws/v1"
 
-# Create client
-client = OpenAI()
+# Use AWS credentials (default method in SageMaker/notebooks)
+client = OpenAI(
+    api_key=provide_token()
+)
 
 # Test connection - list available models
 models = client.models.list()
@@ -71,23 +73,22 @@ for model in models.data[:5]:
 
 **Key points to emphasize:**
 - Mantle provides OpenAI SDK compatibility for Bedrock
-- API keys are created in the Bedrock console (not AWS IAM)
+- `provide_token()` automatically uses your AWS credentials (IAM role/profile)
+- Works seamlessly in SageMaker, EC2, or local environments with AWS CLI configured
 - Region must match your Bedrock resources (us-east-1, us-west-2, etc.)
 - Same models as standard Bedrock, different access pattern
 
-**How to get API key:**
-1. Open Bedrock console
-2. Navigate to: Left sidebar → API keys
-3. Click "Generate key"
-4. Choose "Short-term key" (expires in hours/days)
-5. Copy the key and paste in code above
+**Authentication options (in order of preference):**
+1. **provide_token()** - Uses AWS credentials automatically (recommended)
+2. **API keys** - Generate short-term keys in Bedrock console (alternative)
 
-**Note:** AWS IAM credentials are also supported but more complex. Only mention if user specifically asks about alternatives to API keys.
+**Note:** API keys can be used if you prefer explicit credentials or are outside AWS environment.
 
 **Common pitfalls:**
 - Using boto3/bedrock-runtime instead of OpenAI SDK ❌
 - Wrong endpoint URL format (must include region and /v1)
 - Not setting OPENAI_BASE_URL before creating client
+- Forgetting to install aws-bedrock-token-generator package
 
 ---
 
@@ -431,8 +432,8 @@ https://bedrock-mantle.{REGION}.api.aws/v1
 ```
 
 **Authentication:**
-- Bedrock API keys (generated in console)
-- SigV4 signing with AWS credentials (requires token generator)
+- **Primary:** AWS credentials via `provide_token()` from aws-bedrock-token-generator
+- **Alternative:** Bedrock API keys (generated in console)
 
 **Key Differences:**
 

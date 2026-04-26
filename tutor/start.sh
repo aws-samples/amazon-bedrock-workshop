@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "🚀 Starting Bedrock Tutor v2 (FastAPI + React)"
+echo "🚀 Starting Amazon Bedrock Interactive Tutor"
 
 cd "$(dirname "$0")"
 
@@ -29,15 +29,22 @@ if [ -f "/opt/ml/metadata/resource-metadata.json" ]; then
         echo "✓ Detected SageMaker Space"
         echo ""
         echo "📡 Access your tutor at:"
-        echo "${SPACE_URL}/proxy/8004/"
+        echo "${SPACE_URL}/proxy/8002/"
         echo "========================================="
     fi
 fi
 echo ""
 
-echo "🔧 Starting FastAPI server on port 8004..."
+echo "🔧 Starting FastAPI server on port 8002..."
 cd backend
+
+# Install websockets if not already installed
+../venv/bin/pip show websockets > /dev/null 2>&1 || {
+    echo "📦 Installing websockets..."
+    ../venv/bin/pip install --quiet websockets
+}
+
 exec ../venv/bin/uvicorn main:app \
     --host 0.0.0.0 \
-    --port 8004 \
+    --port 8002 \
     --log-level info

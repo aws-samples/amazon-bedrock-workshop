@@ -69,6 +69,12 @@ MAKING IT INTERACTIVE (use these tools strategically):
 - **update_scratchpad(code, highlight_lines)**: Can highlight when writing new code
   Example: update_scratchpad(code, "15-18") to draw attention to key lines
 
+- **update_learning_progress(path_id, steps_completed, total_steps)**: CRITICAL - call this whenever you cover a step!
+  Updates the visual progress bar in the learning path button
+  Example: After teaching "Step 1: Setup", call update_learning_progress("distributed-inference", ["Step 1"], 7)
+  If user asks about Step 3 first, mark it: update_learning_progress("distributed-inference", ["Step 3"], 7)
+  Track cumulative progress: steps_completed should include ALL covered steps so far
+
 DYNAMIC TEACHING:
 - If user's question already covers learning path steps, acknowledge it and don't repeat
 - Remember what you've taught in THIS conversation
@@ -116,6 +122,7 @@ Available models:
             tools.update_scratchpad,
             tools.highlight_code,
             tools.give_user_task,
+            tools.update_learning_progress,
             tools.find_learning_paths,
             tools.load_learning_path
         ],

@@ -63,6 +63,7 @@
         }
 
         .learning-paths button {
+            position: relative;
             padding: 10px;
             background: #f0f0f0;
             border: 1px solid #ddd;
@@ -70,11 +71,27 @@
             cursor: pointer;
             font-size: 13px;
             transition: all 0.2s;
+            overflow: hidden;
         }
 
         .learning-paths button:hover {
             background: #e0e0e0;
             border-color: #2196f3;
+        }
+
+        .learning-paths button .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4caf50 0%, #45a049 100%);
+            transition: width 0.5s ease-out;
+            width: 0%;
+        }
+
+        .learning-paths button .button-text {
+            position: relative;
+            z-index: 1;
         }
 
         .chat-container {
@@ -485,12 +502,30 @@
 
             <!-- Learning Path Buttons -->
             <div class="learning-paths">
-                <button onclick="startPath('text-generation')">Text Generation</button>
-                <button onclick="startPath('embeddings')">Embeddings</button>
-                <button onclick="startPath('rag')">RAG</button>
-                <button onclick="startPath('distributed-inference')">Responses API</button>
-                <button onclick="startPath('tool-use')">Tool Use</button>
-                <button onclick="startPath('comparison')">Model Comparison</button>
+                <button onclick="startPath('text-generation')" data-path-id="text-generation">
+                    <span class="button-text">Text Generation</span>
+                    <div class="progress-bar"></div>
+                </button>
+                <button onclick="startPath('embeddings')" data-path-id="embeddings">
+                    <span class="button-text">Embeddings</span>
+                    <div class="progress-bar"></div>
+                </button>
+                <button onclick="startPath('rag')" data-path-id="rag">
+                    <span class="button-text">RAG</span>
+                    <div class="progress-bar"></div>
+                </button>
+                <button onclick="startPath('distributed-inference')" data-path-id="distributed-inference">
+                    <span class="button-text">Responses API</span>
+                    <div class="progress-bar"></div>
+                </button>
+                <button onclick="startPath('tool-use')" data-path-id="tool-use">
+                    <span class="button-text">Tool Use</span>
+                    <div class="progress-bar"></div>
+                </button>
+                <button onclick="startPath('comparison')" data-path-id="comparison">
+                    <span class="button-text">Model Comparison</span>
+                    <div class="progress-bar"></div>
+                </button>
             </div>
 
             <!-- Chat Messages -->
@@ -656,6 +691,20 @@
                     taskBanner.remove();
                 }
             }, 20000);
+        }
+
+        function updatePathProgress(pathId, stepsCompleted, totalSteps) {
+            // Find button by data-path-id
+            const button = document.querySelector(`button[data-path-id="${pathId}"]`);
+            if (!button) return;
+
+            const progressBar = button.querySelector('.progress-bar');
+            if (!progressBar) return;
+
+            const progressPct = (stepsCompleted / totalSteps) * 100;
+            progressBar.style.width = `${progressPct}%`;
+
+            console.log(`Progress updated: ${pathId} - ${stepsCompleted}/${totalSteps} (${progressPct}%)`);
         }
 
         // Initialize
@@ -874,6 +923,14 @@
                                 const taskDescription = data.input.task_description;
                                 const hint = data.input.hint;
                                 showUserTask(taskDescription, hint);
+                            }
+
+                            // Handle update_learning_progress - update progress bar
+                            else if (data.name === 'update_learning_progress') {
+                                const pathId = data.input.path_id;
+                                const stepsCompleted = data.input.steps_completed || [];
+                                const totalSteps = data.input.total_steps || 1;
+                                updatePathProgress(pathId, stepsCompleted.length, totalSteps);
                             }
 
                             chatContainer.scrollTop = chatContainer.scrollHeight;

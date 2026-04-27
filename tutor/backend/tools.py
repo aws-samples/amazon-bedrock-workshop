@@ -61,6 +61,28 @@ def give_user_task(task_description: str, hint: str = None) -> str:
 
 
 @tool
+def update_learning_progress(
+    path_id: str,
+    steps_completed: List[str],
+    total_steps: int
+) -> str:
+    """
+    Update the visual progress indicator for a learning path.
+    Call this whenever you cover a concept from the active learning path.
+
+    Args:
+        path_id: The learning path ID (e.g., "distributed-inference")
+        steps_completed: List of step names/numbers covered (e.g., ["Step 1: Setup", "Step 3: Streaming"])
+        total_steps: Total number of steps in this learning path
+
+    Returns:
+        Confirmation of progress update
+    """
+    progress_pct = int((len(steps_completed) / total_steps) * 100) if total_steps > 0 else 0
+    return f"✓ Progress updated: {len(steps_completed)}/{total_steps} steps completed ({progress_pct}%)"
+
+
+@tool
 def find_learning_paths(query: str) -> List[Dict[str, str]]:
     """
     Search for relevant learning paths based on keywords or topics.

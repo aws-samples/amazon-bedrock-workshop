@@ -8,17 +8,56 @@ import yaml
 
 
 @tool
-def update_scratchpad(code: str) -> str:
+def update_scratchpad(code: str, highlight_lines: str = None) -> str:
     """
-    Updates the code scratchpad with new Python code.
+    Updates the code scratchpad with new Python code and optionally highlights specific lines.
 
     Args:
         code: Complete Python code to display in the scratchpad
+        highlight_lines: Optional line numbers to highlight (e.g., "5-7" or "3,5,8-10")
 
     Returns:
         Confirmation message
     """
+    if highlight_lines:
+        return f"✓ Code updated in scratchpad (highlighted lines: {highlight_lines})"
     return "✓ Code updated in scratchpad"
+
+
+@tool
+def highlight_code(line_range: str, explanation: str = None) -> str:
+    """
+    Highlights and scrolls to specific lines in the current code scratchpad.
+    Use this to draw attention to relevant code sections when explaining concepts.
+
+    Args:
+        line_range: Line numbers to highlight (e.g., "5-7" or "3,5,8-10")
+        explanation: Optional brief explanation of what you're highlighting
+
+    Returns:
+        Confirmation message
+    """
+    if explanation:
+        return f"✓ Highlighted lines {line_range}: {explanation}"
+    return f"✓ Highlighted lines {line_range}"
+
+
+@tool
+def give_user_task(task_description: str, hint: str = None) -> str:
+    """
+    Give the user a hands-on task to try in the code scratchpad.
+    Use this to make learning interactive - ask them to modify code, try different parameters, etc.
+
+    Args:
+        task_description: Clear description of what the user should try
+        hint: Optional hint to help them succeed
+
+    Returns:
+        Confirmation that task was presented
+    """
+    if hint:
+        return f"✓ Task presented to user with hint"
+    return f"✓ Task presented to user"
 
 
 @tool

@@ -43,18 +43,44 @@ MANDATORY WORKFLOW for ANY user question:
    - DO NOT answer without searching first
 
 2. IF learning path found: Call load_learning_path(path_id="<id>")
-   - Follow it EXACTLY step-by-step - do not skip steps
-   - Use update_scratchpad tool to write code examples
+   - This gives you the teaching curriculum but BE DYNAMIC
+   - The learning path has steps, but adapt based on user's questions
+   - If user asks about Step 3 content first, answer it and mark Step 3 as covered
+   - Track which concepts from the path you've covered
+   - Don't force linear progression - follow the user's curiosity
    - Use ONLY the code patterns shown in the learning path
    - Follow ALL instructions in the learning path (especially model discovery patterns)
 
 3. IF NO learning path found: Then answer from general knowledge
 
+MAKING IT INTERACTIVE (use these tools strategically):
+
+- **highlight_code(line_range, explanation)**: When explaining existing code, highlight the relevant lines
+  Example: "Let me show you the authentication part" → highlight_code("10-12", "AWS credentials setup")
+
+- **give_user_task(task_description, hint)**: About 20% of the time, give hands-on tasks
+  Don't just show code - ask them to try something!
+  Examples:
+  - "Try changing the model_id to a different Claude version"
+  - "Modify the prompt to ask about a different AWS service"
+  - "Add error handling to catch API exceptions"
+  Make tasks relevant to what you just taught
+
+- **update_scratchpad(code, highlight_lines)**: Can highlight when writing new code
+  Example: update_scratchpad(code, "15-18") to draw attention to key lines
+
+DYNAMIC TEACHING:
+- If user's question already covers learning path steps, acknowledge it and don't repeat
+- Remember what you've taught in THIS conversation
+- Adapt the path to their pace and questions
+- If they ask advanced questions, skip basics they clearly know
+- If they're confused, break down into smaller steps
+
 When explaining:
 - Be CONCISE - screen space is limited
-- Use update_scratchpad tool to write code examples
-- Point to scratchpad: "**Check the code in the scratchpad → and hit ▶ Run!**"
-- Focus on essentials, not lengthy explanations
+- Use code highlighting to point to specific parts
+- Give hands-on tasks to reinforce learning
+- Make it conversational, not lecturing
 
 Code guidelines:
 - Write complete, runnable Python using boto3
@@ -72,7 +98,13 @@ Available models:
     # Add learning path context if provided
     if learning_path_content:
         system_prompt += f"\n\n# ACTIVE LEARNING PATH\n\n{learning_path_content}\n\n"
-        system_prompt += "Follow the teaching flow in the learning path. Present each step progressively."
+        system_prompt += """This is your curriculum guide, but be ADAPTIVE:
+- Track which steps/concepts you've already covered in this conversation
+- If user asks about Step 5 first, teach it and remember you covered it
+- Don't repeat concepts the user clearly understands
+- Use the learning path as a checklist, not a script
+- If conversation diverges, that's fine - follow their interest
+- Periodically check if there are important concepts from the path they haven't seen yet"""
 
     # Create agent
     agent = Agent(
@@ -82,6 +114,8 @@ Available models:
         messages=messages,
         tools=[
             tools.update_scratchpad,
+            tools.highlight_code,
+            tools.give_user_task,
             tools.find_learning_paths,
             tools.load_learning_path
         ],

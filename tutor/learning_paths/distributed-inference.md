@@ -94,13 +94,15 @@ for model in models.data[:5]:
 
 ---
 
-### Step 2: Finding the Right Model ID
-**Goal:** Discover and select the correct model ID for your use case
+### Step 2: Finding Responses API Compatible Models
+**Goal:** Discover which models support the Responses API
+
+⚠️ **CRITICAL:** Not all models support the Responses API! You'll get a 400 error: `The model 'X' does not support the '/v1/responses' API`
 
 **What to show:**
 - List available models
-- Filter by keyword (e.g., "claude", "haiku", "sonnet")
-- Select the appropriate model ID
+- Filter for Responses API compatible models (typically OpenAI models)
+- Chat Completions API works with ALL models, Responses API only works with specific models
 
 **Code pattern:**
 ```python
@@ -113,34 +115,40 @@ client = OpenAI(api_key=provide_token())
 
 # List all models
 models = client.models.list()
+print(f"Total models: {len(models.data)}\n")
 
-# Filter for Claude Sonnet
-claude_models = [m for m in models.data if 'claude' in m.id.lower() and 'sonnet' in m.id.lower()]
+# Responses API typically works with OpenAI-family models
+# For other models (Claude, Llama, etc.), use Chat Completions API instead
+openai_models = [m for m in models.data if 'openai' in m.id.lower() or 'gpt' in m.id.lower()]
 
-print("Claude Sonnet models:")
-for model in claude_models:
+print("Models compatible with Responses API (OpenAI family):")
+for model in openai_models[:5]:
     print(f"  - {model.id}")
 
-# Use the found model ID
-model_id = claude_models[0].id if claude_models else "anthropic.claude-3-5-sonnet-20241022-v2:0"
-print(f"\nUsing model: {model_id}")
+if openai_models:
+    model_id = openai_models[0].id
+    print(f"\n✓ Using: {model_id}")
+else:
+    print("\n⚠️  No OpenAI models found. Use Chat Completions API for other models.")
 ```
 
 **Key points:**
-- **ALWAYS list and filter models** when user asks for a specific model by name
-- Model IDs are verbose (e.g., `anthropic.claude-3-5-sonnet-20241022-v2:0`)
-- Filter by keywords: "claude", "haiku", "sonnet", "opus", "titan", "llama", etc.
-- Use the filtered model ID in subsequent requests
+- **Responses API compatibility is limited** - primarily OpenAI-family models
+- Claude, Llama, Titan, and most other models will throw 400 errors with Responses API
+- **Chat Completions API works with ALL models** - use this for broader compatibility
+- Always test a model first or filter for known-compatible families
+- If you get 400 "does not support '/v1/responses' API" → switch to Chat Completions (Step 3)
 
 ---
 
-### Step 3: Chat Completions API (Stateless)
-**Goal:** Use the familiar OpenAI Chat Completions pattern
+### Step 3: Chat Completions API (Works with ALL Models)
+**Goal:** Use the familiar OpenAI Chat Completions pattern - compatible with every Bedrock model
 
 **What to show:**
 - Send messages with full conversation history
 - Stateless pattern - each request is independent
-- Use correct model ID from discovery
+- Works with Claude, Llama, Titan, Nova, and ALL other models
+- **Use this when Responses API throws compatibility errors**
 
 **Code pattern:**
 ```python
@@ -151,9 +159,12 @@ import os
 os.environ["OPENAI_BASE_URL"] = "https://bedrock-mantle.us-east-1.api.aws/v1"
 client = OpenAI(api_key=provide_token())
 
-# Find Claude model
-models = [m for m in client.models.list().data if 'claude' in m.id.lower() and 'sonnet' in m.id.lower()]
-model_id = models[0].id
+# Works with ANY model - let's use Claude
+models = client.models.list().data
+claude_models = [m for m in models if 'claude' in m.id.lower() and 'sonnet' in m.id.lower()]
+model_id = claude_models[0].id if claude_models else models[0].id
+
+print(f"Using model: {model_id}\n")
 
 # Single request with full context
 response = client.chat.completions.create(
@@ -170,11 +181,25 @@ print(response.choices[0].message.content)
 **Key points to emphasize:**
 - Chat Completions is stateless - you manage the conversation history
 - Must send full message history with each request
-- Same API as OpenAI, works with Bedrock models
+- **Works with ALL Bedrock models** (Claude, Llama, Titan, Nova, OpenAI, etc.)
+- Same API as OpenAI, seamless compatibility
 - Client manages all context
+- **Default choice for most use cases**
 
-**Multi-turn conversation:**
+**Multi-turn conversation with Chat Completions:**
 ```python
+from openai import OpenAI
+from aws_bedrock_token_generator import provide_token
+import os
+
+os.environ["OPENAI_BASE_URL"] = "https://bedrock-mantle.us-east-1.api.aws/v1"
+client = OpenAI(api_key=provide_token())
+
+# Find any model (Chat Completions works with all)
+models = client.models.list().data
+model_id = models[0].id if models else "anthropic.claude-3-5-sonnet-20241022-v2:0"
+print(f"Using: {model_id}\n")
+
 # Client-managed conversation history
 messages = [
     {"role": "system", "content": "You are a helpful AWS expert."}
@@ -184,7 +209,7 @@ def chat(user_message):
     messages.append({"role": "user", "content": user_message})
     
     response = client.chat.completions.create(
-        model="openai.gpt-oss-120b",
+        model=model_id,
         messages=messages
     )
     
@@ -193,36 +218,56 @@ def chat(user_message):
     return assistant_reply
 
 # Turn 1
-print(chat("What is Amazon S3?"))
+print("Q: What is Amazon S3?")
+print(f"A: {chat('What is Amazon S3?')}\n")
 
 # Turn 2 - context maintained by client
-print(chat("How does it compare to EBS?"))
+print("Q: How does it compare to EBS?")
+print(f"A: {chat('How does it compare to EBS?')}")
 ```
 
 **Best practices:**
 - Keep conversation history manageable (token limits apply)
 - Trim old messages when history gets long
 - System message sets behavior for entire conversation
+- Works with **any model** on Bedrock Mantle endpoint
 
 ---
 
-### Step 4: Responses API (Stateful)
+### Step 4: Responses API (Stateful - Limited Model Support)
 **Goal:** Use server-managed conversation state instead of client history
+
+⚠️ **IMPORTANT:** Responses API only works with specific models (primarily OpenAI family). If you get a 400 error, use Chat Completions API instead.
 
 **What to show:**
 - Responses API maintains context server-side
 - Chain responses using `previous_response_id`
 - No need to send full conversation history
+- Only use with compatible models (check Step 2)
 
 **Code pattern:**
 ```python
 from openai import OpenAI
+from aws_bedrock_token_generator import provide_token
+import os
 
-client = OpenAI()
+os.environ["OPENAI_BASE_URL"] = "https://bedrock-mantle.us-east-1.api.aws/v1"
+client = OpenAI(api_key=provide_token())
+
+# Find OpenAI-compatible model for Responses API
+models = client.models.list().data
+openai_models = [m for m in models if 'openai' in m.id.lower() or 'gpt' in m.id.lower()]
+
+if not openai_models:
+    print("⚠️  No Responses API compatible models found. Use Chat Completions instead.")
+    exit()
+
+model_id = openai_models[0].id
+print(f"Using: {model_id}\n")
 
 # Turn 1 - initial request
 response = client.responses.create(
-    model="openai.gpt-oss-120b",
+    model=model_id,
     input=[
         {"role": "user", "content": "What is the capital of France?"}
     ]
@@ -233,7 +278,7 @@ print(f"Response ID: {response.id}\n")
 
 # Turn 2 - chain using previous_response_id
 response = client.responses.create(
-    model="openai.gpt-oss-120b",
+    model=model_id,
     input=[
         {"role": "user", "content": "What river runs through it?"}
     ],
@@ -245,7 +290,7 @@ print(f"Response ID: {response.id}\n")
 
 # Turn 3 - continue the chain
 response = client.responses.create(
-    model="openai.gpt-oss-120b",
+    model=model_id,
     input=[
         {"role": "user", "content": "How long is that river?"}
     ],
@@ -261,6 +306,8 @@ print(f"Turn 3: {response.output_text}")
 - Each response gets a unique ID for retrieval/chaining
 - Significantly reduces payload size (only send new message)
 - Better for long conversations
+- **⚠️  Limited model compatibility** - only OpenAI-family models typically work
+- If you get 400 "does not support '/v1/responses' API" → use Chat Completions instead
 
 **Responses API vs Chat Completions:**
 | Chat Completions | Responses API |
@@ -269,28 +316,37 @@ print(f"Turn 3: {response.output_text}")
 | Client manages history | Server manages history |
 | Send full context each time | Send only new message + ID |
 | Larger payloads | Smaller payloads |
+| **Works with ALL models** | **Limited model support** |
 | OpenAI-standard | Bedrock-specific extension |
 
 ---
 
-### Step 5: Streaming with Responses API
-**Goal:** Stream responses for progressive display
+### Step 5: Streaming with Chat Completions (All Models)
+**Goal:** Stream responses for progressive display - works with ALL models
 
 **What to show:**
 - Stream text as it's generated
 - Handle streaming events
-- Maintain conversation context while streaming
+- Works with Claude, Llama, OpenAI, and all other models
 
 **Code pattern:**
 ```python
 from openai import OpenAI
+from aws_bedrock_token_generator import provide_token
+import os
 
-client = OpenAI()
+os.environ["OPENAI_BASE_URL"] = "https://bedrock-mantle.us-east-1.api.aws/v1"
+client = OpenAI(api_key=provide_token())
+
+# Find any model (streaming works with all)
+models = client.models.list().data
+model_id = models[0].id if models else "anthropic.claude-3-5-sonnet-20241022-v2:0"
+print(f"Using: {model_id}\n")
 
 # Stream a response
-stream = client.responses.create(
-    model="openai.gpt-oss-120b",
-    input=[
+stream = client.chat.completions.create(
+    model=model_id,
+    messages=[
         {"role": "user", "content": "Explain how S3 encryption works."}
     ],
     stream=True
@@ -298,9 +354,9 @@ stream = client.responses.create(
 
 print("Streaming: ", end="", flush=True)
 
-for event in stream:
-    if hasattr(event, 'type') and event.type == 'response.output_text.delta':
-        print(event.delta, end="", flush=True)
+for chunk in stream:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end="", flush=True)
 
 print("\n")
 ```
@@ -308,40 +364,52 @@ print("\n")
 **Key points to emphasize:**
 - Streaming provides better UX (progressive display)
 - Events arrive incrementally - display as received
-- Still get a response ID for chaining
 - Use `flush=True` for immediate display
+- **Works with ALL models** on Bedrock Mantle
 
 **Streaming multi-turn conversation:**
 ```python
-def stream_response(user_input, previous_id=None):
-    """Stream a response and return the response ID."""
-    stream = client.responses.create(
-        model="openai.gpt-oss-120b",
-        input=[{"role": "user", "content": user_input}],
-        previous_response_id=previous_id,
+from openai import OpenAI
+from aws_bedrock_token_generator import provide_token
+import os
+
+os.environ["OPENAI_BASE_URL"] = "https://bedrock-mantle.us-east-1.api.aws/v1"
+client = OpenAI(api_key=provide_token())
+
+models = client.models.list().data
+model_id = models[0].id
+
+messages = [{"role": "system", "content": "You are a helpful AWS expert."}]
+
+def stream_chat(user_input):
+    """Stream a response and update conversation history."""
+    messages.append({"role": "user", "content": user_input})
+    
+    stream = client.chat.completions.create(
+        model=model_id,
+        messages=messages,
         stream=True
     )
     
-    response_id = None
-    for event in stream:
-        if hasattr(event, 'type'):
-            if event.type == 'response.output_text.delta':
-                print(event.delta, end="", flush=True)
-            elif event.type == 'response.done':
-                response_id = event.response.id
+    full_response = ""
+    for chunk in stream:
+        if chunk.choices[0].delta.content:
+            content = chunk.choices[0].delta.content
+            print(content, end="", flush=True)
+            full_response += content
     
+    messages.append({"role": "assistant", "content": full_response})
     print("\n")
-    return response_id
 
 # Turn 1
 print("User: What is Amazon Bedrock?")
 print("Assistant: ", end="")
-resp_id = stream_response("What is Amazon Bedrock?")
+stream_chat("What is Amazon Bedrock?")
 
-# Turn 2 - chain with streaming
+# Turn 2
 print("\nUser: What models does it support?")
 print("Assistant: ", end="")
-resp_id = stream_response("What models does it support?", previous_id=resp_id)
+stream_chat("What models does it support?")
 ```
 
 ---
@@ -461,11 +529,14 @@ print(f"Output: {response.output_text}")
 
 By the end of this path, learners should be able to:
 - Use OpenAI SDK with Bedrock via Mantle endpoint
-- Understand Chat Completions (stateless) vs Responses API (stateful)
-- Build stateful conversations with server-managed context
+- Authenticate with AWS credentials using provide_token()
+- Understand Chat Completions (works with ALL models) vs Responses API (limited compatibility)
+- Know which models support Responses API (primarily OpenAI family)
+- Build conversations with Chat Completions (recommended for most use cases)
+- Build stateful conversations with Responses API (when compatible models available)
 - Stream responses for progressive display
-- Retrieve and resume conversations by ID
-- Use background mode for async inference
+- Retrieve and resume conversations by ID (Responses API only)
+- Use background mode for async inference (Responses API only)
 
 ## Next Steps
 - Explore tool use (function calling) with Responses API
@@ -490,6 +561,8 @@ https://bedrock-mantle.{REGION}.api.aws/v1
 - Stateless (client manages history)
 - OpenAI-standard API
 - Send full conversation each time
+- **Works with ALL Bedrock models** ✓
+- Recommended for most use cases
 
 **Responses API:**
 - Stateful (server manages history)
@@ -497,14 +570,23 @@ https://bedrock-mantle.{REGION}.api.aws/v1
 - Chain with `previous_response_id`
 - Supports background mode
 - Smaller payloads for long conversations
+- **Limited model compatibility** (primarily OpenAI family) ⚠️
+- Use only when you have compatible models
+
+**Model Compatibility:**
+- Chat Completions: Claude, Llama, Titan, Nova, OpenAI, all others ✓
+- Responses API: Primarily OpenAI-family models only ⚠️
+- If you get 400 "does not support '/v1/responses' API" → use Chat Completions
+- Always test model compatibility or filter for known-compatible families
 
 **Model IDs:**
-- Use Mantle model IDs (e.g., `openai.gpt-oss-120b`)
+- Use Mantle model IDs (e.g., `anthropic.claude-3-5-sonnet-20241022-v2:0`)
 - Different from standard Bedrock IDs
 - List with `client.models.list()`
+- Filter by keyword to find specific models
 
 **Cost Considerations:**
 - Charged per token (input + output)
 - Responses API doesn't reduce token usage (context still processed)
 - Background mode has same cost as synchronous
-- Server-managed state reduces network bandwidth
+- Server-managed state reduces network bandwidth only

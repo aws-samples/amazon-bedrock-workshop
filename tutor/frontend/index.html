@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon Bedrock Workshop Tutor</title>
+
+    <!-- CodeMirror 5 (simpler, no ES module issues) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -319,16 +326,87 @@
 
         .code-editor {
             flex: 1;
-            background: #282c34;
-            color: #abb2bf;
-            border: none;
+            border: 1px solid #444;
             border-radius: 6px;
-            padding: 15px;
+            overflow: hidden;
+        }
+
+        .code-editor .CodeMirror {
+            height: 100%;
+            font-size: 14px;
             font-family: 'Monaco', 'Courier New', monospace;
+        }
+
+        .code-highlight {
+            background-color: rgba(255, 235, 59, 0.3) !important;
+            border-left: 3px solid #ffeb3b;
+            animation: highlight-pulse 0.5s ease-in-out;
+        }
+
+        @keyframes highlight-pulse {
+            0%, 100% { background-color: rgba(255, 235, 59, 0.3); }
+            50% { background-color: rgba(255, 235, 59, 0.6); }
+        }
+
+        .user-task-banner {
+            position: relative;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            animation: slide-down 0.3s ease-out;
+            z-index: 20;
+        }
+
+        @keyframes slide-down {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-task-header {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .user-task-description {
             font-size: 14px;
             line-height: 1.5;
-            resize: none;
-            outline: none;
+            margin-bottom: 8px;
+        }
+
+        .user-task-hint {
+            font-size: 13px;
+            font-style: italic;
+            opacity: 0.9;
+            margin-bottom: 12px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+
+        .user-task-close {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .user-task-close:hover {
+            background: rgba(255, 255, 255, 0.35);
         }
 
         .run-button {
@@ -459,11 +537,7 @@
             <!-- Code Editor -->
             <div class="code-section">
                 <div class="section-header">Code Scratchpad</div>
-                <textarea
-                    id="code-editor"
-                    class="code-editor"
-                    spellcheck="false"
-                ># Code scratchpad - ask me to write examples!</textarea>
+                <div id="code-editor" class="code-editor"></div>
                 <button class="run-button" onclick="runCode()">▶ Run Code</button>
             </div>
 
@@ -491,13 +565,104 @@
         // DOM Elements
         const chatContainer = document.getElementById('chat-container');
         const chatInput = document.getElementById('chat-input');
-        const codeEditor = document.getElementById('code-editor');
         const outputEl = document.getElementById('output');
+        let codeEditorView = null;
+
+        // Initialize CodeMirror 5
+        let currentHighlightMarks = [];
+
+        function initCodeMirror() {
+            if (!window.CodeMirror) {
+                setTimeout(initCodeMirror, 100);
+                return;
+            }
+
+            codeEditorView = CodeMirror(document.getElementById('code-editor'), {
+                value: "# Code scratchpad - ask me to write examples!",
+                mode: 'python',
+                theme: 'monokai',
+                lineNumbers: true,
+                lineWrapping: true,
+                indentUnit: 4,
+                tabSize: 4,
+                indentWithTabs: false
+            });
+
+            console.log('CodeMirror initialized');
+        }
+
+        function highlightCodeLines(lineRange) {
+            if (!codeEditorView) return;
+
+            // Clear previous highlights
+            currentHighlightMarks.forEach(mark => mark.clear());
+            currentHighlightMarks = [];
+
+            // Parse line range (e.g., "5-7" or "3,5,8-10")
+            const ranges = lineRange.split(',').map(s => s.trim());
+
+            ranges.forEach(range => {
+                if (range.includes('-')) {
+                    const [start, end] = range.split('-').map(n => parseInt(n.trim()) - 1);
+                    for (let i = start; i <= end; i++) {
+                        const mark = codeEditorView.markText(
+                            {line: i, ch: 0},
+                            {line: i, ch: codeEditorView.getLine(i)?.length || 0},
+                            {className: 'code-highlight'}
+                        );
+                        currentHighlightMarks.push(mark);
+                    }
+                    // Scroll to first highlighted line
+                    codeEditorView.scrollIntoView({line: start, ch: 0}, 100);
+                } else {
+                    const lineNum = parseInt(range) - 1;
+                    const mark = codeEditorView.markText(
+                        {line: lineNum, ch: 0},
+                        {line: lineNum, ch: codeEditorView.getLine(lineNum)?.length || 0},
+                        {className: 'code-highlight'}
+                    );
+                    currentHighlightMarks.push(mark);
+                    codeEditorView.scrollIntoView({line: lineNum, ch: 0}, 100);
+                }
+            });
+
+            // Clear highlights after 3 seconds
+            setTimeout(() => {
+                currentHighlightMarks.forEach(mark => mark.clear());
+                currentHighlightMarks = [];
+            }, 3000);
+        }
+
+        function showUserTask(taskDescription, hint) {
+            // Create task notification in the right panel
+            const taskBanner = document.createElement('div');
+            taskBanner.className = 'user-task-banner';
+            taskBanner.innerHTML = `
+                <div class="user-task-header">✨ Try This!</div>
+                <div class="user-task-description">${taskDescription}</div>
+                ${hint ? `<div class="user-task-hint">💡 Hint: ${hint}</div>` : ''}
+                <button class="user-task-close" onclick="this.parentElement.remove()">Got it!</button>
+            `;
+
+            const rightPanel = document.querySelector('.right-panel');
+            const existingTask = rightPanel.querySelector('.user-task-banner');
+            if (existingTask) existingTask.remove();
+
+            rightPanel.insertBefore(taskBanner, rightPanel.firstChild);
+
+            // Auto-remove after 20 seconds
+            setTimeout(() => {
+                if (taskBanner.parentElement) {
+                    taskBanner.remove();
+                }
+            }, 20000);
+        }
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             chatInput.focus();
             updateStats();
+            initCodeMirror();
         });
 
         // Learning Path Handlers
@@ -685,9 +850,30 @@
                             // Handle update_scratchpad - update code immediately
                             if (data.name === 'update_scratchpad') {
                                 const code = data.input.code || '';
-                                codeEditor.value = code;
+                                const highlightLines = data.input.highlight_lines;
+                                if (codeEditorView) {
+                                    codeEditorView.setValue(code);
+                                    if (highlightLines) {
+                                        highlightCodeLines(highlightLines);
+                                    }
+                                }
                                 state.stats.codeGenerated++;
                                 updateStats();
+                            }
+
+                            // Handle highlight_code - highlight and scroll to lines
+                            else if (data.name === 'highlight_code') {
+                                const lineRange = data.input.line_range;
+                                if (lineRange && codeEditorView) {
+                                    highlightCodeLines(lineRange);
+                                }
+                            }
+
+                            // Handle give_user_task - show interactive task
+                            else if (data.name === 'give_user_task') {
+                                const taskDescription = data.input.task_description;
+                                const hint = data.input.hint;
+                                showUserTask(taskDescription, hint);
                             }
 
                             chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -774,7 +960,7 @@
 
         // Run Code
         async function runCode() {
-            const code = codeEditor.value;
+            const code = codeEditorView ? codeEditorView.getValue() : '';
             outputEl.textContent = 'Running...';
 
             try {

@@ -333,6 +333,15 @@
             padding-top: 50px;
             min-height: 0;
             overflow: hidden;
+            max-height: calc(50vh - 60px);
+        }
+
+        .output-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            max-height: calc(50vh - 60px);
         }
 
         .section-header {
@@ -342,15 +351,14 @@
         }
 
         .code-editor {
-            min-height: 300px;
-            max-height: 400px;
+            flex: 1;
             border: 1px solid #444;
             border-radius: 6px;
             overflow: hidden;
         }
 
         .code-editor .CodeMirror {
-            height: 400px;
+            height: 100%;
             font-size: 14px;
             font-family: 'Monaco', 'Courier New', monospace;
         }
@@ -445,8 +453,6 @@
 
         .output {
             flex: 1;
-            min-height: 150px;
-            max-height: 300px;
             background: #1e1e1e;
             color: #d4d4d4;
             border-radius: 6px;

@@ -11,6 +11,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         * {
             margin: 0;
@@ -340,6 +343,8 @@
             display: flex;
             flex-direction: column;
             padding: 20px;
+            min-height: 0;
+            overflow: hidden;
         }
 
         .section-header {
@@ -447,6 +452,8 @@
             display: flex;
             flex-direction: column;
             padding: 20px;
+            min-height: 0;
+            overflow: hidden;
         }
 
         .output {
@@ -546,6 +553,14 @@
 
             <!-- Chat Input -->
             <div class="chat-input-container">
+                <button
+                    id="next-step-btn"
+                    onclick="nextStep()"
+                    style="display: none; margin-right: 10px; padding: 12px 20px; background: #4caf50; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;"
+                    title="Continue to next step"
+                >
+                    <i class="fas fa-forward"></i> Next
+                </button>
                 <input
                     type="text"
                     id="chat-input"
@@ -726,7 +741,13 @@
             };
 
             state.currentLearningPath = pathId;
+            document.getElementById('next-step-btn').style.display = 'block';
             sendMessage(messages[pathId] || 'Tell me about ' + pathId);
+        }
+
+        function nextStep() {
+            if (!state.currentLearningPath) return;
+            sendMessage('Continue to the next step');
         }
 
         // Input Handler
@@ -1034,6 +1055,15 @@
                 state.stats.codeRuns++;
                 updateStats();
 
+                // If there's an error, auto-notify agent
+                if (result.has_error) {
+                    // Auto-send error info to agent
+                    setTimeout(() => {
+                        const errorMessage = `I ran the code and got this error:\n\`\`\`\n${result.output}\n\`\`\``;
+                        sendMessage(errorMessage);
+                    }, 500);
+                }
+
             } catch (error) {
                 outputEl.textContent = `Error: ${error.message}`;
             }
@@ -1053,11 +1083,25 @@
 
         // Simple Markdown Formatter
         function formatMarkdown(text) {
-            return text
-                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.+?)\*/g, '<em>$1</em>')
-                .replace(/`(.+?)`/g, '<code>$1</code>')
-                .replace(/\n/g, '<br>');
+            // Handle headers
+            text = text.replace(/^### (.+)$/gm, '<h3 style="font-size: 16px; font-weight: 600; margin: 12px 0 8px 0; color: #333;">$1</h3>');
+            text = text.replace(/^## (.+)$/gm, '<h2 style="font-size: 18px; font-weight: 600; margin: 16px 0 10px 0; color: #333;">$1</h2>');
+            text = text.replace(/^# (.+)$/gm, '<h1 style="font-size: 20px; font-weight: 700; margin: 20px 0 12px 0; color: #333;">$1</h1>');
+
+            // Handle lists
+            text = text.replace(/^- (.+)$/gm, '<li style="margin-left: 20px;">$1</li>');
+            text = text.replace(/(<li.*<\/li>)/s, '<ul style="margin: 8px 0;">$1</ul>');
+
+            // Handle bold, italic, code
+            text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+            text = text.replace(/`(.+?)`/g, '<code style="background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-family: monospace; font-size: 13px;">$1</code>');
+
+            // Handle line breaks
+            text = text.replace(/\n\n/g, '<br><br>');
+            text = text.replace(/\n/g, '<br>');
+
+            return text;
         }
     </script>
 </body>

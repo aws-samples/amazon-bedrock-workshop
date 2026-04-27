@@ -83,6 +83,24 @@ def update_learning_progress(
 
 
 @tool
+def read_scratchpad() -> str:
+    """
+    Read the current code in the user's scratchpad.
+    Use this to:
+    - See what code the user has written or modified
+    - Debug errors in their code
+    - Acknowledge their changes
+    - Help them with their modifications
+
+    Returns:
+        The current code in the scratchpad
+    """
+    # Note: In a real implementation, this would retrieve code from session state
+    # For now, agent should ask user to share code if needed
+    return "Note: To see your code, please share it in chat or describe what you changed."
+
+
+@tool
 def find_learning_paths(query: str) -> List[Dict[str, str]]:
     """
     Search for relevant learning paths based on keywords or topics.

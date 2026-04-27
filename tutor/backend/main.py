@@ -130,8 +130,13 @@ async def websocket_chat(websocket: WebSocket):
         await websocket.close()
 
 
+class ExecuteRequest(BaseModel):
+    code: str
+    notify_agent: bool = False
+
+
 @app.post("/api/execute")
-async def execute_code(code: Dict[str, str]):
+async def execute_code(request: ExecuteRequest):
     """Execute Python code and return output"""
     import io
     import sys
@@ -145,17 +150,24 @@ async def execute_code(code: Dict[str, str]):
     sys.stderr = stderr_capture
 
     try:
-        exec(code["code"], {"__builtins__": __builtins__})
+        exec(request.code, {"__builtins__": __builtins__})
         output = stdout_capture.getvalue()
         err = stderr_capture.getvalue()
+        full_output = output + ("\n" + err if err else "")
+
         return {
             "success": True,
-            "output": output + ("\n" + err if err else "")
+            "output": full_output,
+            "code": request.code,
+            "has_error": bool(err)
         }
     except Exception as e:
+        error_output = f"Error: {type(e).__name__}: {str(e)}"
         return {
             "success": False,
-            "output": f"Error:\n{str(e)}"
+            "output": error_output,
+            "code": request.code,
+            "has_error": True
         }
     finally:
         sys.stdout = old_stdout

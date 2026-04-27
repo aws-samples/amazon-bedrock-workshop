@@ -645,8 +645,39 @@
                             });
                             toolsInMessage.push(toolId);
 
+                            // Create tool details popup immediately (so it's clickable during streaming)
+                            if (!document.getElementById(`${toolId}-details`)) {
+                                const detailsDiv = document.createElement('div');
+                                detailsDiv.id = `${toolId}-details`;
+                                detailsDiv.className = 'tool-details';
+                                detailsDiv.innerHTML = `
+                                    <button class="tool-details-close" onclick="closeToolDetails()">✕</button>
+                                    <div class="tool-details-header">🔧 ${data.name}</div>
+                                    <div class="tool-details-section">
+                                        <div class="tool-details-label">Input:</div>
+                                        <div class="tool-details-content">${JSON.stringify(data.input, null, 2)}</div>
+                                    </div>
+                                    <div id="${toolId}-output-section" style="display: none;">
+                                        <div class="tool-details-section">
+                                            <div class="tool-details-label">Output:</div>
+                                            <div class="tool-details-content" id="${toolId}-output"></div>
+                                        </div>
+                                    </div>
+                                `;
+                                document.body.appendChild(detailsDiv);
+                            }
+
+                            // Ensure overlay exists
+                            if (!document.getElementById('tool-overlay')) {
+                                const overlay = document.createElement('div');
+                                overlay.id = 'tool-overlay';
+                                overlay.className = 'tool-details-overlay';
+                                overlay.onclick = closeToolDetails;
+                                document.body.appendChild(overlay);
+                            }
+
                             // Insert badge inline in responseText
-                            responseText += ` <span class="tool-badge" onclick="toggleToolDetails('${toolId}')" title="Click to expand details">🔧 ${data.name} ▼</span> `;
+                            responseText += ` <span class="tool-badge" onclick="toggleToolDetails('${toolId}')" title="Click for details">🔧 ${data.name}</span> `;
 
                             // Update display
                             contentDiv.innerHTML = formatMarkdown(responseText) + '<span class="streaming-indicator">▊</span>';
@@ -663,55 +694,32 @@
                         }
 
                         else if (data.type === 'tool_result') {
-                            // Update tool output
+                            // Update tool output in store
                             const toolData = Array.from(toolDataStore.values()).find(
                                 t => t.tool_use_id === data.tool_use_id
                             );
                             if (toolData) {
                                 toolData.output = data.content || '(no output)';
                             }
+
+                            // Update output in popup if it exists
+                            const toolEntry = Array.from(toolDataStore.entries()).find(
+                                ([_, t]) => t.tool_use_id === data.tool_use_id
+                            );
+                            if (toolEntry) {
+                                const [toolId, _] = toolEntry;
+                                const outputSection = document.getElementById(`${toolId}-output-section`);
+                                const outputEl = document.getElementById(`${toolId}-output`);
+                                if (outputSection && outputEl) {
+                                    outputSection.style.display = 'block';
+                                    outputEl.textContent = data.content || '(no output)';
+                                }
+                            }
                         }
 
                         else if (data.type === 'done') {
-                            // Remove streaming indicator
+                            // Remove streaming indicator (popups already created during streaming)
                             contentDiv.innerHTML = formatMarkdown(responseText);
-
-                            // Add tool details popups to document body (outside message container)
-                            toolsInMessage.forEach(toolId => {
-                                const tool = toolDataStore.get(toolId);
-                                if (tool) {
-                                    // Check if details already exist
-                                    if (!document.getElementById(`${toolId}-details`)) {
-                                        const detailsDiv = document.createElement('div');
-                                        detailsDiv.id = `${toolId}-details`;
-                                        detailsDiv.className = 'tool-details';
-                                        detailsDiv.innerHTML = `
-                                            <button class="tool-details-close" onclick="closeToolDetails()">✕</button>
-                                            <div class="tool-details-header">🔧 ${tool.name}</div>
-                                            <div class="tool-details-section">
-                                                <div class="tool-details-label">Input:</div>
-                                                <div class="tool-details-content">${JSON.stringify(tool.input, null, 2)}</div>
-                                            </div>
-                                            ${tool.output ? `
-                                            <div class="tool-details-section">
-                                                <div class="tool-details-label">Output:</div>
-                                                <div class="tool-details-content">${tool.output}</div>
-                                            </div>
-                                            ` : ''}
-                                        `;
-                                        document.body.appendChild(detailsDiv);
-                                    }
-                                }
-                            });
-
-                            // Ensure overlay exists
-                            if (!document.getElementById('tool-overlay')) {
-                                const overlay = document.createElement('div');
-                                overlay.id = 'tool-overlay';
-                                overlay.className = 'tool-details-overlay';
-                                overlay.onclick = closeToolDetails;
-                                document.body.appendChild(overlay);
-                            }
 
                             // Save assistant message
                             state.messages.push({ role: 'assistant', content: responseText });

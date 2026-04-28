@@ -611,7 +611,9 @@
                 codeRuns: 0
             },
             actionsSinceLastTest: 0,
-            lastTestAction: 0
+            lastTestAction: 0,
+            consecutiveRuns: 0,
+            lastActionType: null
         };
 
         // DOM Elements
@@ -759,7 +761,14 @@
         function nextStep() {
             if (!state.currentLearningPath) return;
             trackAction('click_next');
-            sendMessage('Continue to the next step');
+
+            // Check for blind clicking Next
+            let message = 'Continue to the next step';
+            if (state.consecutiveRuns >= 2 || (state.lastActionType === 'click_next' && state.consecutiveRuns >= 1)) {
+                message = `[SYSTEM: User is clicking Next repeatedly without engaging. INTERVENE NOW!]\n\nContinue to the next step`;
+            }
+
+            sendMessage(message);
         }
 
         // Track code editor changes (debounced to avoid spam)
@@ -794,7 +803,20 @@
         // Track user action
         function trackAction(actionType) {
             state.actionsSinceLastTest++;
-            console.log(`Action: ${actionType}, count: ${state.actionsSinceLastTest}`);
+
+            // Track consecutive runs for blind clicking detection
+            if (actionType === 'run_code') {
+                if (state.lastActionType === 'run_code' || state.lastActionType === 'click_next') {
+                    state.consecutiveRuns++;
+                } else {
+                    state.consecutiveRuns = 1;
+                }
+            } else {
+                state.consecutiveRuns = 0;
+            }
+
+            state.lastActionType = actionType;
+            console.log(`Action: ${actionType}, test count: ${state.actionsSinceLastTest}, consecutive runs: ${state.consecutiveRuns}`);
         }
 
         // Send Message
@@ -1121,12 +1143,21 @@
                 // Auto-trigger agent after code runs (without showing duplicate message to user)
                 setTimeout(() => {
                     let agentMessage;
+
+                    // Detect blind clicking - consecutive runs without engagement
+                    const blindClicking = state.consecutiveRuns >= 2;
+
                     if (result.has_error) {
                         agentMessage = `[SYSTEM: Code execution failed with error]\n${result.output}`;
                     } else if (result.output && result.output.trim()) {
                         agentMessage = `[SYSTEM: Code executed successfully with output]\n${result.output}`;
                     } else {
                         agentMessage = `[SYSTEM: Code executed successfully with no output]`;
+                    }
+
+                    // Add blind clicking warning
+                    if (blindClicking) {
+                        agentMessage = `[SYSTEM: User has run code ${state.consecutiveRuns} times in a row without asking questions. INTERVENE: Either give them a task or ask if they have questions about the content so far.]\n\n${agentMessage}`;
                     }
 
                     // Send directly to agent without adding to chat history visible to user

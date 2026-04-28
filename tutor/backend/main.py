@@ -70,12 +70,17 @@ async def websocket_chat(websocket: WebSocket):
         message = data.get("message", "")
         history = data.get("history", [])
         learning_path_id = data.get("learning_path_id")
+        actions_since_last_test = data.get("actions_since_last_test", 0)
 
         # Convert history to format expected by tutor_agent
         conversation_history = [
             {"role": msg["role"], "content": msg["content"]}
             for msg in history
         ]
+
+        # Add action count context to message if it's high
+        if actions_since_last_test >= 3:
+            message = f"[SYSTEM: User has performed {actions_since_last_test} actions since last knowledge test. Consider testing their understanding now.]\n\n{message}"
 
         # Get region
         import os

@@ -609,7 +609,9 @@
                 messages: 0,
                 codeGenerated: 0,
                 codeRuns: 0
-            }
+            },
+            actionsSinceLastTest: 0,
+            lastTestAction: 0
         };
 
         // DOM Elements
@@ -639,6 +641,7 @@
             });
 
             console.log('CodeMirror initialized');
+            setupCodeChangeTracking();
         }
 
         function highlightCodeLines(lineRange) {
@@ -747,7 +750,29 @@
 
         function nextStep() {
             if (!state.currentLearningPath) return;
+            trackAction('click_next');
             sendMessage('Continue to the next step');
+        }
+
+        // Track code editor changes (debounced to avoid spam)
+        let lastCodeValue = '';
+        let codeChangeTimeout = null;
+        function setupCodeChangeTracking() {
+            if (!codeEditorView) return;
+
+            codeEditorView.on('change', function() {
+                const currentCode = codeEditorView.getValue();
+
+                // Only track if user made substantial changes (not agent updates)
+                if (currentCode !== lastCodeValue && lastCodeValue !== '') {
+                    // Debounce: only count as action if they stop typing for 2 seconds
+                    clearTimeout(codeChangeTimeout);
+                    codeChangeTimeout = setTimeout(() => {
+                        trackAction('edit_code');
+                    }, 2000);
+                }
+                lastCodeValue = currentCode;
+            });
         }
 
         // Input Handler
@@ -758,10 +783,19 @@
             }
         }
 
+        // Track user action
+        function trackAction(actionType) {
+            state.actionsSinceLastTest++;
+            console.log(`Action: ${actionType}, count: ${state.actionsSinceLastTest}`);
+        }
+
         // Send Message
         function sendMessage(messageText = null) {
             const text = messageText || chatInput.value.trim();
             if (!text || state.isStreaming) return;
+
+            // Track action
+            trackAction('send_message');
 
             // Add user message
             addMessage('user', text);
@@ -802,6 +836,8 @@
 
         // Toggle tool details visibility
         function toggleToolDetails(toolId) {
+            trackAction('view_tool_details');
+
             const detailsEl = document.getElementById(`${toolId}-details`);
             const overlay = document.getElementById('tool-overlay');
 
@@ -854,7 +890,8 @@
                     ws.send(JSON.stringify({
                         message: userMessage,
                         history: state.messages.slice(0, -1),
-                        learning_path_id: state.currentLearningPath
+                        learning_path_id: state.currentLearningPath,
+                        actions_since_last_test: state.actionsSinceLastTest
                     }));
                 };
 
@@ -990,6 +1027,11 @@
                             state.stats.messages++;
                             updateStats();
 
+                            // Check if agent asked a question/gave task - if so, reset action counter
+                            if (data.was_test) {
+                                state.actionsSinceLastTest = 0;
+                            }
+
                             // Close WebSocket and cleanup
                             ws.close();
                             state.isStreaming = false;
@@ -1038,6 +1080,8 @@
 
         // Run Code
         async function runCode() {
+            trackAction('run_code');
+
             const code = codeEditorView ? codeEditorView.getValue() : '';
             outputEl.textContent = 'Running...';
 

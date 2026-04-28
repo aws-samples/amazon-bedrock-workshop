@@ -57,12 +57,24 @@
             color: #333;
         }
 
+        .learning-paths-section {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .learning-paths-header {
+            padding: 12px 15px 8px 15px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         .learning-paths {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            padding: 15px;
-            border-bottom: 1px solid #e0e0e0;
+            padding: 0 15px 15px 15px;
         }
 
         .learning-paths button {
@@ -80,6 +92,13 @@
         .learning-paths button:hover {
             background: #e0e0e0;
             border-color: #2196f3;
+        }
+
+        .learning-paths button.active {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
         }
 
         .learning-paths button .progress-bar {
@@ -569,31 +588,34 @@
             </div>
 
             <!-- Learning Path Buttons -->
-            <div class="learning-paths">
-                <button onclick="startPath('text-generation')" data-path-id="text-generation">
-                    <span class="button-text">Text Generation</span>
-                    <div class="progress-bar"></div>
-                </button>
-                <button onclick="startPath('embeddings')" data-path-id="embeddings">
-                    <span class="button-text">Embeddings</span>
-                    <div class="progress-bar"></div>
-                </button>
-                <button onclick="startPath('rag')" data-path-id="rag">
-                    <span class="button-text">RAG</span>
-                    <div class="progress-bar"></div>
-                </button>
-                <button onclick="startPath('distributed-inference')" data-path-id="distributed-inference">
-                    <span class="button-text">Responses API</span>
-                    <div class="progress-bar"></div>
-                </button>
-                <button onclick="startPath('tool-use')" data-path-id="tool-use">
-                    <span class="button-text">Tool Use</span>
-                    <div class="progress-bar"></div>
-                </button>
-                <button onclick="startPath('comparison')" data-path-id="comparison">
-                    <span class="button-text">Model Comparison</span>
-                    <div class="progress-bar"></div>
-                </button>
+            <div class="learning-paths-section">
+                <div class="learning-paths-header">Quick Start with Learning Paths</div>
+                <div class="learning-paths">
+                    <button onclick="startPath('text-generation')" data-path-id="text-generation">
+                        <span class="button-text">Text Generation</span>
+                        <div class="progress-bar"></div>
+                    </button>
+                    <button onclick="startPath('embeddings')" data-path-id="embeddings">
+                        <span class="button-text">Embeddings</span>
+                        <div class="progress-bar"></div>
+                    </button>
+                    <button onclick="startPath('rag')" data-path-id="rag">
+                        <span class="button-text">RAG</span>
+                        <div class="progress-bar"></div>
+                    </button>
+                    <button onclick="startPath('distributed-inference')" data-path-id="distributed-inference">
+                        <span class="button-text">Responses API</span>
+                        <div class="progress-bar"></div>
+                    </button>
+                    <button onclick="startPath('tool-use')" data-path-id="tool-use">
+                        <span class="button-text">Tool Use</span>
+                        <div class="progress-bar"></div>
+                    </button>
+                    <button onclick="startPath('comparison')" data-path-id="comparison">
+                        <span class="button-text">Model Comparison</span>
+                        <div class="progress-bar"></div>
+                    </button>
+                </div>
             </div>
 
             <!-- Chat Messages -->
@@ -913,7 +935,17 @@
             };
 
             state.currentLearningPath = pathId;
+
+            // Mark this button as active
+            document.querySelectorAll('.learning-paths button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const activeBtn = document.querySelector(`button[data-path-id="${pathId}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+
+            // Show Next button
             document.getElementById('next-step-btn').style.display = 'block';
+
             sendMessage(messages[pathId] || 'Tell me about ' + pathId);
         }
 

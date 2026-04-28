@@ -431,6 +431,67 @@
             background: rgba(255, 255, 255, 0.35);
         }
 
+        .mcq-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .mcq-question {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .mcq-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .mcq-option {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .mcq-option:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .mcq-option:disabled {
+            cursor: not-allowed;
+        }
+
+        .mcq-option.correct {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: #4caf50;
+        }
+
+        .mcq-option.incorrect {
+            background: rgba(244, 67, 54, 0.3);
+            border-color: #f44336;
+        }
+
+        .mcq-letter {
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        .mcq-feedback {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 12px;
+        }
+
         .run-button {
             margin-top: 10px;
             padding: 12px;
@@ -713,12 +774,78 @@
             rightPanel.insertBefore(taskBanner, rightPanel.firstChild);
             console.log('Task banner inserted');
 
-            // Auto-remove after 20 seconds
-            setTimeout(() => {
-                if (taskBanner.parentElement) {
-                    taskBanner.remove();
+            // Don't auto-dismiss - stays until user clicks "Got it!"
+        }
+
+        function showMultipleChoice(question, options, correctAnswer, explanation) {
+            console.log('showMultipleChoice called:', question, options, correctAnswer);
+
+            // Create MCQ banner
+            const mcqBanner = document.createElement('div');
+            mcqBanner.className = 'user-task-banner mcq-banner';
+
+            const optionsHtml = options.map((opt, idx) => {
+                const letter = String.fromCharCode(65 + idx); // A, B, C, D...
+                return `
+                    <button class="mcq-option" data-option="${opt}" onclick="checkMCQAnswer('${opt}', '${correctAnswer}', '${explanation || ''}', this)">
+                        <span class="mcq-letter">[${letter}]</span> ${opt}
+                    </button>
+                `;
+            }).join('');
+
+            mcqBanner.innerHTML = `
+                <div class="user-task-header">❓ Quick Check!</div>
+                <div class="mcq-question">${question}</div>
+                <div class="mcq-options">
+                    ${optionsHtml}
+                </div>
+                <div class="mcq-feedback" style="display: none;"></div>
+            `;
+
+            const rightPanel = document.querySelector('.right-panel');
+            if (!rightPanel) {
+                console.error('Right panel not found!');
+                return;
+            }
+
+            const existingTask = rightPanel.querySelector('.user-task-banner');
+            if (existingTask) existingTask.remove();
+
+            rightPanel.insertBefore(mcqBanner, rightPanel.firstChild);
+            console.log('MCQ banner inserted');
+        }
+
+        function checkMCQAnswer(selected, correct, explanation, buttonEl) {
+            const banner = buttonEl.closest('.mcq-banner');
+            const allButtons = banner.querySelectorAll('.mcq-option');
+            const feedbackDiv = banner.querySelector('.mcq-feedback');
+
+            // Disable all buttons
+            allButtons.forEach(btn => {
+                btn.disabled = true;
+                const optionValue = btn.getAttribute('data-option');
+
+                if (optionValue === correct) {
+                    btn.classList.add('correct');
+                    btn.innerHTML += ' <span style="color: #4caf50; font-weight: bold;">✓</span>';
+                } else if (optionValue === selected && selected !== correct) {
+                    btn.classList.add('incorrect');
+                    btn.innerHTML += ' <span style="color: #f44336; font-weight: bold;">✗</span>';
                 }
-            }, 20000);
+            });
+
+            // Show feedback
+            const isCorrect = selected === correct;
+            feedbackDiv.style.display = 'block';
+            feedbackDiv.innerHTML = `
+                <div style="color: ${isCorrect ? '#4caf50' : '#f44336'}; font-weight: 600; margin-bottom: 8px;">
+                    ${isCorrect ? '✓ Correct!' : '✗ Not quite!'}
+                </div>
+                ${explanation ? `<div>${explanation}</div>` : ''}
+                <button class="user-task-close" onclick="this.closest('.mcq-banner').remove()" style="margin-top: 12px;">Continue</button>
+            `;
+
+            console.log('MCQ answered:', selected, 'correct:', correct);
         }
 
         function updatePathProgress(pathId, stepsCompleted, totalSteps) {
@@ -1020,6 +1147,18 @@
                                 const hint = data.input.hint;
                                 console.log('Showing user task:', taskDescription);
                                 showUserTask(taskDescription, hint);
+                                // Mark that a test was given
+                                state.actionsSinceLastTest = 0;
+                            }
+
+                            // Handle ask_multiple_choice - show MCQ with buttons
+                            else if (data.name === 'ask_multiple_choice') {
+                                const question = data.input.question;
+                                const options = data.input.options || [];
+                                const correctAnswer = data.input.correct_answer;
+                                const explanation = data.input.explanation;
+                                console.log('Showing MCQ:', question, options);
+                                showMultipleChoice(question, options, correctAnswer, explanation);
                                 // Mark that a test was given
                                 state.actionsSinceLastTest = 0;
                             }

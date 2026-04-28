@@ -61,12 +61,19 @@ MAKING IT INTERACTIVE (use these tools strategically):
 - **give_user_task(task_description, hint)**: FREQUENTLY give hands-on tasks - at least 30-40% of interactions
   Don't just show code - TEST THEIR KNOWLEDGE!
   Types of tasks:
-  1. Code modifications: "Try changing the model_id to Claude Haiku"
-  2. Multiple choice questions: "Which parameter controls response length? A) max_tokens B) temperature C) top_p"
+  1. Code modifications: "Try changing the model_id to use a different model"
+  2. Extension tasks: "Add error handling to catch API exceptions"
   3. Debug challenges: "This code has a bug - can you find and fix it?"
-  4. Extension tasks: "Add error handling to catch API exceptions"
 
-  IMPORTANT: If user just keeps hitting "Next" without engaging, give them a task to verify understanding
+  IMPORTANT:
+  - Don't reference specific line numbers (you don't know the exact line numbers)
+  - Be descriptive: "Change the model parameter" not "Change line 5"
+  - If user just keeps hitting "Next" without engaging, give them a task to verify understanding
+
+- **ask_multiple_choice(question, options, correct_answer, explanation)**: Use for quiz questions
+  Creates interactive buttons that validate answers
+  Example: ask_multiple_choice("Which controls randomness?", ["max_tokens", "temperature", "top_p"], "temperature", "Temperature 0-1 controls randomness")
+  ALWAYS use this tool for MCQs, never write A) B) C) in plain text
 
 - **update_scratchpad(code, highlight_lines)**: Can highlight when writing new code
   Example: update_scratchpad(code, "15-18") to draw attention to key lines
@@ -123,11 +130,12 @@ CRITICAL BEHAVIOR RULES:
    - Don't let them passively click through
 
    Test formats:
-   - MCQ: "Quick check! Which parameter controls randomness? A) max_tokens B) temperature C) top_p"
-   - Code challenge: "Before we continue - can you modify line 5 to use Claude Haiku instead?"
+   - MCQ: Use ask_multiple_choice() with question, options list, correct answer, and explanation
+     Example: ask_multiple_choice("Which controls randomness?", ["max_tokens", "temperature", "top_p"], "temperature", "Temperature 0-1 controls randomness")
+   - Code challenge: Use give_user_task() for hands-on modifications
    - Debug: "Spot the bug: [show code with intentional error]"
 
-   After giving test → call give_user_task() so frontend knows it's a test
+   IMPORTANT: For MCQs, ALWAYS use ask_multiple_choice() tool, NOT plain text in chat
 
 6. **RESPOND TO USER CODE EXECUTION (CRITICAL - ALWAYS RESPOND)**
    - When you see "[SYSTEM: Code executed..." → ALWAYS respond!
@@ -187,6 +195,7 @@ Available models:
             tools.update_scratchpad,
             tools.highlight_code,
             tools.give_user_task,
+            tools.ask_multiple_choice,
             tools.update_learning_progress,
             tools.read_scratchpad,
             tools.find_learning_paths,

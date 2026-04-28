@@ -61,6 +61,37 @@ def give_user_task(task_description: str, hint: str = None) -> str:
 
 
 @tool
+def ask_multiple_choice(
+    question: str,
+    options: List[str],
+    correct_answer: str,
+    explanation: str = None
+) -> str:
+    """
+    Ask the user a multiple choice question to test their knowledge.
+    Creates interactive buttons that validate answers and provide feedback.
+
+    Args:
+        question: The question to ask
+        options: List of answer choices (e.g., ["max_tokens", "temperature", "top_p"])
+        correct_answer: The correct answer (must match one option exactly)
+        explanation: Optional explanation shown after answering
+
+    Returns:
+        Confirmation that question was presented
+
+    Example:
+        ask_multiple_choice(
+            question="Which parameter controls response randomness?",
+            options=["max_tokens", "temperature", "top_p"],
+            correct_answer="temperature",
+            explanation="Temperature controls randomness. Higher = more creative, lower = more focused."
+        )
+    """
+    return f"✓ Multiple choice question presented with {len(options)} options"
+
+
+@tool
 def update_learning_progress(
     path_id: str,
     steps_completed: List[str],

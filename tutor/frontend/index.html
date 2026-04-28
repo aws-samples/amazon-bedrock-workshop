@@ -777,17 +777,29 @@
             // Don't auto-dismiss - stays until user clicks "Got it!"
         }
 
+        // Store MCQ data globally
+        let currentMCQ = null;
+
         function showMultipleChoice(question, options, correctAnswer, explanation) {
             console.log('showMultipleChoice called:', question, options, correctAnswer);
+
+            // Store MCQ data
+            currentMCQ = {
+                question: question,
+                options: options,
+                correctAnswer: correctAnswer,
+                explanation: explanation || ''
+            };
 
             // Create MCQ banner
             const mcqBanner = document.createElement('div');
             mcqBanner.className = 'user-task-banner mcq-banner';
+            mcqBanner.id = 'current-mcq';
 
             const optionsHtml = options.map((opt, idx) => {
                 const letter = String.fromCharCode(65 + idx); // A, B, C, D...
                 return `
-                    <button class="mcq-option" data-option="${opt}" onclick="checkMCQAnswer('${opt}', '${correctAnswer}', '${explanation || ''}', this)">
+                    <button class="mcq-option" data-option-idx="${idx}">
                         <span class="mcq-letter">[${letter}]</span> ${opt}
                     </button>
                 `;
@@ -812,23 +824,41 @@
             if (existingTask) existingTask.remove();
 
             rightPanel.insertBefore(mcqBanner, rightPanel.firstChild);
-            console.log('MCQ banner inserted');
+
+            // Add click handlers to buttons
+            mcqBanner.querySelectorAll('.mcq-option').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const idx = parseInt(this.getAttribute('data-option-idx'));
+                    const selected = currentMCQ.options[idx];
+                    checkMCQAnswer(selected, idx);
+                });
+            });
+
+            console.log('MCQ banner inserted with click handlers');
         }
 
-        function checkMCQAnswer(selected, correct, explanation, buttonEl) {
-            const banner = buttonEl.closest('.mcq-banner');
+        function checkMCQAnswer(selected, selectedIdx) {
+            if (!currentMCQ) return;
+
+            const banner = document.getElementById('current-mcq');
+            if (!banner) return;
+
             const allButtons = banner.querySelectorAll('.mcq-option');
             const feedbackDiv = banner.querySelector('.mcq-feedback');
+            const correct = currentMCQ.correctAnswer;
+            const explanation = currentMCQ.explanation;
 
-            // Disable all buttons
-            allButtons.forEach(btn => {
+            console.log('Checking answer:', selected, 'vs correct:', correct);
+
+            // Disable all buttons and mark correct/incorrect
+            allButtons.forEach((btn, idx) => {
                 btn.disabled = true;
-                const optionValue = btn.getAttribute('data-option');
+                const optionValue = currentMCQ.options[idx];
 
                 if (optionValue === correct) {
                     btn.classList.add('correct');
                     btn.innerHTML += ' <span style="color: #4caf50; font-weight: bold;">✓</span>';
-                } else if (optionValue === selected && selected !== correct) {
+                } else if (idx === selectedIdx && selected !== correct) {
                     btn.classList.add('incorrect');
                     btn.innerHTML += ' <span style="color: #f44336; font-weight: bold;">✗</span>';
                 }
@@ -842,10 +872,10 @@
                     ${isCorrect ? '✓ Correct!' : '✗ Not quite!'}
                 </div>
                 ${explanation ? `<div>${explanation}</div>` : ''}
-                <button class="user-task-close" onclick="this.closest('.mcq-banner').remove()" style="margin-top: 12px;">Continue</button>
+                <button class="user-task-close" onclick="document.getElementById('current-mcq').remove(); currentMCQ = null;" style="margin-top: 12px;">Continue</button>
             `;
 
-            console.log('MCQ answered:', selected, 'correct:', correct);
+            console.log('MCQ answered:', selected, 'correct:', correct, 'isCorrect:', isCorrect);
         }
 
         function updatePathProgress(pathId, stepsCompleted, totalSteps) {

@@ -687,6 +687,8 @@
         }
 
         function showUserTask(taskDescription, hint) {
+            console.log('showUserTask called with:', taskDescription, hint);
+
             // Create task notification in the right panel
             const taskBanner = document.createElement('div');
             taskBanner.className = 'user-task-banner';
@@ -698,10 +700,16 @@
             `;
 
             const rightPanel = document.querySelector('.right-panel');
+            if (!rightPanel) {
+                console.error('Right panel not found!');
+                return;
+            }
+
             const existingTask = rightPanel.querySelector('.user-task-banner');
             if (existingTask) existingTask.remove();
 
             rightPanel.insertBefore(taskBanner, rightPanel.firstChild);
+            console.log('Task banner inserted');
 
             // Auto-remove after 20 seconds
             setTimeout(() => {
@@ -808,6 +816,14 @@
             streamResponse(text);
         }
 
+        // Trigger agent response without showing user message
+        function triggerAgentResponse(systemMessage) {
+            if (state.isStreaming) return;
+
+            // Don't add to visible chat, just send to agent
+            streamResponse(systemMessage, true); // true = hidden from user
+        }
+
         // Add Message to UI
         function addMessage(role, content, isStreaming = false) {
             const messageDiv = document.createElement('div');
@@ -864,7 +880,7 @@
         }
 
         // Stream Response from Backend using WebSocket
-        async function streamResponse(userMessage) {
+        async function streamResponse(userMessage, isSystemTriggered = false) {
             state.isStreaming = true;
             chatInput.disabled = true;
 
@@ -980,7 +996,10 @@
                             else if (data.name === 'give_user_task') {
                                 const taskDescription = data.input.task_description;
                                 const hint = data.input.hint;
+                                console.log('Showing user task:', taskDescription);
                                 showUserTask(taskDescription, hint);
+                                // Mark that a test was given
+                                state.actionsSinceLastTest = 0;
                             }
 
                             // Handle update_learning_progress - update progress bar
@@ -1099,20 +1118,19 @@
                 state.stats.codeRuns++;
                 updateStats();
 
-                // Auto-notify agent after code runs (both success and error)
+                // Auto-trigger agent after code runs (without showing duplicate message to user)
                 setTimeout(() => {
+                    let agentMessage;
                     if (result.has_error) {
-                        const errorMessage = `I ran the code and got this error:\n\`\`\`\n${result.output}\n\`\`\``;
-                        sendMessage(errorMessage);
+                        agentMessage = `[SYSTEM: Code execution failed with error]\n${result.output}`;
                     } else if (result.output && result.output.trim()) {
-                        // Success with output - agent can comment and guide next step
-                        const successMessage = `I ran the code successfully. Output:\n\`\`\`\n${result.output}\n\`\`\``;
-                        sendMessage(successMessage);
+                        agentMessage = `[SYSTEM: Code executed successfully with output]\n${result.output}`;
                     } else {
-                        // Success with no output
-                        const noOutputMessage = `I ran the code - it completed with no output.`;
-                        sendMessage(noOutputMessage);
+                        agentMessage = `[SYSTEM: Code executed successfully with no output]`;
                     }
+
+                    // Send directly to agent without adding to chat history visible to user
+                    triggerAgentResponse(agentMessage);
                 }, 500);
 
             } catch (error) {

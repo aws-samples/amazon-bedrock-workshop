@@ -78,9 +78,9 @@ async def websocket_chat(websocket: WebSocket):
             for msg in history
         ]
 
-        # Add action count context to message if it's high
+        # Add action count context to message if it's high (max 3 actions before test required)
         if actions_since_last_test >= 3:
-            message = f"[SYSTEM: User has performed {actions_since_last_test} actions since last knowledge test. Consider testing their understanding now.]\n\n{message}"
+            message = f"[SYSTEM: User has performed {actions_since_last_test} actions since last knowledge test. TEST THEIR KNOWLEDGE NOW - this is mandatory!]\n\n{message}"
 
         # Get region
         import os

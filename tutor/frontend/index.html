@@ -1099,14 +1099,21 @@
                 state.stats.codeRuns++;
                 updateStats();
 
-                // If there's an error, auto-notify agent
-                if (result.has_error) {
-                    // Auto-send error info to agent
-                    setTimeout(() => {
+                // Auto-notify agent after code runs (both success and error)
+                setTimeout(() => {
+                    if (result.has_error) {
                         const errorMessage = `I ran the code and got this error:\n\`\`\`\n${result.output}\n\`\`\``;
                         sendMessage(errorMessage);
-                    }, 500);
-                }
+                    } else if (result.output && result.output.trim()) {
+                        // Success with output - agent can comment and guide next step
+                        const successMessage = `I ran the code successfully. Output:\n\`\`\`\n${result.output}\n\`\`\``;
+                        sendMessage(successMessage);
+                    } else {
+                        // Success with no output
+                        const noOutputMessage = `I ran the code - it completed with no output.`;
+                        sendMessage(noOutputMessage);
+                    }
+                }, 500);
 
             } catch (error) {
                 outputEl.textContent = `Error: ${error.message}`;

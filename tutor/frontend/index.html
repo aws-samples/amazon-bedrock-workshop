@@ -866,12 +866,14 @@
 
             // Show feedback
             const isCorrect = selected === correct;
+            const correctLetter = String.fromCharCode(65 + currentMCQ.options.indexOf(correct));
+
             feedbackDiv.style.display = 'block';
             feedbackDiv.innerHTML = `
                 <div style="color: ${isCorrect ? '#4caf50' : '#f44336'}; font-weight: 600; margin-bottom: 8px;">
-                    ${isCorrect ? '✓ Correct!' : '✗ Not quite!'}
+                    ${isCorrect ? '✓ Correct!' : `✗ Incorrect! Correct answer: [${correctLetter}] ${correct}`}
                 </div>
-                ${explanation ? `<div>${explanation}</div>` : ''}
+                ${explanation ? `<div style="margin-top: 8px;">${explanation}</div>` : ''}
                 <button class="user-task-close" onclick="document.getElementById('current-mcq').remove(); currentMCQ = null;" style="margin-top: 12px;">Continue</button>
             `;
 

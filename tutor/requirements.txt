@@ -8,4 +8,4 @@ strands-agents>=1.37.0
 aws-bedrock-token-generator>=0.1.0
 openai>=1.0.0
 numpy>=1.24.0
-pillow>=10.0.0
+pillow>=12.2.0

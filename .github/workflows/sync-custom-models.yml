@@ -19,7 +19,7 @@ jobs:
           python-version: "3.12"
 
       - name: Checkout amazon-bedrock-workshop
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 

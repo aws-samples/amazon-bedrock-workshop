@@ -1,4 +1,4 @@
-fastapi>=0.104.0
+fastapi>=0.138.2
 uvicorn>=0.24.0
 pydantic>=2.13.4
 boto3>=1.43.27

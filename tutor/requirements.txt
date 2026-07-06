@@ -1,5 +1,5 @@
 fastapi>=0.104.0
-uvicorn>=0.24.0
+uvicorn>=0.50.2
 pydantic>=2.13.4
 boto3>=1.43.27
 botocore>=1.43.27

@@ -14,7 +14,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     # Try to keep ruff version synced with .pre-commit-config.yaml and .github/workflows/lint.yml
-    "ruff>=0.15.16,<0.16",
+    "ruff>=0.15.16,<0.17",
 ]
 
 [project.optional-dependencies]

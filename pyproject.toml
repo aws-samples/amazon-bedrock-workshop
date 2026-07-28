@@ -40,7 +40,7 @@ lab3 = [
     "urllib3>=2.7.0",
 ]
 lab4 = [
-    "bedrock-agentcore>=1.13.0",
+    "bedrock-agentcore>=1.18.1",
     "bedrock-agentcore-starter-toolkit>=0.3.9",
     "opensearch-py>=3.2.0",
     "retrying>=1.4.2",

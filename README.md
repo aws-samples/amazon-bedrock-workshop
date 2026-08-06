@@ -66,7 +66,7 @@ Amazon Bedrock now [automatically enables access](https://aws.amazon.com/blogs/s
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=aws-samples/amazon-bedrock-workshop&type=Date)](https://star-history.com/#aws-samples/amazon-bedrock-workshop&Date)
+[![Star History Chart](https://star-history.dera.page/svg?repos=aws-samples/amazon-bedrock-workshop&type=Date)](https://star-history.dera.page/#aws-samples/amazon-bedrock-workshop&Date)
 
 ## Contributors
 

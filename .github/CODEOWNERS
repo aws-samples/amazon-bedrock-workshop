@@ -2,11 +2,10 @@
 * @athewsey
 
 # Module owners
-/01_Text_generation/         @rodzanto
+/01_Inference_APIs/         @thewsey
 /02_Knowledge_Bases_and_RAG/ @w601sxs
 /03_Model_customization/     @w601sxs
 /04_Agents/                  @mttanke
-/05_Distributed_Inference_Engine/ @w601sxs
 /tutor/                      @w601sxs
 
 # CI / GitHub config

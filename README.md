@@ -1,68 +1,79 @@
-# Amazon Bedrock Workshop [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
+# Amazon Bedrock Workshop
 
-This hands-on workshop, aimed at developers and solution builders, introduces how to leverage foundation models (FMs) through [Amazon Bedrock](https://aws.amazon.com/bedrock/). This code goes alongside the self-paced or instructor-led workshop here - https://catalog.us-east-1.prod.workshops.aws/amazon-bedrock/en-US
+This sample repository accompanies a hands-on workshop, aimed at developers and solution builders, introducing how to leverage AI foundation models through [Amazon Bedrock](https://aws.amazon.com/bedrock/) on AWS.
 
-**Please follow the prerequisites listed in the link above or ask your AWS workshop instructor how to get started.**
-
-Amazon Bedrock is a fully managed service that provides access to FMs from third-party providers and Amazon via an API. With Bedrock, you can choose from a variety of models to find the one best suited for your use case.
-
-Within this series of labs, you'll explore the most common usage patterns for Generative AI on AWS. You will gain hands-on experience with text generation, retrieval-augmented generation, agentic AI, and open-weight models via Bedrock APIs and SDKs.
-
-## Labs
-
-- **01 - Text Generation** \[~25 mins\]
-  - Converse API and Invoke Model API
-  - Summarization, code generation, function calling
-  - Multi-turn conversations and streaming
-  - Cross-regional inference profiles
-
-- **02 - Knowledge Bases and RAG** \[~35 mins\]
-  - Create a Knowledge Base with OpenSearch Serverless
-  - RetrieveAndGenerate API (managed RAG)
-  - Retrieve API (custom RAG pipeline)
-
-- **03 - Model Customization** \[~30 mins — own account only, not available on Workshop Studio\]
-  - Fine-tuning, continued pre-training, distillation
-  - Reinforcement fine-tuning
-
-- **04 - Agents** \[~30 mins\]
-  - Restaurant booking assistant using Strands Agents framework
-  - Tool use with DynamoDB and Knowledge Bases
-  - Deployment to Amazon Bedrock AgentCore Runtime
-
-- **05 - Distributed Inference Engine** \[~20 mins\]
-  - OpenAI-compatible endpoint for open-weight models
-  - Chat Completions and Responses API
-  - Stateful conversations, tool use, structured output
+**Find the full guided instructions for the workshop at: https://catalog.workshops.aws/amazon-bedrock**
 
 ## Getting started
 
+The code samples are organized into numbered sub-folders corresponding to the modules of the workshop.
+
 ### Prerequisites
 
-This workshop runs in **Amazon SageMaker Studio** with a pre-configured JupyterLab space. If you are at an AWS-run event, your environment is already set up — open Studio and click the JupyterLab space to get started.
+To get started, you'll first need to set up your AWS Account and the development environment where you'll run the samples. In AWS-hosted events, these may already be provided for you.
 
-For self-paced use in your own account, deploy the workshop CloudFormation stack from `static/bedrock-workshop-studio.yaml`. This creates a SageMaker Studio domain, a JupyterLab space, and automatically clones this repository into it.
+For full instructions, refer to the [workshop introduction](https://catalog.workshops.aws/amazon-bedrock) and the [prerequisites steps](https://catalog.workshops.aws/amazon-bedrock/en-US/10-setup). At a high level, you'll need:
 
-### IAM permissions
+- Access to an AWS Account with AWS IAM permissions for:
+  - Amazon Bedrock for all labs (including AWS Marketplace permissions to subscribe to new models)
+  - Amazon OpenSearch Serverless and Amazon S3 for knowledge base / RAG-related labs
+  - Amazon Bedrock AgentCore, AWS CloudFormation, Amazon DynamoDB, and AWS IAM access for agent-related labs
+- A development environment with:
+  - AWS CLI access [configured](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) with the access above
+  - (Recommended) [uv installed](https://docs.astral.sh/uv/), for Python version and Python virtual environment management
+  - Python 3.11+
+  - This repository downloaded, for example by running, `git clone https://github.com/aws-samples/amazon-bedrock-workshop`
 
-The SageMaker execution role needs `bedrock:*` at minimum. The CloudFormation template in this repo provisions all required permissions automatically.
+> ⚠️ **Cost warning:** Running these samples in *your own AWS Account* will incur costs!
+>
+> Refer to the workshop website for more details, and be sure to run cleanup steps promptly when you're finished experimenting, to avoid unnecessary cost.
 
-### Clone the notebooks
+### Install dependencies
 
-If running outside of Workshop Studio, clone this repository into your notebook environment:
+The main required libraries for the workshop are detailed in [pyproject.toml](pyproject.toml).
+
+If you're at an AWS-led event where a temporary account and VS Code Server instance has been provided for you, these dependencies will **already be installed** in an environment at `.venv` in this folder: you can skip to the next section.
+
+If you're using [uv](https://docs.astral.sh/uv/) in your own local IDE (like Kiro or VSCode), you can perform the same setup by opening a terminal and running:
 
 ```sh
-git clone https://github.com/aws-samples/amazon-bedrock-workshop.git
-cd amazon-bedrock-workshop
+uv venv .venv
+uv sync --all-extras --all-groups
 ```
 
-### Model access
+If you're using plain pip with some other tool for managing environments, you can run:
 
-Amazon Bedrock now [automatically enables access](https://aws.amazon.com/blogs/security/simplified-amazon-bedrock-model-access/) to all serverless foundation models. Anthropic models require a one-time usage form submission via the Bedrock console.
+```sh
+pip install .[all]
+```
+
+For a lighter footprint, you could instead choose to install only the extras for the lab(s) you want to follow. For example, `pip install .[lab2,lab4]`.
+
+### Run notebooks
+
+The lab exercises make extensive use of `.ipynb` [Python notebook files](https://code.visualstudio.com/docs/datascience/jupyter-notebooks).
+
+Notebooks bring together rich formatted explanations with interactive code "cells" that run against a live Python interpreter environment. You can run each cell of code by selecting it and either pressing `Shift`+`Enter` on the keyboard, or clicking the ▶️ play button.
+
+When you first open or run a code cell in a notebook, you may be asked to **select a kernel**. If so, choose: Python Environments > .venv (.venv/bin/python)
+
+If you don't see this option, check that the `.venv` folder has been created and follow the "Install dependencies" instructions above if needed. If using your own local IDE like VSCode or Kiro, check you've installed the recommended extensions for Jupyter and Python environment discovery. If you're at an AWS-led event and need help, don't hesitate to ask one of your facilitators!
+
+When you're ready, why not go ahead and try running the first notebook:
+
+▶️ [01_Inference_APIs/01_Inference_APIs.ipynb](01_Inference_APIs/01_Inference_APIs.ipynb)
+
+## Further reading
+
+Keen to explore further beyond this workshop? Check out:
+
+- [aws-samples/amazon-bedrock-samples](https://github.com/aws-samples/amazon-bedrock-samples) for a more comprehensive range of code and notebook samples covering different features and use-cases of Amazon Bedrock
+- The [Amazon Bedrock User Guide](https://docs.aws.amazon.com/bedrock/latest/userguide/) for detailed documentation
+- The AI category in the [AWS Solutions Library](https://aws.amazon.com/solutions/ai/)
+
+If you're building solutions powered by generative and agentic AI, it's also well worth exploring [Amazon Bedrock AgentCore](https://aws.amazon.com/bedrock/agentcore/) - a unified platform to build, connect, and optimize AI agents!
 
 ---
-
-[![HitCount](https://hits.dwyl.com/aws-samples/amazon-bedrock-workshop.svg?style=flat-square&show=unique)](http://hits.dwyl.com/aws-samples/amazon-bedrock-workshop)
 
 ## Star History
 

@@ -24,7 +24,7 @@ repos:
       - id: yamllint
         args: ["-d", "{extends: default, rules: {line-length: {max: 200}}}"]
 
-  # Python linting (tutor app)
+  # Python linting
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.16
     hooks:

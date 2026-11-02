@@ -1,34 +1,10 @@
 version: 2
 updates:
-  # Python dependencies - tutor app
-  - package-ecosystem: "pip"
-    directory: "/tutor"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    open-pull-requests-limit: 10
-    labels:
-      - "dependencies"
-      - "automated"
-      - "tutor"
-    commit-message:
-      prefix: "chore(deps):"
-    groups:
-      boto3-and-botocore:
-        patterns:
-          - "boto3"
-          - "botocore"
-      aws-sdk:
-        patterns:
-          - "aws-*"
-          - "sagemaker*"
-
   # Python dependencies - Main workshop
   - package-ecosystem: "pip"
     directory: "/"
-    # Avoid overlap with tutor & lab4 configs:
+    # Avoid overlap with lab4 config:
     exclude-paths:
-      - "/tutor/**"
       - "/04_Agents/**"
     schedule:
       interval: "weekly"

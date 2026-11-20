@@ -83,7 +83,7 @@ nbstripout --status
 
 ## About our code quality workflows
 
-This repository implements a range of automated workflows as described below, to drive code quality and safety. Pre-commit hooks are configured in [.pre-commit-config.yaml](./pre-commit-config.yaml), and automated GitHub Action workflows in the [.github/workflows](.github/workflows) folder.
+This repository implements a range of automated workflows as described below, to drive code quality and safety. Pre-commit hooks are configured in [.pre-commit-config.yaml](./.pre-commit-config.yaml), and automated GitHub Action workflows in the [.github/workflows](.github/workflows) folder.
 
 | Automation | What it does | Where it's applied |
 |------------|--------------|--------------------|
